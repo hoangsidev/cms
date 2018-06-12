@@ -1,0 +1,102 @@
+<%- include('../layouts/header.ejs'); -%>
+    <!-- main -->
+    <div id="wrap_main">
+        <!-- sidebar -->
+        <%- include('../layouts/sidebar'); -%>
+            <!-- end sidebar -->
+            <%- include('../layouts/navbar'); -%>
+                <!-- content -->
+                <% var user = JSON.parse(data_user); if(user) { %>
+                    <form action="<%= get_admin_url(); %>/users/update?_method=PUT" method="post" enctype="multipart/form-data" id="edit_user"
+                        v-on:submit.prevent="update_user" ref="form">
+                        <input type="hidden" name="_id" value="<% if(user._id) { %><%= user._id %><% } %>">
+                        <div class="errors" v-if="errors.length">
+                            <p>Please correct the following error(s):</p>
+                            <ul>
+                                <li v-for="error in errors">
+                                    <small>{{ error }}</small>
+                                </li>
+                            </ul>
+                            <hr style="margin: 10px 0;">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group" v-bind:class="{'has-error has-feedback': err_exist_username}">
+                                    <label for="username">Username</label>
+                                    <input type="text" class="form-control" name="username" v-model="username" readonly>
+                                    <span class="glyphicon glyphicon-remove form-control-feedback" v-if="err_exist_username"></span>
+                                    <small v-if="err_exist_username" class="error">{{ err_exist_username }}</small>
+                                </div>
+                                <div class="form-group" v-bind:class="{'has-error has-feedback': err_exist_email}">
+                                    <label for="email">Email</label>
+                                    <input type="text" class="form-control" name="email" v-model="email" v-on:input="exist_email" v-on:blur="exist_email" autocomplete="off"
+                                        placeholder="mail@example.com" v-focus>
+                                    <span class="glyphicon glyphicon-remove form-control-feedback" v-if="err_exist_email"></span>
+                                    <small v-if="err_exist_email" class="error">{{ err_exist_email }}</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">&nbsp;</label>
+                                    <br>
+                                    <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#change_password">Change Password</button>
+                                </div>
+                                <div id="change_password" class="collapse">
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control" name="password" v-model="password" v-focus autocomplete="off">
+                                        <small>Use at least one letter, one numeral, and six characters.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Confirm password</label>
+                                        <input type="password" class="form-control" name="confirm_password" v-model="confirm_password" autocomplete="off">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="display_name">Display name</label>
+                                    <input type="text" class="form-control" name="display_name" autocomplete="off" value="<% if(user.display_name) { %><%= user.display_name %><% } %>">
+                                </div>
+                                <div class="form-group">
+                                    <label for="role">Role</label>
+                                    <select name="role" class="form-control">
+                                        <option value="0">Subscriber</option>
+                                        <option value="1">Author</option>
+                                        <option value="2">Administrator</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="thumbnail">Featured Image</label>
+                                    <div class="user_thumbnail">
+                                        <span id="del_thumbnail">
+                                            <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                        </span>
+                                        <input class="input-file" accept="image/*" id="thumbnail" name="thumbnail" type="file" onChange="loadFile(event)">
+                                        <img id="output_avatar" class="img-thumbnail" alt="Add Featured Image" src="<%= get_admin_url(); %>/uploads/<% if(user.thumbnail) { %><%= user.thumbnail %><% } %>">
+                                    </div>
+                                    <small style="font-style:italic;">Click the image to edit or update</small>
+                                    <br>
+                                    <script>
+                                        var loadFile = function (event) {
+                                            var output = document.getElementById('output_avatar'); output.src = URL.createObjectURL(event.target.files[0]);
+                                            var thumbnail = document.getElementById('thumbnail'); thumbnail.value = URL.createObjectURL(event.target.files[0]);
+                                        };
+                                                // $('#del_thumbnail').click(function () {
+                                                //     $('#output_avatar').attr('src', '');
+                                                //     $('#thumbnail').val('');
+                                                // });
+                                    </script>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <!-- end -->
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-default">Update</button>
+                        </div>
+                    </form>
+                    <% } %>
+                        <!-- end content -->
+    </div>
+    <!-- end main -->
+    <%- include('../layouts/footer'); -%>

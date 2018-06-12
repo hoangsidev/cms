@@ -1,0 +1,136 @@
+<%- include('../layouts/inc/functions.ejs'); -%>
+    <!-- https://hoangsi.com/ -->
+    <!DOCTYPE html>
+    <html lang='en'>
+
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+        <link rel="stylesheet" href="<%= get_admin_url(); %>/css/bootstrap.min.css">
+        <link rel="stylesheet" href="<%= get_admin_url(); %>/css/users.css">
+        <link rel="shortcut icon" href="<%= get_admin_url(); %>/images/favicon.ico" type="image/x-icon" />
+        <title>Sign up</title>
+    </head>
+
+    <body>
+        <div class="container" id="wrap">
+            <div id="wrap_cont">
+                <div class="panel col-md-4 col-md-offset-4">
+                    <div class="panel-body">
+                        <form id="signup" action="/signup" method="post" v-on:submit.prevent="signup" ref="form">
+                            <div class="errors" v-if="errors.length">
+                                <p>Please correct the following error(s):</p>
+                                <ul>
+                                    <li v-for="error in errors">
+                                        <small>{{ error }}</small>
+                                    </li>
+                                </ul>
+                                <hr style="margin: 10px 0;">
+                            </div>
+                            <div class="form-group" v-bind:class="{'has-error has-feedback': err_exist_username}">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control" name="username" v-model="username" v-on:input="exist_username" v-on:blur="exist_username"
+                                    v-focus autocomplete="off" placeholder="Pick a username">
+                                <span class="glyphicon glyphicon-remove form-control-feedback" v-if="err_exist_username"></span>
+                                <small v-if="err_exist_username" class="error">{{ err_exist_username }}</small>
+                            </div>
+                            <div class="form-group" v-bind:class="{'has-error has-feedback': err_exist_email}">
+                                <label for="email">Email</label>
+                                <input type="text" class="form-control" name="email" v-model="email" v-on:input="exist_email" v-on:blur="exist_email" autocomplete="off"
+                                    placeholder="mail@example.com">
+                                <span class="glyphicon glyphicon-remove form-control-feedback" v-if="err_exist_email"></span>
+                                <small v-if="err_exist_email" class="error">{{ err_exist_email }}</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" name="password" v-model="password" autocomplete="off" placeholder="Create a password">
+                                <small>Use at least one letter, one numeral, and six characters.</small>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-default">Sign up</button>
+                                <small style="margin-top: 20px;" class="pull-right">Already have an account?
+                                    <a href="/signin">Sign in</a>
+                                </small>
+                            </div>
+                            <hr style="margin: 0 0 10px 0">
+                            <small>
+                                By clicking “Sign up”, you agree to our
+                                <a href="/term-of-service">terms of service</a> and
+                                <a href="/privacy-statement">privacy statement</a>. We’ll occasionally send you account related emails.
+                            </small>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="<%= get_admin_url(); %>/js/vue.min.js"></script>
+        <script src="<%= get_admin_url(); %>/js/socket.io.js"></script>
+        <script> var socket = io(); </script>
+        <script>
+            Vue.directive('focus', {
+                inserted: function (el) { el.focus() }
+            });
+            var signup = new Vue({
+                el: '#signup',
+                data: {
+                    username: null,
+                    email: null,
+                    password: null,
+                    errors: [],
+                    err_exist_username: null,
+                    err_exist_email: null,
+                },
+                methods: {
+                    signup: function () {
+                        this.errors = [];
+                        if (!this.username) {
+                            this.errors.push("Username required.")
+                        } else if (!this.valid_username(this.username)) {
+                            this.errors.push("Username may only contain alphanumeric characters or single hyphens, and cannot begin or end with a hyphen.");
+                        }
+                        if (!this.email) {
+                            this.errors.push("Email required.");
+                        } else if (!this.valid_email(this.email)) {
+                            this.errors.push("Valid email required.");
+                        }
+                        if (!this.password) {
+                            this.errors.push("Password required.");
+                        } else if (!this.valid_password(this.password)) {
+                            this.errors.push("Password must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters.");
+                        }
+                        if (!this.errors.length && !this.err_exist_username && !this.err_exist_email) this.$refs.form.submit();
+                    },
+                    valid_username: function (username) {
+                        var re = /^[a-zA-Z0-9]+$/;
+                        return re.test(username);
+                    },
+                    valid_email: function (email) {
+                        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                        return re.test(email);
+                    },
+                    valid_password: function (password) {
+                        var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
+                        return re.test(password);
+                    },
+                    exist_username: function () {
+                        this.err_exist_username = null;
+                        if (this.username) { socket.emit('guest_username', this.username); }
+                    },
+                    exist_email: function () {
+                        this.err_exist_email = null;
+                        if (this.email) { socket.emit('guest_email', this.email); }
+                    }
+                }
+            });
+            socket.on('ser_exist_username', () => {
+                signup.err_exist_username = "Username is already taken.";
+            });
+            socket.on('ser_exist_email', () => {
+                signup.err_exist_email = "Email is already taken.";
+            });
+        </script>
+    </body>
+
+    </html>

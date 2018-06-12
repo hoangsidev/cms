@@ -1,0 +1,81 @@
+<%- include('../layouts/header.ejs'); -%>
+    <!-- main -->
+    <div id="wrap_main">
+        <!-- sidebar -->
+        <%- include('../layouts/sidebar'); -%>
+            <!-- end sidebar -->
+            <%- include('../layouts/navbar'); -%>
+                <!-- content -->
+                <form action="<%= get_admin_url(); %>/articles/create" method="post" enctype="multipart/form-data">
+                    <div class="wrap_create">
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" name="title" class="form-control" v-focus required placeholder="Enter title here">
+                        </div>
+                        <div class="form-group">
+                            <label>Content</label>
+                            <div id="toolbar-container"></div>
+                            <textarea name="content" id="content" rows="10" class="form-control" ></textarea>
+                        </div>
+                        <hr>
+                        <div class="form-group">
+                            <label>Excerpt</label>
+                            <textarea name="excerpt" id="excerpt" rows="4" class="form-control"></textarea>
+                        </div>
+                        
+                        <div class="wrap_publish">
+                            <label>&nbsp;</label>
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <strong># Publish</strong>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> 04/06/2018 at 15:07
+                                    </div>
+                                    <div class="form-group">
+                                        <select class="form-control">
+                                            <option value="">Publish</option>
+                                            <option value="">Private</option>
+                                        </select>
+                                    </div>
+                                    <button type="submit" class="btn btn-default pull-right">Create</button>
+                                </div>
+                            </div>
+                            <!-- end -->
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <strong># Featured Image</strong>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="form-group">
+                                        <div class="user_thumbnail">
+                                            <span id="del_thumbnail">
+                                                <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                            </span>
+                                            <input class="input-file" accept="image/*" id="thumbnail" name="thumbnail" type="file" onChange="loadFile(event)">
+                                            <img id="output_avatar" class="img-thumbnail" alt="Add Featured Image">
+                                        </div>
+                                        <small style="font-style:italic;">Click the image to edit or update</small>
+                                        <br>
+                                        <script>
+                                            var loadFile = function (event) {
+                                                var output = document.getElementById('output_avatar'); output.src = URL.createObjectURL(event.target.files[0]);
+                                                var thumbnail = document.getElementById('thumbnail'); thumbnail.value = URL.createObjectURL(event.target.files[0]);
+                                            };
+                                            // $('#del_thumbnail').click(function () {
+                                            //     $('#output_avatar').attr('src', '');
+                                            //     $('#thumbnail').val('');
+                                            // });
+                                        </script>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- end content -->
+    </div>
+    <!-- end main -->
+    <%- include('../layouts/footer'); -%>

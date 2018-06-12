@@ -1,0 +1,54 @@
+<div class="clearfix"></div>
+</div>
+<!-- end main -->
+<!-- footer -->
+<!-- end footer -->
+
+<script src="<%= get_admin_url(); %>/js/socket.io.js"></script>
+<script> var socket = io(); </script>
+
+<% if(typeof site_info !== 'undefined') { %>
+    <% if(typeof site_info.page_slug !== 'undefined' && site_info.page_slug=='create_user') { %>
+        <script src="<%= get_admin_url(); %>/js/users/create.js"></script>
+    <% } %>
+
+        <% if(typeof site_info.page_slug !== 'undefined' && site_info.page_slug=='update_user') { %>
+        <script src="<%= get_admin_url(); %>/js/users/edit.js"></script>
+        <% var user = JSON.parse(data_user); if(user) { %>
+            <% if(user.username) { %>
+                <script> edit_user.username = '<%= user.username %>'; </script>
+            <% } %>
+            <% if(user.email) { %>
+                <script> edit_user.old_email = '<%= user.email %>'; </script>
+                <script> edit_user.email = '<%= user.email %>'; </script>
+            <% } %>
+        <% } %>
+       
+    <% } %>
+
+
+
+
+  
+     <% if(typeof site_info.page_slug !== 'undefined' && (site_info.page_slug=='create' || site_info.page_slug=='edit')) { %>
+        <script src="https://cdn.ckeditor.com/ckeditor5/10.0.1/decoupled-document/ckeditor.js"></script>
+        <script>
+            DecoupledEditor
+                .create( document.querySelector( '#editor' ), {
+                    cloudServices: {
+                        // tokenUrl: 'https://example.com/cs-token-endpoint',
+                        uploadUrl: 'assets/backend/uploads/'
+                    }
+                } )
+                .then( editor => {
+                    const toolbarContainer = document.querySelector( '#toolbar-container' );
+                    toolbarContainer.appendChild( editor.ui.view.toolbar.element );
+                } );
+                
+        </script>
+    <% } %>
+   
+<% } %>
+
+</body>
+</html>

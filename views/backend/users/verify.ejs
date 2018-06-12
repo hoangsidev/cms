@@ -1,0 +1,60 @@
+<%- include('../layouts/inc/functions.ejs'); -%>
+    <!-- https://hoangsi.com/ -->
+    <!DOCTYPE html>
+    <html lang='en'>
+
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+        <link rel="stylesheet" href="<%= get_admin_url(); %>/css/bootstrap.min.css">
+        <link rel="stylesheet" href="<%= get_admin_url(); %>/css/users.css">
+        <title>Thanks for verifying your email address.</title>
+    </head>
+
+    <body>
+        <div class="container" id="wrap">
+            <div id="wrap_cont">
+                <div class="panel col-md-4 col-md-offset-4">
+                    <div class="panel-body" id="verify">
+                        <small>Email <a href="javascript:void(0)">{{ email }}</a> is already verified. Thanks!</small>
+                        <div class="form-group" style="margin-top: 20px;">
+                            <a href="/backend/dashboard" class="btn btn-default" style="width: 100%;">Return to sign in</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="<%= get_admin_url(); %>/js/vue.min.js"></script>
+        <script>
+
+            var verify = new Vue({
+                el: '#verify',
+                data: {
+                    verified: null,
+                    username: null,
+                    email: null
+                },
+                methods: {
+                }
+            });
+
+        </script>
+        <% if(typeof verified !== 'undefined' && verified!='') { %>
+            <script>
+                verify.verified = true
+            </script>
+            <% } %>
+                <% if(typeof username !== 'undefined' && username!='') { %>
+                    <script>
+                        verify.username = '<%= username  %>'
+                    </script>
+                    <% } %>
+                        <% if(typeof email !== 'undefined' && email!='') { %>
+                            <script>
+                                verify.email = '<%= email  %>'
+                            </script>
+                            <% } %>
+    </body>
+
+    </html>

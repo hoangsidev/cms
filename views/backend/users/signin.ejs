@@ -1,0 +1,100 @@
+<%- include('../layouts/inc/functions.ejs'); -%>
+    <!-- https://hoangsi.com/ -->
+    <!DOCTYPE html>
+    <html lang='en'>
+
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+        <link rel="stylesheet" href="<%= get_admin_url(); %>/css/bootstrap.min.css">
+        <link rel="stylesheet" href="<%= get_admin_url(); %>/css/users.css">
+        <link rel="shortcut icon" href="<%= get_admin_url(); %>/images/favicon.ico" type="image/x-icon" />
+        <title>Sign in</title>
+    </head>
+
+    <body>
+        <div class="container" id="wrap">
+            <div id="wrap_cont">
+                <div class="panel col-md-4 col-md-offset-4">
+                    <div class="panel-body">
+                        <form id="signin" action="/signin" method="post" v-on:submit.prevent="submit_signin" ref="form">
+                            <div class="errors" v-if="errors.length">
+                                <p>Please correct the following error(s):</p>
+                                <ul>
+                                    <li v-for="error in errors">
+                                        <small>{{ error }}</small>
+                                    </li>
+                                </ul>
+                                <hr style="margin: 10px 0;">
+                            </div>
+                            <div class="form-group">
+                                <label for="username">Username or email address</label>
+                                <input type="text" class="form-control" name="username" v-model="username" v-focus autocomplete="off">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control" name="password" v-model="password" autocomplete="off">
+                            </div>
+                            <div class="checkbox">
+                                <label style="display: block;">
+                                    <input type="checkbox" v-model="remember" name="remember">
+                                    <small>Remember me</small>
+                                    <a href="/password_reset" class="pull-right">
+                                        <small>Forgot password?</small>
+                                    </a>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-default">Sign in</button>
+                                <small style="margin-top: 20px;" class="pull-right">Don't have an account?
+                                    <a href="/signup">Sign up</a>
+                                </small>
+                            </div>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="<%= get_admin_url(); %>/js/vue.min.js"></script>
+        <script>
+            Vue.directive('focus', {
+                inserted: function (el) {
+                    el.focus()
+                }
+            });
+            var signin = new Vue({
+                el: '#signin',
+                data: {
+                    username: null,
+                    email: null,
+                    password: null,
+                    remember: null,
+                    errors: [],
+                    unverify: null
+                },
+                methods: {
+                    submit_signin: function () {
+                        this.errors = [];
+                        if (!this.username) {
+                            this.errors.push("Username required.")
+                        }
+                        if (!this.password) {
+                            this.errors.push("Password required.");
+                        }
+                        if (!this.errors.length) this.$refs.form.submit();
+                    }
+                }
+            });
+
+
+        </script>
+        <% if(typeof incorrect !== 'undefined' && incorrect!='') { %>
+            <script>
+                signin.errors.push("Incorrect Username or Password.");
+            </script>
+            <% } %>
+    </body>
+
+    </html>

@@ -1,0 +1,96 @@
+<div id="wrap_sidebar">
+    <div class="brand">
+        <a href="<%= get_admin_url(); %>/dashboard" class="text-center">Adnimistrator</a>
+    </div>
+    <ul class="list-group">
+        <li>
+            <a href="<%= get_admin_url(); %>/dashboard" class="list-group-item main  <% if(typeof site_info !== 'undefined' && site_info.page_slug=='dashboard') { %> active <% } %>">
+                <i class="fa fa-tachometer" aria-hidden="true"></i>&nbsp; Dashboard
+            </a>
+        </li>
+    </ul>
+    <ul class="list-group">
+        <li>
+            <a href="<%= get_admin_url(); %>/posts" class="list-group-item main <% if(typeof site_info !== 'undefined' && (site_info.page_slug=='posts' || site_info.page_slug=='edit') ) { %> active <% } %>">
+                <i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp; Articles
+            </a>
+        </li>
+        <li>
+            <a href="<%= get_admin_url(); %>/posts" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='posts') { %> active <% } %>">
+                All posts
+            </a>
+        </li>
+        <li>
+            <a href="<%= get_admin_url(); %>/posts/create" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='create') { %> active <% } %>">
+                Add new
+            </a>
+        </li>
+        <li>
+            <a href="/dashboard" class="list-group-item">
+                Categories
+            </a>
+        </li>
+        <li>
+            <a href="/dashboard" class="list-group-item">
+                Tags
+            </a>
+        </li>
+    </ul>
+    <ul class="list-group">
+        <li>
+            <a href="#" class="list-group-item main">
+                <i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Pages
+            </a>
+        </li>
+        <li>
+            <a href="#" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='pages') { %> active <% } %>">
+                All pages
+            </a>
+        </li>
+        <li>
+            <a href="#" class="list-group-item">
+                Add new
+            </a>
+        </li>
+    </ul>
+    <ul class="list-group">
+        <li>
+            <a href="<%= get_admin_url(); %>/users" class="list-group-item main <% if(typeof site_info !== 'undefined'  && (site_info.page_slug=='users' || site_info.page_slug=='edit_user')) { %> active <% } %>">
+                <i class="fa fa-users" aria-hidden="true"></i>&nbsp; Users
+            </a>
+        </li>
+        <li>
+            <a href="<%= get_admin_url(); %>/users" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='users') { %> active <% } %>">
+                All users
+            </a>
+        </li>
+        <li>
+            <a href="<%= get_admin_url(); %>/users/create" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='create_user') { %> active <% } %>">
+                Add new
+            </a>
+        </li>
+        <li>
+            <a href="/dashboard" class="list-group-item">
+                Your Profile
+            </a>
+        </li>
+    </ul>
+    <ul class="list-group">
+        <li>
+            <a href="javascript:void(0)" class="list-group-item main">
+                <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp; Configs
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)" class="list-group-item main">
+                <i class="fa fa-heart" aria-hidden="true"></i>&nbsp; Feedbacks
+                <span class="badge">79</span>
+            </a>
+        </li>
+        <li>
+            <a href="javascript:void(0)" class="list-group-item main" onClick="return confirm('Are you sure?')">
+                <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp; Signout
+            </a>
+        </li>
+    </ul>
+</div>

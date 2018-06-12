@@ -1,0 +1,57 @@
+<%- include('../layouts/header.ejs'); -%>
+    <!-- main -->
+    <div id="wrap_main">
+        <!-- sidebar -->
+        <%- include('../layouts/sidebar'); -%>
+            <!-- end sidebar -->
+            <%- include('../layouts/navbar'); -%>
+                <!-- content -->
+                    <!-- if search -->
+                        <% if(typeof key_search !== 'undefined' && key_search!='') { %>
+                            <p><% if (typeof count_result !== 'undefined' && count_result > 0)  { %> Có <%= count_result %> <% } else { %> Không có <% } %> kết quả phù hợp với từ khóa : "<%= key_search %>"</p> 
+                        <% } %>
+                    <!-- end if search -->
+
+                    <% if(typeof data_posts !== 'undefined') { var posts = JSON.parse(data_posts); %>
+                            <% if(posts.length > 0) { %>
+                                <%- include('../layouts/components/pagination.ejs'); -%>
+                                    <table class="table table-bordered table-striped wrap_data">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:30px;">No.</th>
+                                                <th>Title</th>
+                                                <th>Categories</th>
+                                                <th>Date</th>
+                                                <th style="width:95px;text-align:center;">Options</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="data-words">
+                                            <% posts.forEach(function(item, index){ %>
+                                                <tr id="<% if(item._id) { %><%= item._id %><% } %>">
+                                                    <td style="text-align:center;"> <% index %> </td>
+                                                    <td><a href="<%= get_admin_url(); %>/posts/update/<% if(item._id) { %><%= item._id %><% } %>"></a></td>
+                                                    <td>Categories</td>
+                                                    <td><% if(item.created_at) { %><%= get_time(item.created_at) %><% } %></td>
+                                                    <td style="text-align:center;">
+                                                        <a href="javascript:void(0)" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                        <a href="<%= get_admin_url(); %>/posts/update/<% if(item._id) { %><%= item._id %><% } %>" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
+                                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                        </a>
+                                                        <form action="<%= get_admin_url(); %>/posts/delete?_method=DELETE" method="POST" style="display:inline-block;">
+                                                            <input type="hidden" name="_id" value="<% if(item._id) { %><%= item._id %><% } %>">
+                                                            <button type="submit" onclick="return confirm ('Are you sure ?')" class="btn btn-danger btn-xs"> <i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                                <% }) %>
+                                        </tbody>
+                                    </table>
+                                <%- include('../layouts/components/pagination.ejs'); -%>
+                            <% } else { %>
+                            <p>Empty</p>
+                            <%  } %>
+                    <% } %>    
+                <!-- end content -->
+    </div>
+    <!-- end main -->
+<%- include('../layouts/footer'); -%>

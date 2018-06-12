@@ -1,0 +1,27 @@
+{ 
+    "_id" : ObjectId("5b1a3d625e130c66ae3a7e98"), 
+    "username" : "wpadmin", 
+    "email" : "it.hoangsi@gmail.com", 
+    "display_name" : "Hoang Si123123123", 
+    "password" : null, 
+    "thumbnail" : "bec1452b05c0256b0922cf5f640a0fa8.JPG", 
+    "key" : "dfee05d2c3d28b7c49e8670285656056", 
+    "active" : "0", 
+    "role" : "0", 
+    "created_at" : "Tue May 22 2018 13:48:48 GMT+0700 (SE Asia Standard Time)", 
+    "__v" : NumberInt(0), 
+    "updated_at" : "Mon Jun 11 2018 16:31:19 GMT+0700 (SE Asia Standard Time)"
+}
+{ 
+    "_id" : ObjectId("5b1e14dac378240ca07096b6"), 
+    "username" : "wpadmin2", 
+    "email" : "it.hoangsi2@gmail.com", 
+    "display_name" : "wpadmin2", 
+    "password" : "b594f4fdac5ce47f7b67f70c2f296df6", 
+    "thumbnail" : null, 
+    "key" : "972dba628c60089e11bc899f285d2275", 
+    "verify" : "0", 
+    "role" : "0", 
+    "created_at" : "Mon Jun 11 2018 13:21:14 GMT+0700 (SE Asia Standard Time)", 
+    "__v" : NumberInt(0)
+}

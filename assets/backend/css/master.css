@@ -1,0 +1,253 @@
+/* https://hoangsi.com/ */
+
+* {
+    border-radius: 0px !important;
+}
+
+/**/
+
+.wrap_search {
+    display: inline-block;
+    padding: 8px;
+}
+
+.wrap_search input#search {
+    background: #2f2f2f;
+    border: 1px solid #7b7b7b;
+    border-radius: 4px !important;
+    padding: 5px 10px;
+    color: #ccc;
+    width: 350px;
+    height: 34px;
+}
+
+.wrap_search #submit_s {
+    background: #222;
+    border: 1px solid #7b7b7b;
+    border-radius: 4px !important;
+    padding: 8px 10px;
+    color: #fff;
+}
+
+.wrap_search #submit_s i {
+    font-size: 13px !important;
+}
+
+#wrap {
+    padding-left: 239px;
+    position: relative;
+    width: 100%;
+    float: left;
+}
+
+#wrap_sidebar {
+    width: 239px;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    height: 100%;
+    background: #333;
+    position: fixed;
+}
+
+#wrap_main {
+    padding: 15px;
+    width: 100%;
+    float: left;
+    margin-top: 50px;
+}
+
+#wrap_sidebar ul {
+    margin-bottom: 0;
+}
+
+#wrap_sidebar ul li a {
+    border: none;
+    border-bottom: 1px solid #3c3c3c;
+    background: #333;
+    color: #ccc;
+    font-size: 12px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+#wrap_sidebar ul li a.main {
+    background: #222;
+    color: #fff;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-weight: bold;
+}
+
+#wrap_sidebar ul li a .badge {
+    font-weight: lighter;
+    font-size: 10px;
+    background: #fff;
+    color: #f00;
+    border-radius: 15px !important
+}
+
+#wrap_sidebar ul li:hover a, #wrap_sidebar ul li a.active {
+    background: #222;
+    color: #FF0;
+}
+
+#wrap_sidebar .brand a {
+    color: #fff;
+    padding: 13px 7px;
+    font-size: 16px;
+    display: block;
+    text-decoration: none;
+}
+
+.wrap_data {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.wrap_data tr th {
+    background: #222;
+    color: #fff;
+    font-size: 12px;
+    padding: 3px 5px 5px 5px !important;
+    border-bottom: 1px solid #222 !important;
+    border-top: 1px solid #222 !important;
+}
+
+.wrap_data tr td {
+    padding: 3px !important;
+    font-size: 13px;
+    vertical-align: middle !important;
+}
+
+.wrap_pagination {
+    margin: 0 0 10px 0;
+}
+
+/**/
+
+#wrap_breadcrumb {
+    background: none;
+    margin: 0 0 10px 0;
+    padding: 0;
+}
+
+#wrap_header {
+    right: 0;
+    height: 50px;
+    z-index: 9;
+    position: fixed;
+    top: 0;
+    padding-right: 15px;
+    left: 239px;
+    background: #222;
+}
+
+.wrap_me li a.dropdown-toggle {
+    color: #fff;
+    background: none !important;
+}
+
+/**/
+
+.wrap_create {
+    position: relative;
+    padding-right: 254px;
+}
+
+.wrap_publish {
+    width: 239px;
+    right: 0;
+    top: 0;
+    position: absolute;
+}
+
+/**/
+
+.user_thumbnail {
+    position: relative;
+    display: block;
+}
+
+#del_thumbnail {
+    position: absolute;
+    right: -20px;
+    top: -25px;
+    font-size: 28px;
+    color: #F00;
+    padding: 5px 10px;
+    z-index: 99;
+}
+
+#del_thumbnail i {
+    background: #fff;
+    border-radius: 100% !important;
+    line-height: 22px;
+}
+
+.user_thumbnail, #output_avatar, #thumbnail {
+    width: 205px;
+    height: 140px;
+    background: #f5f5f5;
+    text-align: center;
+}
+
+#output_avatar {
+    height: 140px;
+}
+
+#thumbnail {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.thumb {
+    max-width: 60px;
+}
+
+#output_avatar {
+    object-fit: cover;
+    line-height: 130px;
+}
+
+/**/
+
+.errors, .error {
+    color: #f00;
+}
+
+.errors p {
+    color: #333
+}
+
+.errors ul {
+    padding-left: 20px;
+}
+
+.errors ul li {
+    line-height: 100%;
+}
+
+/**/
+
+.fr-box.fr-basic .fr-element {
+    height: 300px !important;
+}
+
+.bootstrap-tagsinput {
+    display: block;
+    width: 100%;
+}
+
+.ale {
+    margin: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+@media screen and (max-width:767px) {}
