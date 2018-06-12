@@ -25,7 +25,7 @@
                                                 <th style="width:95px;text-align:center;">Options</th>
                                             </tr>
                                         </thead>
-                                        <tbody id="data-words">
+                                        <tbody>
                                             <% posts.forEach(function(item, index){ %>
                                                 <tr id="<% if(item._id) { %><%= item._id %><% } %>">
                                                     <td style="text-align:center;"> <%= index + 1 %> </td>
@@ -49,6 +49,7 @@
                                 <%- include('../layouts/components/pagination.ejs'); -%>
                             <% } else { %>
                             <p>Empty</p>
+                            <a href="<%= get_admin_url(); %>/dashboard">Return to Dashboard</a>
                             <%  } %>
                     <% } %>    
                 <!-- end content -->

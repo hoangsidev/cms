@@ -29,7 +29,9 @@ var edit_user = new Vue({
             }
             if (this.password && !this.confirm_password) {
                 this.errors.push("Confirm password required.");
-            } else if (this.confirm_password != this.password) {
+            } else if (!this.password && this.confirm_password) {
+                this.errors.push("If you want change password, please input field password."); this.$refs.password.focus()
+            } else if (this.password && this.confirm_password != this.password) {
                 this.errors.push("Password confirmation doesn't match the password.");
             }
             if (!this.errors.length && !this.err_exist_username && !this.err_exist_email) this.$refs.form.submit();

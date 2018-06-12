@@ -6,17 +6,14 @@
             <!-- end sidebar -->
             <%- include('../layouts/navbar'); -%>
                 <!-- content -->
-                <% if(typeof key_search !== 'undefined' && key_search!='') { %>
-                    <h1 style="font-size: 14px;">
-                        <% if (count_result)  { %> Có
-                            <%= count_result %>
-                                <% } else { %> Không có
-                                    <% } %> kết quả phù hợp với từ khóa : "
-                                        <%= key_search %>"
-                    </h1>
-                    <a href="<%= get_admin_url(); %>/dashboard">Return to Dashboard</a>
+                    <!-- if search -->
+                    <% if(typeof key_search !== 'undefined' && key_search!='') { %>
+                        <p><% if (typeof count_result !== 'undefined' && count_result > 0)  { %> Có <%= count_result %> <% } else { %> Không có <% } %> kết quả phù hợp với từ khóa : "<%= key_search %>"</p> 
                     <% } %>
-                        <% var users = JSON.parse(data_users); if(users!=null && users.length > 0) { %>
+                    <!-- end if search -->
+
+                    <% if(typeof data_users !== 'undefined') { var users = JSON.parse(data_users); %>
+                        <% if(users.length > 0) { %>
                             <%- include('../layouts/components/pagination.ejs'); -%>
                                 <table class="table table-bordered table-striped wrap_data">
                                     <thead>
@@ -30,64 +27,45 @@
                                             <th style="width:95px;text-align:center;">Options</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="data-words">
+                                    <tbody>
                                         <% users.forEach(function(item, index){ %>
                                             <tr id="<% if(item._id) { %><%= item._id %><% } %>">
-                                                <td style="text-align:center;"> 1 </td>
+                                                <td style="text-align:center;"> <%= index + 1 %> </td>
                                                 <td style="width: 70px;" class="text-center">
                                                     <% if(item.thumbnail) { %>
                                                         <a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>">
                                                             <img class="thumb" src="<%= get_admin_url(); %>/uploads/<%= item.thumbnail %>" alt="<% if(item.username) { %><%= item.username %><% } %>">
-                                                    </a>
-                                                        <% } %>
+                                                        </a>
+                                                    <% } %>
                                                 </td>
-                                                <td>
-                                                    <a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>">
-                                                        <% if(item.username) { %>
-                                                            <%= item.username %>
-                                                                <% } %>
-                                                    </a>
+                                                <td><a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>"><% if(item.username) { %><%= item.username %><% } %></a>
                                                 </td>
-                                                <td>
-                                                    <% if(item.display_name) { %>
-                                                        <%= item.display_name %>
-                                                            <% } %>
-                                                </td>
-                                                <td>
-                                                    <% if(item.email) { %>
-                                                        <%= item.email %>
-                                                            <% } %>
-                                                </td>
-                                                <td>
-                                                    <% if(item.role) { %>
-                                                        <%= item.role %>
-                                                            <% } %>
-                                                </td>
+                                                <td><% if(item.display_name) { %><%= item.display_name %><% } %></td>
+                                                <td><% if(item.email) { %><%= item.email %><% } %></td>
+                                                <td><% if(item.role) { %><%= item.role %><% } %></td>
                                                 <td style="text-align:center;" >
                                                     <a href="javascript:void(0)" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="View">
                                                         <i class="fa fa-eye" aria-hidden="true"></i>
                                                     </a>
-                                                    <a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>" class="btn btn-warning btn-xs" data-toggle="tooltip"
-                                                        data-placement="top" data-original-title="Edit">
+                                                    <a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
                                                         <i class="fa fa-pencil" aria-hidden="true"></i>
                                                     </a>
                                                     <form action="<%= get_admin_url(); %>/users/delete?_method=DELETE" method="POST" style="display:inline-block;">
-                                                        <input type="hidden" name="id" value="<% if(item._id) { %><%= item._id %><% } %>">
-                                                        <button type="submit" onclick="return confirm ('Are you sure ?')" class="btn btn-danger btn-xs">
-                                                            <i class="fa fa-trash-o" aria-hidden="true"></i>
-                                                        </button>
+                                                        <input type="hidden" name="_id" value="<% if(item._id) { %><%= item._id %><% } %>">
+                                                        <button type="submit" onclick="return confirm ('Are you sure ?')" class="btn btn-danger btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                                     </form>
-                                               
                                                 </td>
                                             </tr>
                                             <% }) %>
                                     </tbody>
                                 </table>
                                 <%- include('../layouts/components/pagination.ejs'); -%>
-                                    <% } else { %>
-                                        Empty
-                                        <%  } %>
-                                            <!-- end content -->
+                            <% } else { %>
+                                <p>Empty</p>
+                                <a href="<%= get_admin_url(); %>/dashboard">Return to Dashboard</a>
+                            <%  } %>
+                        <% } %>
+                <!-- end content -->
     </div>
     <!-- end main -->
     <%- include('../layouts/footer'); -%>
