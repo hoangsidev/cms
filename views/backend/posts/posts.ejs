@@ -28,8 +28,8 @@
                                         <tbody id="data-words">
                                             <% posts.forEach(function(item, index){ %>
                                                 <tr id="<% if(item._id) { %><%= item._id %><% } %>">
-                                                    <td style="text-align:center;"> <% index %> </td>
-                                                    <td><a href="<%= get_admin_url(); %>/posts/update/<% if(item._id) { %><%= item._id %><% } %>"></a></td>
+                                                    <td style="text-align:center;"> <%= index + 1 %> </td>
+                                                    <td><a href="<%= get_admin_url(); %>/posts/update/<% if(item._id) { %><%= item._id %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></td>
                                                     <td>Categories</td>
                                                     <td><% if(item.created_at) { %><%= get_time(item.created_at) %><% } %></td>
                                                     <td style="text-align:center;">

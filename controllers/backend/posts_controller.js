@@ -22,7 +22,7 @@ var posts_controller = {
     posts: (req, res, next) => {  // done
         if (req.query.search && req.query.search != null && req.query.search != '' && typeof req.query.search !== 'undefined') { var key_search = req.query.search };
         var per_page = 20, // num of post in one page
-            page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : null;
+            page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
         if (!key_search) { // list all
             m_posts.find({}).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
                 m_posts.count().exec((err, count) => {
@@ -104,7 +104,7 @@ var posts_controller = {
                     arr_data.num_order = (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') ? fields.num_order : '0';
                     m_posts.create(arr_data, (err, result) => {
                         if (result) {
-                            return res.redirect(get_admin_url + '/posts/edit/' + result._id);
+                            return res.redirect(get_admin_url + '/posts/update/' + result._id);
                         } else {
                             return res.redirect(get_admin_url + '/error');
                         }
