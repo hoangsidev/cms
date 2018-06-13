@@ -12,7 +12,7 @@
         <script src="<%= get_admin_url(); %>/js/users/create.js"></script>
     <% } %>
 
-        <% if(typeof site_info.page_slug !== 'undefined' && site_info.page_slug=='update_user') { %>
+        <% if(typeof site_info.page_slug !== 'undefined' && (site_info.page_slug=='update_user' || site_info.page_slug=='profile')) { %>
         <script src="<%= get_admin_url(); %>/js/users/edit.js"></script>
         <% var user = JSON.parse(data_user); if(user) { %>
             <% if(user.username) { %>

@@ -15,4 +15,5 @@ var posts_schema = new mongoose.Schema({
     updated_at: String,
     num_order: String
 });
+// posts_schema.index({ title: 'text' }); // index search, use posts_schema.index({'$**': 'text'}); to index all
 module.exports = mongoose.model('posts', posts_schema);  // posts là tên collecttion

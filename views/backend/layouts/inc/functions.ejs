@@ -27,4 +27,12 @@
     var the_time = d + '/' + m + '/' + y + ' at ' + g + ':' + i + ' ' + a
     return the_time;
   }
+
+  get_role = (value_role) => {
+    var result_role = '';
+    if(value_role==0) { result_role = '<span class="label label-default">Guest</span>'  }
+    if(value_role==1) { result_role = '<span class="label label-primary">Author</span>'  }
+    if(value_role==2) { result_role = '<span class="label label-danger">Adnimistrator</span>'  }
+    return result_role;
+  }
 %>

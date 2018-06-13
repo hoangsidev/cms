@@ -301,9 +301,9 @@ var users_controller = {
             });
         } else { // if search     
             var regex = [
-                { 'username': new RegExp(key_search + '$', "i") },
-                { 'email': new RegExp(key_search + '$', "i") },
-                { 'display_name': new RegExp(key_search + '$', "i") }
+                { username: new RegExp(key_search, "i") },
+                { email: new RegExp(key_search, "i") },
+                { display_name: new RegExp(key_search, "i") }
             ];
             m_users.find({ $or: regex }).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
                 m_users.find({ $or: regex }).count().exec((err, count) => {
@@ -384,6 +384,29 @@ var users_controller = {
         }
     },
 
+    profile: (req, res, next) => {
+        check_exist_user();
+        if (req.method == 'GET') {
+            if (res.locals.me._id && res.locals.me._id != null && res.locals.me._id != '' && typeof res.locals.me._id !== 'undefined') { var _id = res.locals.me._id };
+            if (_id) {
+                m_users.findOne({ _id: _id }, (err, result) => {
+                    if (result) {
+                        return res.render('backend/users/update', {
+                            data_user: JSON.stringify(result) ? JSON.stringify(result) : JSON.stringify({}),
+                            site_info: {
+                                page_title: 'Profile',
+                                page_slug: 'profile',
+                                me: res.locals.me
+                            }
+                        });
+                    } else {
+                        return res.redirect(get_admin_url + '/404');
+                    }
+                });
+            }
+        }
+    },
+
     update: (req, res, next) => {
         check_exist_user();
         if (req.method == 'GET') {
@@ -409,9 +432,15 @@ var users_controller = {
             var form = new formidable.IncomingForm(); form.maxFileSize = 20 * 1024 * 1024;
             form.parse(req, (err, fields, files) => {
                 if (fields._id && fields._id != null && fields._id != '' && typeof fields._id !== 'undefined') { var _id = fields._id };
-                if (_id) {
+                if (fields.old_email && fields.old_email != null && fields.old_email != '' && typeof fields.old_email !== 'undefined' && valid_email(fields.old_email)) { var old_email = fields.old_email; };
+                if (_id && old_email) {
                     var arr_data = new Object();
-                    if (fields.email && fields.email != null && fields.email != '' && typeof fields.email !== 'undefined' && valid_email(fields.email)) { arr_data.email = fields.email; };
+                    if (fields.email && fields.email != null && fields.email != '' && typeof fields.email !== 'undefined' && valid_email(fields.email)) {
+                        if (fields.email != old_email) { // nếu mail đã bị thay đổi thì đổi thì  xử lý đổi trong dữ liệu, sau đó verify về 0 và gửi mail verify
+                            arr_data.email = fields.email;
+                            arr_data.verify = '0';
+                        }
+                    };
                     if (fields.password && fields.password != null && fields.password != '' && typeof fields.password !== 'undefined' && valid_password(fields.password)) {
                         arr_data.password = md5(fields.password);
                         arr_data.key = md5(Math.random().toString());
@@ -429,11 +458,30 @@ var users_controller = {
                     arr_data.updated_at = new Date();
                     m_users.findOneAndUpdate({ _id: _id }, { $set: arr_data }, { new: true }, (err, result) => {
                         if (result) {
+                            if (_id == res.locals.me._id) { // nếu tài khoản bị sửa chính là tài khoản đang đăng nhập thì fải làm mới session
+                                req.session.me = result;
+                            }
+                            if (result.verify == 0) { // nếu sau quá trình cập nhật, verify bị đổi về 0 thì gửi 1 mail verify
+                                // verify email
+                                var url_verify = get_site_url + '/verify/' + result.username + '/' + result.key,
+                                    mail_options = {
+                                        from: 'it.hoangsi@gmail.com', to: result.email, subject: '[' + get_site_name + '] Please verify your email address.',
+                                        html: `Help us secure your account by verifying your email address (` + result.email + `). This lets you access all of our features.<br><br>
+                                        <a href="` + url_verify + `">` + url_verify + `</a><br><br>
+                                        You’re receiving this email because you recently created a new `+ get_site_name + ` account or added a new email address. If this wasn’t you, please ignore this email.`
+                                    };
+                                mail_auth.sendMail(mail_options, (err, sent) => {
+                                    if (!err) { console.log('Sent verify!'); }
+                                });
+                                // end verify email
+                            }
                             return res.redirect(get_admin_url + '/users/')
                         } else {
                             return res.redirect(get_admin_url + '/error');
                         }
                     });
+                } else {
+                    return res.redirect(get_admin_url + '/error');
                 }
             });
         }

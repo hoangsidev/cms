@@ -70,7 +70,7 @@
             </a>
         </li>
         <li>
-            <a href="/dashboard" class="list-group-item">
+            <a href="<%= get_admin_url(); %>/users/profile" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='profile') { %> active <% } %>">
                 Your Profile
             </a>
         </li>

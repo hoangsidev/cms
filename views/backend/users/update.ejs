@@ -10,6 +10,7 @@
                     <form action="<%= get_admin_url(); %>/users/update?_method=PUT" method="post" enctype="multipart/form-data" id="edit_user"
                         v-on:submit.prevent="update_user" ref="form">
                         <input type="hidden" name="_id" value="<% if(user._id) { %><%= user._id %><% } %>">
+                        <input type="hidden" name="old_email" value="<% if(user.email) { %><%= user.email %><% } %>">
                         <div class="errors" v-if="errors.length">
                             <p>Please correct the following error(s):</p>
                             <ul>

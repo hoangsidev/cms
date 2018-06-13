@@ -12,13 +12,14 @@ var configs = require('./config/configs.js'),
 global.io = require('socket.io')(server);  // golobal để sử dụng trên tất cả file
 
 server.listen(process.env.PORT || 3000, () => { console.log('Server runing with port 3000 !!!!'); });
+console.log();
 /* --------------------------------------------------------------------------------------- */
 app.use(body_parser.json()); // support json encoded bodies
 app.use(body_parser.urlencoded({ extended: true })); // support encoded bodies
 app.use(method_override('_method'));
-app.use(express.static('./assets')); // thư mục public chứa hình, css,...
+app.use(express.static(__dirname + '/assets')); // thư mục public chứa hình, css,...
 app.set('view engine', 'ejs'); // đặt template engine là EJS
-app.set('views', './views'); // trỏ vào thư mục view để chứa các file template
+app.set('views', __dirname + '/views'); // trỏ vào thư mục view để chứa các file template
 app.use((req, res, next) => {
     session({
         secret: 'hoangsi', saveUninitialized: true, resave: true, maxAge: req.body.remember ? (24 * 60 * 60 * 1000 * 30) : null//, maxAge: 24 * 60 * 60 * 1000 * 30 // 30 ngày
@@ -103,6 +104,9 @@ app.route('/backend/users/page/:page')
 app.route('/backend/users/create')
     .get(auth, users_controller.create)
     .post(auth, users_controller.create)
+
+app.route('/backend/users/profile')
+    .get(auth, users_controller.profile)
 
 app.route('/backend/users/update/:_id')
     .get(auth, users_controller.update)

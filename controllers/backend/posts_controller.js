@@ -41,9 +41,9 @@ var posts_controller = {
             });
         } else { // if search
             var regex = [
-                { 'title': new RegExp(key_search + '$', "i") }, // thêm '^' +  : là search bắt đầu bằng từ khóa
-                { 'slug': new RegExp(key_search + '$', "i") },
-                { 'content': new RegExp(key_search + '$', "i") }
+                { title: new RegExp(key_search, "i") }, // thêm '^' +  : là search bắt đầu bằng từ khóa
+                { slug: new RegExp(key_search, "i") },
+                { content: new RegExp(key_search, "i") }
             ];
             m_posts.find({ $or: regex }).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
                 m_posts.find({ $or: regex }).count().exec((err, count) => {

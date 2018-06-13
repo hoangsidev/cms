@@ -5,7 +5,7 @@
             <% if (current == 1) { %>
                 <li class="disabled"><a>First</a></li>
             <% } else { %>
-                <li><a href="<%= get_admin_url() %>/<% if(page_slug) { %><%= page_slug %><% } %>/?search=<%= key_search %>">First</a></li>
+                <li><a href="<%= get_admin_url() %>/<% if(typeof site_info.page_slug !== 'undefined') { %><%= site_info.page_slug %><% } %>/?search=<%= key_search %>">First</a></li>
             <% } %>
             <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
             <% if (i !== 1) { %>
@@ -17,7 +17,7 @@
                 <% if (i == current) { %>
                     <li class="active"><a><%= i %></a></li>
                 <% } else { %>
-                    <li><a href="<%= get_admin_url() %>/<% if(page_slug) { %><%= page_slug %><% } %>/page/<%= i %>/?search=<%= key_search %>"><%= i %></a></li>
+                    <li><a href="<%= get_admin_url() %>/<% if(typeof site_info.page_slug !== 'undefined') { %><%= site_info.page_slug %><% } %>/page/<%= i %>/?search=<%= key_search %>"><%= i %></a></li>
                 <% } %>
                 <% if (i == Number(current) + 4 && i < pages) { %>
                     <li class="disabled"><a>...</a></li>
@@ -27,7 +27,7 @@
             <% if (current == pages) { %>
                 <li class="disabled"><a>Last</a></li>
             <% } else { %>
-                <li><a href="<%= get_admin_url() %>/<% if(page_slug) { %><%= page_slug %><% } %>/page/<%= pages %>/?search=<%= key_search %>">Last</a></li>
+                <li><a href="<%= get_admin_url() %>/<% if(typeof site_info.page_slug !== 'undefined') { %><%= site_info.page_slug %><% } %>/page/<%= pages %>/?search=<%= key_search %>">Last</a></li>
             <% } %>
         </ul>
     <% } %>
@@ -36,7 +36,7 @@
             <% if (current == 1) { %>
                 <li class="disabled"><a>First</a></li>
             <% } else { %>
-                <li><a href="<%= get_admin_url() %>/<% if(page_slug) { %><%= page_slug %><% } %>">First</a></li>
+                <li><a href="<%= get_admin_url() %>/<% if(typeof site_info.page_slug !== 'undefined') { %><%= site_info.page_slug %><% } %>">First</a></li>
             <% } %>
             <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
             <% if (i !== 1) { %>
@@ -48,7 +48,7 @@
                 <% if (i == current) { %>
                     <li class="active"><a><%= i %></a></li>
                 <% } else { %>
-                    <li><a href="<%= get_admin_url() %>/<% if(page_slug) { %><%= page_slug %><% } %>/page/<%= i %>"><%= i %></a></li>
+                    <li><a href="<%= get_admin_url() %>/<% if(typeof site_info.page_slug !== 'undefined') { %><%= site_info.page_slug %><% } %>/page/<%= i %>"><%= i %></a></li>
                 <% } %>
                 <% if (i == Number(current) + 4 && i < pages) { %>
                     <li class="disabled"><a>...</a></li>
@@ -58,7 +58,7 @@
             <% if (current == pages) { %>
                 <li class="disabled"><a>Last</a></li>
             <% } else { %>
-                <li><a href="<%= get_admin_url() %>/<% if(page_slug) { %><%= page_slug %><% } %>/page/<%= pages %>">Last</a></li>
+                <li><a href="<%= get_admin_url() %>/<% if(typeof site_info.page_slug !== 'undefined') { %><%= site_info.page_slug %><% } %>/page/<%= pages %>">Last</a></li>
             <% } %>
         </ul>
 <% } %>
