@@ -20,18 +20,24 @@ function valid_username(username) {
     if (username) {
         var re = /^[a-zA-Z0-9]+$/;
         return re.test(username);
+    } else {
+        return false;
     }
 }
 function valid_email(email) {
     if (email) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
+    } else {
+        return false;
     }
 }
 function valid_password(password) {
     if (password) {
         var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
         return re.test(password);
+    } else {
+        return false;
     }
 }
 
@@ -141,7 +147,7 @@ var users_controller = {
                     }
                 });
             } else { // if nó phá bậy bạ
-                return res.redirect(get_site_url + '/signup');
+                return res.redirect(get_site_url + '/error');
             }
         }
     },
@@ -168,12 +174,16 @@ var users_controller = {
                     return res.redirect(get_site_url + '/signin');
                 }
             })
+        } else {
+            return res.redirect(get_admin_url + '/error');
         }
     },
     signout: (req, res, next) => { // done
         req.session = null;
         if (req.session == null) {
             return res.redirect(get_site_url + '/signin');
+        } else {
+            return res.redirect(get_admin_url + '/error');
         }
     },
     password_reset: (req, res, next) => { // done
@@ -252,7 +262,7 @@ var users_controller = {
                     }
                 });
             } else { // if nó phá bậy bạ
-                return res.redirect(get_admin_url + '/password_reset');
+                return res.redirect(get_admin_url + '/error');
             }
         } else if (req.method == 'PUT') { // if PUT
             if (req.body.password && req.body.password != null && req.body.password != '' && typeof req.body.password !== 'undefined' && valid_password(req.body.password)) { var password = req.body.password };
@@ -273,7 +283,7 @@ var users_controller = {
                     }
                 });
             } else { // đây là trường hợp nó phá
-                return res.redirect(get_site_url + '/password_reset');
+                return res.redirect(get_site_url + '/error');
             }
         }
     },
@@ -379,6 +389,8 @@ var users_controller = {
                             return res.redirect(get_admin_url + '/users');
                         }
                     });
+                } else {
+                    return res.redirect(get_admin_url + '/error');
                 }
             });
         }
@@ -427,6 +439,8 @@ var users_controller = {
                     }
 
                 });
+            } else {
+                return res.redirect(get_admin_url + '/404');
             }
         } else if (req.method == 'PUT') {
             var form = new formidable.IncomingForm(); form.maxFileSize = 20 * 1024 * 1024;
@@ -496,6 +510,8 @@ var users_controller = {
                     return res.redirect(get_admin_url + '/404');
                 }
             });
+        } else {
+            return res.redirect(get_admin_url + '/error');
         }
     }
     // End CURD

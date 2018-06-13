@@ -109,6 +109,8 @@ var posts_controller = {
                             return res.redirect(get_admin_url + '/error');
                         }
                     });
+                } else {
+                    return res.redirect(get_admin_url + '/error');
                 }
             });
         }
@@ -156,10 +158,10 @@ var posts_controller = {
                     if (fields.terms && fields.terms != null && fields.terms != '' && typeof fields.terms !== 'undefined') { arr_data.terms = fields.terms };
                     if (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') { arr_data.custom_fields = fields.custom_fields };
                     if (res.locals.me._id) { arr_data.author_id = res.locals.me._id };
-                    if (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') { arr_data.post_type_id = fields.post_type_id };
-                    if (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') { arr_data.status = fields.status };
+                    if (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') { arr_data.post_type_id = fields.post_type_id } else { arr_data.post_type_id = '1' };
+                    if (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') { arr_data.status = fields.status } else { arr_data.status = '0' };
                     arr_data.updated_at = new Date();
-                    if (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') { arr_data.num_order = fields.num_order };
+                    if (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') { arr_data.num_order = fields.num_order } else { arr_data.num_order = '0' };
                     m_posts.findOneAndUpdate({ _id: _id }, { $set: arr_data }, { new: true }, (err, result) => {
                         if (result) {
                             return res.redirect(get_admin_url + '/posts/update/' + result._id);
@@ -167,6 +169,8 @@ var posts_controller = {
                             return res.redirect(get_admin_url + '/error');
                         }
                     });
+                } else {
+                    return res.redirect(get_admin_url + '/error');
                 }
             });
         }
@@ -181,6 +185,8 @@ var posts_controller = {
                     return res.redirect(get_admin_url + '/404');
                 }
             });
+        } else {
+            return res.redirect(get_admin_url + '/error');
         }
     }
     // End CURD

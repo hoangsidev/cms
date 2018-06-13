@@ -30,9 +30,16 @@
 
   get_role = (value_role) => {
     var result_role = '';
-    if(value_role==0) { result_role = '<span class="label label-default">Guest</span>'  }
-    if(value_role==1) { result_role = '<span class="label label-primary">Author</span>'  }
-    if(value_role==2) { result_role = '<span class="label label-danger">Adnimistrator</span>'  }
+    if(value_role=='0') { result_role = '<span class="label label-info">Guest</span>'  }
+    if(value_role=='1') { result_role = '<span class="label label-primary">Author</span>'  }
+    if(value_role=='2') { result_role = '<span class="label label-danger">Adnimistrator</span>'  }
     return result_role;
+  }
+
+  get_status = (value_status) => {
+    var result_status = '';
+    if(value_status=='0') { result_status = '<span class="label label-danger">Private</span>'  }
+    if(value_status=='1') { result_status = '<span class="label label-success">Publish</span>'  }
+    return result_status;
   }
 %>

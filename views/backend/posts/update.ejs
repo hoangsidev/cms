@@ -36,11 +36,11 @@
                                                 <i class="fa fa-calendar" aria-hidden="true"></i> 04/06/2018 at 15:07
                                             </div>
                                             <div class="form-group">
-                                                <select class="form-control">
-                                                    <option value="1">Publish</option>
-                                                    <option value="0">Private</option>
-                                                </select>
-                                            </div>
+                                                    <select class="form-control" name="status">
+                                                        <option value="1" <% if(post.status && post.status=='1') { %> selected <% } %> >Publish</option>
+                                                        <option value="0" <% if(post.status && post.status=='0') { %> selected <% } %> >Private</option>
+                                                    </select>
+                                                </div>
                                             <button type="submit" class="btn btn-default pull-right">Update</button>
                                         </div>
                                     </div>

@@ -22,6 +22,7 @@
                                                 <th>Title</th>
                                                 <th>Categories</th>
                                                 <th>Date</th>
+                                                <th>Status</th>
                                                 <th style="width:95px;text-align:center;">Options</th>
                                             </tr>
                                         </thead>
@@ -32,6 +33,7 @@
                                                     <td><a href="<%= get_admin_url(); %>/posts/update/<% if(item._id) { %><%= item._id %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></td>
                                                     <td>Categories</td>
                                                     <td><% if(item.created_at) { %><%= get_time(item.created_at) %><% } %></td>
+                                                    <td><% if(item.status) { %><%- get_status(item.status) %><% } %></td>
                                                     <td style="text-align:center;">
                                                         <a href="javascript:void(0)" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                         <a href="<%= get_admin_url(); %>/posts/update/<% if(item._id) { %><%= item._id %><% } %>" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
