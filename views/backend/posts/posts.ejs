@@ -53,8 +53,12 @@
                                     </table>
                                 <%- include('../layouts/components/pagination.ejs'); -%>
                             <% } else { %>
-                            <p>Empty</p>
-                            <a href="<%= get_admin_url(); %>/dashboard">Return to Dashboard</a>
+                            <p>Empty!</p>
+                            <% if(typeof key_search !== 'undefined' && key_search!='') { %>
+                                <a href="<%= get_admin_url(); %>/dashboard">Return to Dashboard</a>
+                            <% } else { %>
+                                <a href="<%= get_admin_url(); %>/<%= post_type_slug %>/create">Add new</a>
+                            <% } %>
                             <%  } %>
                     <% } %>    
                 <!-- end content -->

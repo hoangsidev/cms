@@ -7,7 +7,8 @@ var configs = require('./config/configs.js'),
     path = configs.path(),
     fs = configs.fs(),
     method_override = configs.method_override(),
-    server = require('http').Server(app);
+    server = require('http').Server(app),
+    get_admin_url = configs.get_admin_url();
 
 global.io = require('socket.io')(server);  // golobal để sử dụng trên tất cả file
 
@@ -41,82 +42,103 @@ var frontend_controller = require('./controllers/frontend/frontend_controller.js
 
 // BACKEND
 
-function auth(req, res, next) {
+auth = (req, res, next) => {
     if (!req.session.me) {
         res.redirect('/signin');
     } else {
         next();
     }
 }
-
-app.route('/backend/404')
-    .get(auth, backend_controller.not_found)
-
-app.route('/backend/error')
-    .get(auth, backend_controller.error)
-
-app.route('/backend/dashboard')
-    .get(auth, backend_controller.dashboard)
+app.get('/backend', (req, res, next) => {
+    return res.redirect(get_admin_url + '/dashboard');
+})
+app.get('/backend/404', auth, backend_controller.not_found)
+app.get('/backend/error', auth, backend_controller.error)
+app.get('/backend/dashboard', auth, backend_controller.dashboard)
 
 // posts
-app.route('/backend/:post_type')
-    .get(auth, posts_controller.posts)
+app.get(('/backend/:post_type'), auth, (req, res, next) => {
+    if (req.params.post_type && req.params.post_type == 'users') {
+        return users_controller.users(req, res, next);
+    } else {
+        return posts_controller.posts(req, res, next); // articles and pages
+    }
+})
 
-app.route('/backend/:post_type/page/:page')
-    .get(auth, posts_controller.posts)
+app.get('/backend/:post_type/page/:page', auth, (req, res, next) => {
+    if (req.params.post_type && req.params.post_type == 'users') {
+        return users_controller.users(req, res, next);
+    } else {
+        return posts_controller.posts(req, res, next);
+    }
+})
 
 app.route('/backend/:post_type/create')
-    .get(auth, posts_controller.create)
-    .post(auth, posts_controller.create)
+    .get(auth, (req, res, next) => {
+        if (req.params.post_type && req.params.post_type == 'users') {
+            return users_controller.create(req, res, next);
+        } else {
+            return posts_controller.create(req, res, next); // articles and pages
+        }
+    })
+    .post(auth, (req, res, next) => {
+        if (req.params.post_type && req.params.post_type == 'users') {
+            return users_controller.create(req, res, next);
+        } else {
+            return posts_controller.create(req, res, next); // articles and pages
+        }
+    })
 
-app.route('/backend/:post_type/update/:_id')
-    .get(auth, posts_controller.update)
+app.get('/backend/:post_type/update/:_id', auth, (req, res, next) => {
+    if (req.params.post_type && req.params.post_type == 'users') {
+        return users_controller.update(req, res, next);
+    } else {
+        return posts_controller.update(req, res, next); // articles and pages
+    }
+})
 
-app.route('/backend/:post_type/update')
-    .put(auth, posts_controller.update)
+app.put('/backend/:post_type/update', auth, auth, (req, res, next) => {
+    if (req.params.post_type && req.params.post_type == 'users') {
+        return users_controller.update(req, res, next);
+    } else {
+        return posts_controller.update(req, res, next); // articles and pages
+    }
+})
 
-app.route('/backend/:post_type/delete')
-    .delete(auth, posts_controller.delete)
+app.route('/backend/users/profile')
+    .get(auth, users_controller.profile)
+
+
+app.delete('/backend/:post_type/delete', auth, auth, (req, res, next) => {
+    if (req.params.post_type && req.params.post_type == 'users') {
+        return users_controller.delete(req, res, next);
+    } else {
+        return posts_controller.delete(req, res, next); // articles and pages
+    }
+})
 // end posts
+
 
 // users
 app.route('/signin')
     .get(users_controller.signin)
     .post(users_controller.signin)
+
 app.route('/signup')
     .get(users_controller.signup)
     .post(users_controller.signup)
+
 app.route('/verify/:username/:key')
     .get(users_controller.verify)
+
 app.route('/signout')
     .get(users_controller.signout)
+
 app.route('/password_reset')
     .get(users_controller.password_reset)
     .post(users_controller.password_reset)
     .put(users_controller.password_reset)
-/* */
-app.route('/backend/users')
-    .get(auth, users_controller.users)
-
-app.route('/backend/users/page/:page')
-    .get(auth, users_controller.users)
-
-app.route('/backend/users/create')
-    .get(auth, users_controller.create)
-    .post(auth, users_controller.create)
-
-app.route('/backend/users/profile')
-    .get(auth, users_controller.profile)
-
-app.route('/backend/users/update/:_id')
-    .get(auth, users_controller.update)
-
-app.route('/backend/users/update')
-    .put(auth, users_controller.update)
-
-app.route('/backend/users/delete')
-    .delete(auth, users_controller.delete)
-// end users
+// end user
 
 // End BACKEND
 
