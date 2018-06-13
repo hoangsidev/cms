@@ -59,23 +59,23 @@ app.route('/backend/dashboard')
     .get(auth, backend_controller.dashboard)
 
 // posts
-app.route('/backend/posts')
+app.route('/backend/:post_type')
     .get(auth, posts_controller.posts)
 
-app.route('/backend/posts/page/:page')
+app.route('/backend/:post_type/page/:page')
     .get(auth, posts_controller.posts)
 
-app.route('/backend/posts/create')
+app.route('/backend/:post_type/create')
     .get(auth, posts_controller.create)
     .post(auth, posts_controller.create)
 
-app.route('/backend/posts/update/:_id')
+app.route('/backend/:post_type/update/:_id')
     .get(auth, posts_controller.update)
 
-app.route('/backend/posts/update')
+app.route('/backend/:post_type/update')
     .put(auth, posts_controller.update)
 
-app.route('/backend/posts/delete')
+app.route('/backend/:post_type/delete')
     .delete(auth, posts_controller.delete)
 // end posts
 

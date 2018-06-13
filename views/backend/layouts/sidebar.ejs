@@ -11,51 +11,51 @@
     </ul>
     <ul class="list-group">
         <li>
-            <a href="<%= get_admin_url(); %>/posts" class="list-group-item main <% if(typeof site_info !== 'undefined' && (site_info.page_slug=='posts' || site_info.page_slug=='edit') ) { %> active <% } %>">
+            <a href="<%= get_admin_url(); %>/articles" class="list-group-item main <% if(typeof site_info !== 'undefined' && (site_info.page_slug=='articles' || site_info.page_slug=='update_articles') ) { %> active <% } %>">
                 <i class="fa fa-newspaper-o" aria-hidden="true"></i>&nbsp; Articles
             </a>
         </li>
         <li>
-            <a href="<%= get_admin_url(); %>/posts" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='posts') { %> active <% } %>">
-                All posts
+            <a href="<%= get_admin_url(); %>/articles" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='articles') { %> active <% } %>">
+                All articles
             </a>
         </li>
         <li>
-            <a href="<%= get_admin_url(); %>/posts/create" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='create') { %> active <% } %>">
+            <a href="<%= get_admin_url(); %>/articles/create" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='create_articles') { %> active <% } %>">
                 Add new
             </a>
         </li>
         <li>
-            <a href="/dashboard" class="list-group-item">
+            <a href="#" class="list-group-item">
                 Categories
             </a>
         </li>
         <li>
-            <a href="/dashboard" class="list-group-item">
+            <a href="#" class="list-group-item">
                 Tags
             </a>
         </li>
     </ul>
     <ul class="list-group">
         <li>
-            <a href="#" class="list-group-item main">
+            <a href="<%= get_admin_url(); %>/pages" class="list-group-item main  <% if(typeof site_info !== 'undefined' && (site_info.page_slug=='pages' || site_info.page_slug=='update_pages')) { %> active <% } %>">
                 <i class="fa fa-file-text" aria-hidden="true"></i>&nbsp; Pages
             </a>
         </li>
         <li>
-            <a href="#" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='pages') { %> active <% } %>">
+            <a href="<%= get_admin_url(); %>/pages" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='pages') { %> active <% } %>">
                 All pages
             </a>
         </li>
         <li>
-            <a href="#" class="list-group-item">
+            <a href="<%= get_admin_url(); %>/pages/create" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='create_pages') { %> active <% } %>">
                 Add new
             </a>
         </li>
     </ul>
     <ul class="list-group">
         <li>
-            <a href="<%= get_admin_url(); %>/users" class="list-group-item main <% if(typeof site_info !== 'undefined'  && (site_info.page_slug=='users' || site_info.page_slug=='edit_user')) { %> active <% } %>">
+            <a href="<%= get_admin_url(); %>/users" class="list-group-item main <% if(typeof site_info !== 'undefined'  && (site_info.page_slug=='users' || site_info.page_slug=='update_user')) { %> active <% } %>">
                 <i class="fa fa-users" aria-hidden="true"></i>&nbsp; Users
             </a>
         </li>

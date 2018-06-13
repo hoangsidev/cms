@@ -11,7 +11,10 @@
                             <p><% if (typeof count_result !== 'undefined' && count_result > 0)  { %> Có <%= count_result %> <% } else { %> Không có <% } %> kết quả phù hợp với từ khóa : "<%= key_search %>"</p> 
                         <% } %>
                     <!-- end if search -->
-
+                    <% var post_type_slug  = '', post_type_id = '' ; if(typeof site_info !== 'undefined' && typeof site_info.post_type !== 'undefined') {  
+                        post_type_slug = site_info.post_type.post_type_slug;
+                        post_type_id = site_info.post_type.post_type_id  
+                    } %>
                     <% if(typeof data_posts !== 'undefined') { var posts = JSON.parse(data_posts); %>
                             <% if(posts.length > 0) { %>
                                 <%- include('../layouts/components/pagination.ejs'); -%>
@@ -30,16 +33,16 @@
                                             <% posts.forEach(function(item, index){ %>
                                                 <tr id="<% if(item._id) { %><%= item._id %><% } %>">
                                                     <td style="text-align:center;"> <%= index + 1 %> </td>
-                                                    <td><a href="<%= get_admin_url(); %>/posts/update/<% if(item._id) { %><%= item._id %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></td>
+                                                    <td><a href="<%= get_admin_url(); %>/<%= post_type_slug %>/update/<% if(item._id) { %><%= item._id %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></td>
                                                     <td>Categories</td>
                                                     <td><% if(item.created_at) { %><%= get_time(item.created_at) %><% } %></td>
                                                     <td><% if(item.status) { %><%- get_status(item.status) %><% } %></td>
                                                     <td style="text-align:center;">
                                                         <a href="javascript:void(0)" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                                                        <a href="<%= get_admin_url(); %>/posts/update/<% if(item._id) { %><%= item._id %><% } %>" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
+                                                        <a href="<%= get_admin_url(); %>/<%= post_type_slug %>/update/<% if(item._id) { %><%= item._id %><% } %>" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
                                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                                         </a>
-                                                        <form action="<%= get_admin_url(); %>/posts/delete?_method=DELETE" method="POST" style="display:inline-block;">
+                                                        <form action="<%= get_admin_url(); %>/<%= post_type_slug %>/delete?_method=DELETE" method="POST" style="display:inline-block;">
                                                             <input type="hidden" name="_id" value="<% if(item._id) { %><%= item._id %><% } %>">
                                                             <button type="submit" onclick="return confirm ('Are you sure ?')" class="btn btn-danger btn-xs"> <i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                                         </form>

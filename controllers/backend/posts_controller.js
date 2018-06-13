@@ -17,23 +17,44 @@ var configs = require('../../config/configs.js'),
 app.use(body_parser.json());
 app.use(body_parser.urlencoded({ extended: true }));
 
+function exist_post_type(slug) {
+    var post_type, post_type_id;
+    if (slug && slug != null && slug != '' && typeof slug !== 'undefined' && (slug == 'articles' || slug == 'pages')) {
+        if (slug == 'articles') { post_type_id = '1'; } else if (slug == 'pages') { post_type_id = '2'; }
+        return post_type = {
+            post_type_slug: slug,
+            post_type_id: post_type_id
+        }
+    } else {
+        return false;
+    }
+}
+
 var posts_controller = {
     // CURD
     posts: (req, res, next) => {  // done
+        // check exist post_type
+        if (exist_post_type(req.params.post_type)) {
+            var post_type = exist_post_type(req.params.post_type), post_type_slug = post_type.post_type_slug, post_type_id = post_type.post_type_id;
+        } else {
+            return res.redirect(get_admin_url + '/404');
+        }
+        // end check exist post_type
         if (req.query.search && req.query.search != null && req.query.search != '' && typeof req.query.search !== 'undefined') { var key_search = req.query.search };
         var per_page = 20, // num of post in one page
             page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
         if (!key_search) { // list all
-            m_posts.find({}).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
-                m_posts.count().exec((err, count) => {
+            m_posts.find({ post_type_id: post_type_id }).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
+                m_posts.find({ post_type_id: post_type_id }).count().exec((err, count) => {
                     return res.render('backend/posts/posts', {
                         data_posts: JSON.stringify(result) ? JSON.stringify(result) : JSON.stringify([]),
                         current: page,
                         pages: Math.ceil(count / per_page),
                         paginate: (count > per_page) ? true : false,
                         site_info: {
-                            page_title: 'All posts',
-                            page_slug: 'posts',
+                            page_title: 'All ' + post_type_slug,
+                            page_slug: post_type_slug,
+                            post_type: post_type,
                             me: res.locals.me
                         }
                     });
@@ -45,8 +66,8 @@ var posts_controller = {
                 { slug: new RegExp(key_search, "i") },
                 { content: new RegExp(key_search, "i") }
             ];
-            m_posts.find({ $or: regex }).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
-                m_posts.find({ $or: regex }).count().exec((err, count) => {
+            m_posts.find({ $and: [{ post_type_id: post_type_id }, { $or: regex }] }).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
+                m_posts.find({ $and: [{ post_type_id: post_type_id }, { $or: regex }] }).count().exec((err, count) => {
                     return res.render('backend/posts/posts', {
                         data_posts: JSON.stringify(result) ? JSON.stringify(result) : JSON.stringify([]),
                         current: page,
@@ -55,21 +76,31 @@ var posts_controller = {
                         count_result: count,
                         paginate: count > per_page ? true : false,
                         site_info: {
-                            page_title: 'Search results',
-                            page_slug: 'posts',
+                            page_title: 'Search results ' + post_type_slug,
+                            page_slug: post_type_slug,
+                            post_type: post_type,
                             me: res.locals.me
                         }
                     });
                 });
             });
         }
+
     },
     create: (req, res, next) => { // done
+        // check exist post_type
+        if (exist_post_type(req.params.post_type)) {
+            var post_type = exist_post_type(req.params.post_type), post_type_slug = post_type.post_type_slug, post_type_id = post_type.post_type_id;
+        } else {
+            return res.redirect(get_admin_url + '/404');
+        }
+        // end check exist post_type
         if (req.method == 'GET') {
             return res.render('backend/posts/create', {
                 site_info: {
-                    page_title: 'Add new post',
-                    page_slug: 'create',
+                    page_title: 'Add new ' + post_type_slug,
+                    page_slug: 'create_' + post_type_slug,
+                    post_type: post_type,
                     me: res.locals.me
                 }
             });
@@ -77,7 +108,8 @@ var posts_controller = {
             var form = new formidable.IncomingForm(); form.maxFileSize = 20 * 1024 * 1024; // 20MB
             form.parse(req, (err, fields, files) => {
                 if (fields.title && fields.title != null && fields.title != '' && typeof fields.title !== 'undefined') { var title = fields.title };
-                if (title) {
+                if (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') { var post_type_id = fields.post_type_id };
+                if (title && post_type_id) {
                     var arr_data = new Object();
                     arr_data.title = fields.title;
                     arr_data.slug = slugify(fields.title, { replacement: '-', remove: /[$*_+~.()'"!\-:@]/g, lower: true });
@@ -97,14 +129,15 @@ var posts_controller = {
                     arr_data.terms = (fields.terms && fields.terms != null && fields.terms != '' && typeof fields.terms !== 'undefined') ? fields.terms : [];
                     arr_data.custom_fields = (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') ? fields.custom_fields : [];
                     arr_data.author_id = res.locals.me._id ? res.locals.me._id : '1';
-                    arr_data.post_type_id = (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') ? fields.post_type_id : '0';
+                    arr_data.post_type_id = (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') ? fields.post_type_id : '1';
                     arr_data.status = (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') ? fields.status : '0';
+                    arr_data.post_type_id = fields.post_type_id;
                     arr_data.created_at = new Date();
                     arr_data.updated_at = null;
                     arr_data.num_order = (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') ? fields.num_order : '0';
                     m_posts.create(arr_data, (err, result) => {
                         if (result) {
-                            return res.redirect(get_admin_url + '/posts/update/' + result._id);
+                            return res.redirect(get_admin_url + '/' + post_type_slug + '/update/' + result._id);
                         } else {
                             return res.redirect(get_admin_url + '/error');
                         }
@@ -117,6 +150,13 @@ var posts_controller = {
     },
 
     update: (req, res, next) => { // done
+        // check exist post_type
+        if (exist_post_type(req.params.post_type)) {
+            var post_type = exist_post_type(req.params.post_type), post_type_slug = post_type.post_type_slug, post_type_id = post_type.post_type_id;
+        } else {
+            return res.redirect(get_admin_url + '/404');
+        }
+        // end check exist post_type
         if (req.method == 'GET') {
             if (req.params._id && req.params._id != null && req.params._id != '' && typeof req.params._id !== 'undefined') { var _id = req.params._id };
             if (_id) {
@@ -125,8 +165,9 @@ var posts_controller = {
                         return res.render('backend/posts/update', {
                             data_post: JSON.stringify(result),
                             site_info: {
-                                page_title: 'Update post',
-                                page_slug: 'update',
+                                page_title: 'Update ' + post_type_slug,
+                                page_slug: 'update_' + post_type_slug,
+                                post_type: post_type,
                                 me: res.locals.me
                             }
                         });
@@ -176,11 +217,18 @@ var posts_controller = {
         }
     },
     delete: (req, res, next) => { // done
+        // check exist post_type
+        if (exist_post_type(req.params.post_type)) {
+            var post_type = exist_post_type(req.params.post_type), post_type_slug = post_type.post_type_slug, post_type_id = post_type.post_type_id;
+        } else {
+            return res.redirect(get_admin_url + '/404');
+        }
+        // end check exist post_type
         if (req.body._id && req.body._id != null && req.body._id != '' && typeof req.body._id !== 'undefined') { var _id = req.body._id };
         if (_id) {
             m_posts.deleteOne({ _id: _id }, (err, result) => {
                 if (result) {
-                    return res.redirect(get_admin_url + '/posts');
+                    return res.redirect(get_admin_url + '/' + post_type_slug);
                 } else {
                     return res.redirect(get_admin_url + '/404');
                 }
