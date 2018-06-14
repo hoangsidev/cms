@@ -1,4 +1,4 @@
-var mongoose = require('../config/database.js');
+var mongoose = require('../configs/database.js');
 var posts_schema = new mongoose.Schema({
     title: String,
     slug: String,

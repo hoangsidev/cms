@@ -1,5 +1,5 @@
 /* https://hoangsi.com/ */
-var configs = require('./config/configs.js'),
+var configs = require('./configs/configs.js'),
     app = configs.app(),
     express = configs.express(),
     session = configs.session(),
@@ -13,7 +13,6 @@ var configs = require('./config/configs.js'),
 global.io = require('socket.io')(server);  // golobal để sử dụng trên tất cả file
 
 server.listen(process.env.PORT || 3000, () => { console.log('Server runing with port 3000 !!!!'); });
-console.log();
 /* --------------------------------------------------------------------------------------- */
 app.use(body_parser.json()); // support json encoded bodies
 app.use(body_parser.urlencoded({ extended: true })); // support encoded bodies
@@ -36,6 +35,7 @@ app.use((req, res, next) => {
 var backend_controller = require('./controllers/backend/backend_controller.js'),
     posts_controller = require('./controllers/backend/posts_controller.js'),
     users_controller = require('./controllers/backend/users_controller.js');
+terms_controller = require('./controllers/backend/terms_controller.js');
 /* ----- */
 var frontend_controller = require('./controllers/frontend/frontend_controller.js');
 /* --------------------------------------------------------------------------------------- */
@@ -78,14 +78,14 @@ app.route('/backend/:post_type/create')
         if (req.params.post_type && req.params.post_type == 'users') {
             return users_controller.create(req, res, next);
         } else {
-            return posts_controller.create(req, res, next); // articles and pages
+            return posts_controller.create(req, res, next);
         }
     })
     .post(auth, (req, res, next) => {
         if (req.params.post_type && req.params.post_type == 'users') {
             return users_controller.create(req, res, next);
         } else {
-            return posts_controller.create(req, res, next); // articles and pages
+            return posts_controller.create(req, res, next);
         }
     })
 
@@ -93,7 +93,7 @@ app.get('/backend/:post_type/update/:_id', auth, (req, res, next) => {
     if (req.params.post_type && req.params.post_type == 'users') {
         return users_controller.update(req, res, next);
     } else {
-        return posts_controller.update(req, res, next); // articles and pages
+        return posts_controller.update(req, res, next);
     }
 })
 
@@ -101,13 +101,11 @@ app.put('/backend/:post_type/update', auth, auth, (req, res, next) => {
     if (req.params.post_type && req.params.post_type == 'users') {
         return users_controller.update(req, res, next);
     } else {
-        return posts_controller.update(req, res, next); // articles and pages
+        return posts_controller.update(req, res, next);
     }
 })
 
-app.route('/backend/users/profile')
-    .get(auth, users_controller.profile)
-
+app.get('/backend/users/profile', auth, users_controller.profile)
 
 app.delete('/backend/:post_type/delete', auth, auth, (req, res, next) => {
     if (req.params.post_type && req.params.post_type == 'users') {
@@ -118,7 +116,17 @@ app.delete('/backend/:post_type/delete', auth, auth, (req, res, next) => {
 })
 // end posts
 
+// terms
+app.get('/backend/terms/:taxonomy', auth, terms_controller.terms)
+app.get('/backend/terms/:taxonomy/page/:page', auth, terms_controller.terms)
+app.post('/backend/terms/:taxonomy/create', auth, terms_controller.create)
 
+app.route('/backend/terms/:taxonomy/update/:_id')
+    .get(auth, terms_controller.update)
+    .post(auth, terms_controller.update)
+    
+app.delete('/backend/terms/:taxonomy/delete', auth, terms_controller.delete)
+// end terms
 // users
 app.route('/signin')
     .get(users_controller.signin)
@@ -128,11 +136,9 @@ app.route('/signup')
     .get(users_controller.signup)
     .post(users_controller.signup)
 
-app.route('/verify/:username/:key')
-    .get(users_controller.verify)
+app.get('/verify/:username/:key', users_controller.verify)
 
-app.route('/signout')
-    .get(users_controller.signout)
+app.get('/signout', users_controller.signout)
 
 app.route('/password_reset')
     .get(users_controller.password_reset)

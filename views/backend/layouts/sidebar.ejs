@@ -26,12 +26,12 @@
             </a>
         </li>
         <li>
-            <a href="#" class="list-group-item">
+            <a href="<%= get_admin_url(); %>/terms/categories" class="list-group-item  <% if(typeof site_info !== 'undefined' && (site_info.page_slug=='categories' || site_info.page_slug=='update_categories')) { %> active <% } %>">
                 Categories
             </a>
         </li>
         <li>
-            <a href="#" class="list-group-item">
+            <a href="<%= get_admin_url(); %>/terms/tags" class="list-group-item  <% if(typeof site_info !== 'undefined' && (site_info.page_slug=='tags' || site_info.page_slug=='update_tags')) { %> active <% } %>">
                 Tags
             </a>
         </li>

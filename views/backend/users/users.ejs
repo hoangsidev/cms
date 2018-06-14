@@ -11,7 +11,7 @@
                         <p><% if (typeof count_result !== 'undefined' && count_result > 0)  { %> Có <%= count_result %> <% } else { %> Không có <% } %> kết quả phù hợp với từ khóa : "<%= key_search %>"</p> 
                     <% } %>
                     <!-- end if search -->
-
+                    
                     <% if(typeof data_users !== 'undefined') { var users = JSON.parse(data_users); %>
                         <% if(users.length > 0) { %>
                             <%- include('../layouts/components/pagination.ejs'); -%>

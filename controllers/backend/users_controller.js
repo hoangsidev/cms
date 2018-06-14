@@ -1,4 +1,4 @@
-var configs = require('../../config/configs.js'),
+var configs = require('../../configs/configs.js'),
     m_users = require('../../models/users_model.js'),
     md5 = configs.md5(),
     fs = configs.fs(),
@@ -59,6 +59,11 @@ function check_exist_user() { // check exist username & email with socket.io
         });
         socket.setMaxListeners(0);
     });
+}
+
+var post_type = {
+    post_type_slug: 'users',
+    post_type_id: '3'
 }
 
 var users_controller = {
@@ -304,6 +309,7 @@ var users_controller = {
                         site_info: {
                             page_title: 'All users',
                             page_slug: 'users',
+                            post_type: post_type,
                             me: res.locals.me
                         }
                     });
@@ -325,8 +331,9 @@ var users_controller = {
                         count_result: count,
                         paginate: count > per_page ? true : false,
                         site_info: {
-                            page_title: 'Search result',
+                            page_title: 'Search result users',
                             page_slug: 'users',
+                            post_type: post_type,
                             me: res.locals.me
                         }
                     });
@@ -341,6 +348,7 @@ var users_controller = {
                 site_info: {
                     page_title: 'Add new user',
                     page_slug: 'create_user',
+                    post_type: post_type,
                     me: res.locals.me
                 }
             });
@@ -408,6 +416,7 @@ var users_controller = {
                             site_info: {
                                 page_title: 'Profile',
                                 page_slug: 'profile',
+                                post_type: post_type,
                                 me: res.locals.me
                             }
                         });
@@ -431,6 +440,7 @@ var users_controller = {
                             site_info: {
                                 page_title: 'Update user',
                                 page_slug: 'update_user',
+                                post_type: post_type,
                                 me: res.locals.me
                             }
                         });

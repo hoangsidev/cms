@@ -1,4 +1,4 @@
-var mongoose = require('../config/database.js');
+var mongoose = require('../configs/database.js');
 var users_schema = new mongoose.Schema({
     username: String,
     email: String,

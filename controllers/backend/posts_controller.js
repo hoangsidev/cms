@@ -1,4 +1,4 @@
-var configs = require('../../config/configs.js'),
+var configs = require('../../configs/configs.js'),
     m_posts = require('../../models/posts_model.js'),
     app = configs.app(),
     express = configs.express(),
