@@ -1,7 +1,5 @@
 var configs = require('../../configs/configs.js'),
     m_posts = require('../../models/posts_model.js'),
-    m_users = require('../../models/users_model.js'),
-    m_terms = require('../../models/terms_model.js'),
     app = configs.app(),
     express = configs.express(),
     session = configs.session(),
@@ -47,90 +45,20 @@ var posts_controller = {
             page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
         if (!key_search) { // list all
             m_posts.find({ post_type_id: post_type_id }).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
-                var data_posts = [];
-                result.forEach(element => { // foreach posst
-                    var arr_terms = element.terms;
-
-
-                    const promise_users = (author_id) => { // done
-                        return new Promise((resolve, reject) => {
-                            m_users.findOne({ _id: author_id }, (err, result) => {
-                                resolve(result);
-                            });
-                        });
-                    }
-
-                    const promise_terms = (arr_terms, taxonomy_id) => {
-                        return new Promise((resolve, reject) => {
-                            var arr_last_terms = [];
-                            arr_terms.forEach((ele_term, index) => {
-                                m_terms.findOne({ _id: ele_term.term_id, taxonomy_id: taxonomy_id }, (err, result) => {
-                                    if (result) { arr_last_terms.push(result) }
-
-                                    if (index == (arr_terms.length - 1)) { // cho forEach tới cuối mảng thì mới resolve, vì resolve là nó ngắt vòng forEach
-                                        resolve(arr_last_terms);
-                                    }
-                                });
-                            });
-                        });
-                    }
-
-
-                    const posts = async () => { // hàm tổng kết
-                        var post = {};
-                        post._id = element._id;
-                        post.title = element.title;
-                        const author = await promise_users(element.author_id);
-                        post.author = author.display_name ? author.display_name : author.username;
-
-                        const categories = await promise_terms(arr_terms, "1");
-                        post.categories = categories;
-                        const tags = await promise_terms(arr_terms, "2");
-                        post.tags = tags;
-
-
-
-
-
-
-
-
-
-
-
-
-                        data_posts.push(post)
-                        return Promise.resolve(data_posts);
-                    }
-
-                    posts().then((data_posts) => {
-                        console.log(data_posts);
-
-                        m_posts.find({ post_type_id: post_type_id }).count().exec((err, count) => {
-                            return res.render('backend/posts/posts', {
-                                data_posts: JSON.stringify(data_posts) ? JSON.stringify(data_posts) : JSON.stringify([]),
-                                current: page,
-                                pages: Math.ceil(count / per_page),
-                                paginate: (count > per_page) ? true : false,
-                                site_info: {
-                                    page_title: 'All ' + post_type_slug,
-                                    page_slug: post_type_slug,
-                                    post_type: post_type,
-                                    me: res.locals.me
-                                }
-                            });
-                        });
+                m_posts.find({ post_type_id: post_type_id }).count().exec((err, count) => {
+                    return res.render('backend/posts/posts', {
+                        data_posts: JSON.stringify(result) ? JSON.stringify(result) : JSON.stringify([]),
+                        current: page,
+                        pages: Math.ceil(count / per_page),
+                        paginate: (count > per_page) ? true : false,
+                        site_info: {
+                            page_title: 'All ' + post_type_slug,
+                            page_slug: post_type_slug,
+                            post_type: post_type,
+                            me: res.locals.me
+                        }
                     });
-
-
-
                 });
-
-
-
-
-
-                
             });
         } else { // if search
             var regex = [
