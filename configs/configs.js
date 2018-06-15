@@ -54,6 +54,7 @@ var config = {
     method_override: () => {
         return method_override;
     }
+    
 }
 
 module.exports = config;

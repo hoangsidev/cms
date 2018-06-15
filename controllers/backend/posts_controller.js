@@ -47,90 +47,177 @@ var posts_controller = {
             page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
         if (!key_search) { // list all
             m_posts.find({ post_type_id: post_type_id }).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
-                var data_posts = [];
-                result.forEach(element => { // foreach posst
-                    var arr_terms = element.terms;
 
-
-                    const promise_users = (author_id) => { // done
-                        return new Promise((resolve, reject) => {
-                            m_users.findOne({ _id: author_id }, (err, result) => {
-                                resolve(result);
-                            });
+                var post = {}
+                const promise_users = (author_id) => { // done
+                    return new Promise((resolve, reject) => {
+                        m_users.findOne({ _id: author_id }, (err, result) => {
+                            resolve(result);
                         });
-                    }
+                    });
+                }
 
-                    const promise_terms = (arr_terms, taxonomy_id) => {
-                        return new Promise((resolve, reject) => {
-                            var arr_last_terms = [];
-                            arr_terms.forEach((ele_term, index) => {
+                const promise_terms = (post, arr_terms_id, taxonomy_id) => {
+                    return new Promise((resolve, reject) => {
+                        var arr_terms = [];
+                        if (arr_terms_id.length > 0) {
+                            arr_terms_id.forEach((ele_term, index) => {
                                 m_terms.findOne({ _id: ele_term.term_id, taxonomy_id: taxonomy_id }, (err, result) => {
-                                    if (result) { arr_last_terms.push(result) }
-
-                                    if (index == (arr_terms.length - 1)) { // cho forEach tới cuối mảng thì mới resolve, vì resolve là nó ngắt vòng forEach
-                                        resolve(arr_last_terms);
+                                    if (result) { arr_terms.push(result) }
+                                    if (index == (arr_terms_id.length - 1)) { // cho forEach tới cuối mảng thì mới resolve, vì resolve là nó ngắt vòng forEach (phải trừ 1 vì index bắt đầu từ 0)
+                                        if (taxonomy_id == '1') { post.categories = arr_terms; resolve(post); }
+                                        if (taxonomy_id == '2') { post.tags = arr_terms; resolve(post); }
                                     }
                                 });
                             });
-                        });
-                    }
+                        } else {
+                            resolve(post);
+                        }
+                    });
+                }
+
+                const promise_post = (post, ele_post) => {
+                    return new Promise((resolve, reject) => {
+                        post._id = ele_post._id
+                        post.title = ele_post.title
+
+                        // obj_post._id = ele_post._id;
+                        // obj_post.title = ele_post.title;
+                        // obj_post.author = author.display_name ? author.display_name : author.username;
+                        // post.categories = categories ? categories : null;
+                        // post.tags = tags ? tags : null;
+                        resolve(post);
+                        // data_posts.push(post);
+                        // return Promise.resolve(post);
+                        // if (index_post == (result.length - 1)) {
+                        //     return Promise.resolve(data_posts);
+                        // }
+                    });
+                }
 
 
-                    const posts = async () => { // hàm tổng kết
-                        var post = {};
-                        post._id = element._id;
-                        post.title = element.title;
-                        const author = await promise_users(element.author_id);
-                        post.author = author.display_name ? author.display_name : author.username;
-
-                        const categories = await promise_terms(arr_terms, "1");
-                        post.categories = categories;
-                        const tags = await promise_terms(arr_terms, "2");
-                        post.tags = tags;
 
 
 
-
-
-
-
-
-
-
-
-
-                        data_posts.push(post)
-                        return Promise.resolve(data_posts);
-                    }
-
-                    posts().then((data_posts) => {
-                        console.log(data_posts);
-
-                        m_posts.find({ post_type_id: post_type_id }).count().exec((err, count) => {
-                            return res.render('backend/posts/posts', {
-                                data_posts: JSON.stringify(data_posts) ? JSON.stringify(data_posts) : JSON.stringify([]),
-                                current: page,
-                                pages: Math.ceil(count / per_page),
-                                paginate: (count > per_page) ? true : false,
-                                site_info: {
-                                    page_title: 'All ' + post_type_slug,
-                                    page_slug: post_type_slug,
-                                    post_type: post_type,
-                                    me: res.locals.me
-                                }
-                            });
+                const users = (author_id) => { // done
+                    return new Promise((resolve, reject) => {
+                        m_users.findOne({ _id: author_id }, (err, result) => {
+                            resolve(result);
                         });
                     });
+                }
+
+
+                let data_posts = []
+
+                const async_func = (ele, cb) => {
+                    var obj_post = {};
+                    obj_post.title = ele.title
+                    tongket(obj_post, ele, cb)
+                   
+                   
+                }
+
+                const tongket =  (obj_post, ele, cb) => {
+                    m_users.findOne({ _id: ele.author_id }, (err, result) => {
+                        obj_post.author = result.username;
+                        cb(null, obj_post)
+                    });
+                    
+                    // cb(null, obj_post) // lưu post
+                    // return Promise.resolve(obj_post);   
+                }
+
+
+             
+
+                const do_async = (ele) => {
+                    async_func(ele, (err, obj_post) => {
+                        data_posts.push(obj_post)
+                        if (data_posts.length >= result.length) {
+                            (data_posts) => { }
+                        }
+                    }) // có post thì push vào mảng lớn trả ra
+                }
+
+               
+
+                result.forEach(do_async)
+
+
+                console.log(data_posts);
 
 
 
+
+
+
+
+
+
+
+
+
+                // foreach posts
+
+                // const waitFor = (ms) => new Promise(r => setTimeout(r, ms))
+
+                // const asyncForEach = (array, callback) => {
+                //     for (let index = 0; index < array.length; index++) {
+                //         callback(array[index], index, array)
+                //     }
+                // }
+
+                // const start = async () => {
+                //     var data_posts = [];
+                //      await asyncForEach(result, async (ele_post, index) => {
+                //         await promise_users(post, ele_post.author_id);
+                //         await promise_terms(post, ele_post.terms, "1");
+                //         await promise_terms(post, ele_post.terms, "2");
+                //         await promise_post(post, ele_post)
+
+
+                //         await data_posts.push(post)
+
+
+                //         await waitFor(50)
+                //         // await  cb(null, data_posts);
+                //     });
+                //     // await console.log(data_posts);
+                //     // return Promise.resolve(data_posts);
+
+                // }
+
+                // start().then(result => {
+                //     // console.log(result);
+                // })
+
+
+
+
+
+
+
+                // posts(index_post, result).then((data_posts) => {
+                //     console.log(data_posts);
+                // });
+
+
+                m_posts.find({ post_type_id: post_type_id }).count().exec((err, count) => {
+                    return res.render('backend/posts/posts', {
+                        data_posts: JSON.stringify(result) ? JSON.stringify(result) : JSON.stringify([]),
+                        current: page,
+                        pages: Math.ceil(count / per_page),
+                        paginate: (count > per_page) ? true : false,
+                        site_info: {
+                            page_title: 'All ' + post_type_slug,
+                            page_slug: post_type_slug,
+                            post_type: post_type,
+                            me: res.locals.me
+                        }
+                    });
                 });
 
-
-
-
-
-                
             });
         } else { // if search
             var regex = [
