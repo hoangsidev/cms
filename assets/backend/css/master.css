@@ -250,4 +250,8 @@
     padding-bottom: 10px;
 }
 
+.terms span:last-child {
+    display: none;
+}
+
 @media screen and (max-width:767px) {}

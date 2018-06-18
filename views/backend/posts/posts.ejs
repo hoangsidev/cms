@@ -15,7 +15,7 @@
                         post_type_slug = site_info.post_type.post_type_slug;
                         post_type_id = site_info.post_type.post_type_id  
                     } %>
-                    <% if(typeof data_posts !== 'undefined') { var posts = JSON.parse(data_posts); %>
+                    <% if(typeof posts !== 'undefined') { %>
                             <% if(posts.length > 0) { %>
                                 <%- include('../layouts/components/pagination.ejs'); -%>
                                     <table class="table table-bordered table-striped wrap_data">
@@ -36,35 +36,30 @@
                                                 <tr id="<% if(item._id) { %><%= item._id %><% } %>">
                                                     <td style="text-align:center;"> <%= index + 1 %> </td>
                                                     <td><a href="<%= get_admin_url(); %>/<%= post_type_slug %>/update/<% if(item._id) { %><%= item._id %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></td>
-                                                    <td>
-                                                            <% if(typeof item.categories !== 'undefined') { var  categories = item.categories %>
-                                                                <% if(categories.length > 0) { %>
-                                                                    <% categories.forEach(function(item_category, index){ %>
-                                                                        <a href=""><% if(item_category.title) { %><%= item_category.title %><% } %></a><br>
-                                                                        
-
-                                                                        <% }); %>
+                                                    <td class="terms">
+                                                        <% if(typeof item.categories !== 'undefined') { var  categories = item.categories %>
+                                                            <% if(categories.length > 0) { %>
+                                                                <% categories.forEach(function(item_category, index){ %>
+                                                                    <% if(item_category.taxonomy_id == '1') { %>
+                                                                        <a href=""><% if(item_category.title) { %><%= item_category.title %><% } %></a><span>, </span> 
                                                                     <% } %>
-                                                                    <% } %>
-
+                                                                <% }); %>
+                                                            <% } %>
+                                                        <% } %>
                                                     </td>
                                                     <td>
-                                                        
-
-                                                            <% if(typeof item.tags !== 'undefined') { var  tags = item.tags %>
-                                                                <% if(tags.length > 0) { %>
-                                                                    <% tags.forEach(function(item_tag, index){ %>
+                                                        <% if(typeof item.tags !== 'undefined') { var  tags = item.tags %>
+                                                            <% if(tags.length > 0) { %>
+                                                                <% tags.forEach(function(item_tag, index){ %>
+                                                                    <% if(item_tag.taxonomy_id == '2') { %>
                                                                         <a href=""><% if(item_tag.title) { %><%= item_tag.title %><% } %></a><br>
-                                                                        
-
-                                                                        <% }); %>
                                                                     <% } %>
-                                                                    <% } %>
-
-
+                                                                <% }); %>
+                                                            <% } %>
+                                                        <% } %>
                                                     </td>
                                                     <td><% if(item.created_at) { %><%= get_time(item.created_at) %><% } %></td>
-                                                    <td>Author</td>
+                                                    <td><% if(item.author) { %><a href="<%= item.author._id %>"><%= item.author.display_name %></a><% } %></td>
                                                     <td><% if(item.status) { %><%- get_status(item.status) %><% } %></td>
                                                     <td style="text-align:center;">
                                                         <a href="javascript:void(0)" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>

@@ -10,7 +10,7 @@
                     post_type_slug = site_info.post_type.post_type_slug;
                     post_type_id = site_info.post_type.post_type_id  
                 } %>
-                <form action="<%= get_admin_url(); %>/<%= post_type_slug %>/create" method="post" enctype="multipart/form-data">
+                <form action="<%= get_admin_url(); %>/<%= post_type_slug %>/create" method="post" id="create" enctype="multipart/form-data">
                     <input type="hidden" value="<%= post_type_id %>" name="post_type_id">
                     <div class="wrap_create">
                         <div class="form-group">
@@ -48,6 +48,8 @@
                                 </div>
                             </div>
                             <!-- end -->
+                            
+                          
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <strong># Featured Image</strong>
@@ -68,18 +70,60 @@
                                                 var output = document.getElementById('output_avatar'); output.src = URL.createObjectURL(event.target.files[0]);
                                                 var thumbnail = document.getElementById('thumbnail'); thumbnail.value = URL.createObjectURL(event.target.files[0]);
                                             };
-                                            // $('#del_thumbnail').click(function () {
-                                            //     $('#output_avatar').attr('src', '');
-                                            //     $('#thumbnail').val('');
-                                            // });
+                                            $('#del_thumbnail').click(function () {
+                                                $('#output_avatar').attr('src', '');
+                                                $('#thumbnail').val('');
+                                            });
                                         </script>
                                         <div class="clearfix"></div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- end -->
+                            <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <strong># Categories</strong>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div id="wrap_tags">
+                                                <% if(typeof terms !== 'undefined') { var  terms = JSON.parse(terms); %>
+                                                    <% if(terms.length > 0) { %>
+                                                        <% terms.forEach(function(item_term, index){ %>
+                                                            <% if(item_term.taxonomy_id == '1') { %>
+                                                                <div class="checkbox">
+                                                                    <label><input class="term" type="checkbox" value="<% if(item_term._id) { %><%= item_term._id %><% } %>"><% if(item_term.title) { %><%= item_term.title %><% } %></label>
+                                                                </div>
+                                                            <% } %>
+                                                        <% }); %>
+                                                    <% } %>
+                                                <% } %>
+                                                <input type="hidden" name="terms" id="terms">
+                                        </div>
+                                      
+                                         <div class="input-group">
+                                                <input type="text" class="form-control" >
+                                                <span class="input-group-btn">
+                                                  <button class="btn btn-default" type="button">Add</button>
+                                                </span>
+                                         </div>
+                                    </div>
+                                </div>
+                                <!-- end -->
                         </div>
                     </div>
                 </form>
+
+<script>
+    $('#create').submit(function(e){
+        var terms = [];
+        $('.term').each(function() {
+            if(this.checked) { terms.push($(this).val()); }
+        });
+        $('#terms').val(terms);
+        e.submit();                               
+    })
+</script>
+
                 <!-- end content -->
     </div>
     <!-- end main -->

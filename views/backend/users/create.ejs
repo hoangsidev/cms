@@ -72,10 +72,10 @@
                                         var output = document.getElementById('output_avatar'); output.src = URL.createObjectURL(event.target.files[0]);
                                         var thumbnail = document.getElementById('thumbnail'); thumbnail.value = URL.createObjectURL(event.target.files[0]);
                                     };
-                                    // $('#del_thumbnail').click(function () {
-                                    //     $('#output_avatar').attr('src', '');
-                                    //     $('#thumbnail').val('');
-                                    // });
+                                    $('#del_thumbnail').click(function () {
+                                        $('#output_avatar').attr('src', '');
+                                        $('#thumbnail').val('');
+                                    });
                                 </script>
                                 <div class="clearfix"></div>
                             </div>

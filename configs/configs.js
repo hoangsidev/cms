@@ -7,7 +7,8 @@ var express = require('express'),
     body_parser = require('body-parser'),
     slugify = require('slugify'),
     nodemailer = require('nodemailer'),
-    method_override = require('method-override');
+    method_override = require('method-override'),
+    ObjectID = require('mongodb').ObjectID;
 
 var config = {
     app: () => {
@@ -53,8 +54,11 @@ var config = {
     },
     method_override: () => {
         return method_override;
+    },
+    ObjectID: () => {
+        return ObjectID;
     }
-    
+
 }
 
 module.exports = config;

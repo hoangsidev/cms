@@ -159,7 +159,7 @@ var terms_controller = {
                     }
                 });
             }
-        } else if (req.method == 'PUT') {
+        } else if (req.method == 'PUT') { 
             var form = new formidable.IncomingForm(); form.maxFileSize = 20 * 1024 * 1024;
             form.parse(req, (err, fields, files) => {
                 if (fields._id && fields._id != null && fields._id != '' && typeof fields._id !== 'undefined') { var _id = fields._id };
