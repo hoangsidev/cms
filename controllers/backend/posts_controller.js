@@ -268,7 +268,7 @@ var posts_controller = {
                                 terms = JSON.parse(JSON.stringify(terms));
                                 return res.render('backend/posts/update', {
                                     terms: terms ? terms : [],
-                                    post: result,
+                                    post: post,
                                     site_info: {
                                         page_title: 'Update ' + post_type_slug.substring(0, post_type_slug.length - 1), // bỏ chữ s cuối, ví dụ Add new post(s)
                                         page_slug: 'update_' + post_type_slug,

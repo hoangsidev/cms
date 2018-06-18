@@ -86,7 +86,20 @@
                                                                 <% terms.forEach(function(item_term, index){ %>
                                                                     <% if(item_term.taxonomy_id == '1') { %>
                                                                         <div class="checkbox">
-                                                                            <label><input class="term" type="checkbox" value="<% if(item_term._id) { %><%= item_term._id %><% } %>"><% if(item_term.title) { %><%= item_term.title %><% } %></label>
+                                                                            <label>
+                                                                                <input 
+                                                                                
+                                                                                <% if(typeof post.categories !== 'undefined') { var  categories = post.categories %>
+                                                                                    <% if(categories.length > 0) { %>
+                                                                                        <% categories.forEach(function(item_category, index){ %>
+                                                                                            <% if(item_category.taxonomy_id == '1' && item_category._id == item_term._id) { %>
+                                                                                                checked
+                                                                                            <% } %>
+                                                                                        <% }); %>
+                                                                                    <% } %>
+                                                                                <% } %>
+                                                                                
+                                                                                class="term" type="checkbox" value="<% if(item_term._id) { %><%= item_term._id %><% } %>"><% if(item_term.title) { %><%= item_term.title %><% } %></label>
                                                                         </div>
                                                                     <% } %>
                                                                 <% }); %>
