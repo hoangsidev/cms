@@ -20,7 +20,7 @@ var configs = require('../../configs/configs.js'),
 app.use(body_parser.json());
 app.use(body_parser.urlencoded({ extended: true }));
 
-function exist_post_type(slug) {
+const exist_post_type = (slug) => {
     var post_type, post_type_id;
     if (slug && slug != null && slug != '' && typeof slug !== 'undefined' && (slug == 'articles' || slug == 'pages')) {
         if (slug == 'articles') { post_type_id = '1'; } else if (slug == 'pages') { post_type_id = '2'; }
@@ -32,6 +32,86 @@ function exist_post_type(slug) {
         return false;
     }
 }
+
+// promise
+const promise_terms = (arr_terms, taxonomy_id) => {
+    return new Promise((resolve, reject) => {
+        var terms = [];
+        for (var i in arr_terms) {
+            m_terms.findOne({ _id: (arr_terms[i])._id, taxonomy_id: taxonomy_id }).sort({ title: 1 }).exec((err, result_term) => {
+                if (result_term != null) {
+                    var term = {};
+                    term._id = result_term._id;
+                    term.title = result_term.title;
+                    term.slug = result_term.slug;
+                    term.taxonomy_id = result_term.taxonomy_id;
+                    terms.push(term);
+                }
+                resolve(terms);
+            });
+        }
+    });
+}
+
+const promise_user = (author_id) => {
+    return new Promise((resolve, reject) => {
+        m_users.findOne({ _id: author_id }, (err, result_user) => {
+            var user = {};
+            user._id = result_user._id;
+            user.username = result_user.username;
+            user.display_name = result_user.display_name;
+            resolve(user);
+        });
+    });
+}
+
+const promise_post = (elem, post) => {
+    return new Promise((resolve, reject) => {
+        post._id = elem._id;
+        post.title = elem.title;
+        post.slug = elem.slug;
+        post.content = elem.content;
+        post.excerpt = elem.excerpt;
+        post.thumbnail = elem.thumbnail;
+        post.status = elem.status;
+        post.created_at = elem.created_at;
+        post.updated_at = elem.updated_at;
+        post.num_order = elem.num_order;
+        resolve(post);
+    });
+}
+
+const progress_post = async (result) => {
+    var elem = result,
+        post = {},
+        categories = await promise_terms(elem.terms, '1'),
+        tags = await promise_terms(elem.terms, '2'),
+        user = await promise_user(elem.author_id),
+        post = await promise_post(elem, post);
+    post.categories = categories;
+    post.tags = tags;
+    post.author = user;
+    return Promise.resolve(post);
+}
+
+
+const progress_posts = async (results) => {
+    var posts = [];
+    for (var j in results) {
+        var elem = results[j],
+            post = {},
+            categories = await promise_terms(elem.terms, '1'),
+            tags = await promise_terms(elem.terms, '2'),
+            user = await promise_user(elem.author_id),
+            post = await promise_post(elem, post);
+        post.categories = categories;
+        post.tags = tags;
+        post.author = user;
+        posts.push(post);
+    }
+    return Promise.resolve(posts);
+}
+// end promise
 
 var posts_controller = {
     // CURD
@@ -46,79 +126,10 @@ var posts_controller = {
         if (req.query.search && req.query.search != null && req.query.search != '' && typeof req.query.search !== 'undefined') { var key_search = req.query.search };
         var per_page = 2, // num of post in one page
             page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
-
-        // promise
-        const promise_terms = (arr_terms, taxonomy_id) => {
-            return new Promise((resolve, reject) => {
-                var terms = [];
-                for (var i in arr_terms) {
-                    m_terms.findOne({ _id: (arr_terms[i]).term_id, taxonomy_id: taxonomy_id }).sort({ title: 1 }).exec((err, result_term) => {
-                        if (result_term != null) {
-                            var term = {};
-                            term._id = result_term._id;
-                            term.title = result_term.title;
-                            term.slug = result_term.slug;
-                            term.taxonomy_id = result_term.taxonomy_id;
-                            terms.push(term);
-                        }
-                        resolve(terms);
-                    });
-                }
-            });
-        }
-
-        const promise_user = (author_id) => {
-            return new Promise((resolve, reject) => {
-                m_users.findOne({ _id: author_id }, (err, result_user) => {
-                    var user = {};
-                    user._id = result_user._id;
-                    user.username = result_user.username;
-                    user.display_name = result_user.display_name;
-                    resolve(user);
-                });
-            });
-        }
-
-        const promise_post = (elem, post) => {
-            return new Promise((resolve, reject) => {
-                post._id = elem._id;
-                post.title = elem.title;
-                post.slug = elem.slug;
-                post.content = elem.content;
-                post.excerpt = elem.excerpt;
-
-
-                post.thumbnail = elem.thumbnail;
-                post.status = elem.status;
-                post.created_at = elem.created_at;
-                post.updated_at = elem.updated_at;
-                post.num_order = elem.num_order;
-                resolve(post);
-            });
-        }
-        // end promise
-
         if (!key_search) { // list all
             m_posts.find({ post_type_id: post_type_id }).skip((per_page * page) - per_page).limit(per_page).exec((err, results) => {
                 results = JSON.parse(JSON.stringify(results));
-                let progress_posts = async () => {
-                    var posts = [];
-                    for (var j in results) {
-                        var elem = results[j],
-                            post = {},
-                            categories = await promise_terms(elem.terms, '1'),
-                            tags = await promise_terms(elem.terms, '2'),
-                            user = await promise_user(elem.author_id),
-                            post = await promise_post(elem, post);
-                        post.categories = categories;
-                        post.tags = tags;
-                        post.author = user;
-                        posts.push(post);
-                    }
-                    return Promise.resolve(posts);
-                }
-
-                progress_posts().then((posts) => {
+                progress_posts(results).then((posts) => {
                     m_posts.find({ post_type_id: post_type_id }).count().exec((err, count) => {
                         return res.render('backend/posts/posts', {
                             posts: posts ? posts : [],
@@ -143,24 +154,7 @@ var posts_controller = {
             ];
             m_posts.find({ $and: [{ post_type_id: post_type_id }, { $or: regex }] }).skip((per_page * page) - per_page).limit(per_page).exec((err, results) => {
                 results = JSON.parse(JSON.stringify(results));
-                let progress_posts = async () => {
-                    var posts = [];
-                    for (var j in results) {
-                        var elem = results[j],
-                            post = {},
-                            categories = await promise_terms(elem.terms, '1'),
-                            tags = await promise_terms(elem.terms, '2'),
-                            user = await promise_user(elem.author_id),
-                            post = await promise_post(elem, post);
-                        post.categories = categories;
-                        post.tags = tags;
-                        post.author = user;
-                        posts.push(post);
-                    }
-                    return Promise.resolve(posts);
-                }
-
-                progress_posts().then((posts) => {
+                progress_posts(results).then((posts) => {
                     m_posts.find({ $and: [{ post_type_id: post_type_id }, { $or: regex }] }).count().exec((err, count) => {
                         return res.render('backend/posts/posts', {
                             posts: posts ? posts : [],
@@ -180,8 +174,8 @@ var posts_controller = {
                 });
             });
         }
-
     },
+
     create: (req, res, next) => { // done
         // check exist post_type
         if (exist_post_type(req.params.post_type)) {
@@ -191,19 +185,10 @@ var posts_controller = {
         }
         // end check exist post_type
         if (req.method == 'GET') {
-
-
-
-
-
-
-
-
-
-
             m_terms.find({}).exec((err, terms) => {
+                terms = JSON.parse(JSON.stringify(terms));
                 return res.render('backend/posts/create', {
-                    terms: terms ? JSON.stringify(terms) : JSON.stringify([]),
+                    terms: terms ? terms : [],
                     site_info: {
                         page_title: 'Add new ' + post_type_slug.substring(0, post_type_slug.length - 1), // bỏ chữ s cuối, ví dụ Add new post(s)
                         page_slug: 'create_' + post_type_slug,
@@ -277,14 +262,21 @@ var posts_controller = {
             if (_id) {
                 m_posts.findOne({ _id: _id }, (err, result) => {
                     if (result) {
-                        return res.render('backend/posts/update', {
-                            data_post: JSON.stringify(result),
-                            site_info: {
-                                page_title: 'Update ' + post_type_slug.substring(0, post_type_slug.length - 1), // bỏ chữ s cuối, ví dụ Add new post(s)
-                                page_slug: 'update_' + post_type_slug,
-                                post_type: post_type,
-                                me: res.locals.me
-                            }
+                        result = JSON.parse(JSON.stringify(result));
+                        progress_post(result).then((post) => {
+                            m_terms.find({}).exec((err, terms) => {
+                                terms = JSON.parse(JSON.stringify(terms));
+                                return res.render('backend/posts/update', {
+                                    terms: terms ? terms : [],
+                                    post: result,
+                                    site_info: {
+                                        page_title: 'Update ' + post_type_slug.substring(0, post_type_slug.length - 1), // bỏ chữ s cuối, ví dụ Add new post(s)
+                                        page_slug: 'update_' + post_type_slug,
+                                        post_type: post_type,
+                                        me: res.locals.me
+                                    }
+                                });
+                            });
                         });
                     } else {
                         return res.redirect(get_admin_url + '/404');

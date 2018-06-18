@@ -86,7 +86,7 @@
                                     </div>
                                     <div class="panel-body">
                                         <div id="wrap_tags">
-                                                <% if(typeof terms !== 'undefined') { var  terms = JSON.parse(terms); %>
+                                                <% if(typeof terms !== 'undefined') {  %>
                                                     <% if(terms.length > 0) { %>
                                                         <% terms.forEach(function(item_term, index){ %>
                                                             <% if(item_term.taxonomy_id == '1') { %>
@@ -117,7 +117,11 @@
     $('#create').submit(function(e){
         var terms = [];
         $('.term').each(function() {
-            if(this.checked) { terms.push($(this).val()); }
+            if(this.checked) { 
+                var term = {};
+                term._id = $(this).val();
+                terms.push(term); 
+            }
         });
         $('#terms').val(terms);
         e.submit();                               
