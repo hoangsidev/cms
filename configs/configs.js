@@ -31,6 +31,9 @@ var config = {
     get_site_name: () => {
         return 'HoangSi';
     },
+    get_admin_email: () => {
+        return 'it.hoangsi@gmail.com';
+    },
     fs: () => {
         return fs;
     },

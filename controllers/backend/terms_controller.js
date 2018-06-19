@@ -181,7 +181,7 @@ var terms_controller = {
                     if (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') { arr_data.num_order = fields.num_order } else { arr_data.num_order = '0' };
                     m_terms.findOneAndUpdate({ _id: _id }, { $set: arr_data }, { new: true }, (err, result) => {
                         if (result) {
-                            return res.redirect(get_admin_url + '/terms/'+ taxonomy_slug +'update/' + result._id);
+                            return res.redirect(get_admin_url + '/terms/'+ taxonomy_slug +'/update/' + result._id);
                         } else {
                             return res.redirect(get_admin_url + '/error');
                         }

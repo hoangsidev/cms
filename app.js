@@ -97,7 +97,7 @@ app.get('/backend/:post_type/update/:_id', auth, (req, res, next) => {
     }
 })
 
-app.put('/backend/:post_type/update', auth, auth, (req, res, next) => {
+app.put('/backend/:post_type/update', auth, (req, res, next) => {
     if (req.params.post_type && req.params.post_type == 'users') {
         return users_controller.update(req, res, next);
     } else {
@@ -121,10 +121,9 @@ app.get('/backend/terms/:taxonomy', auth, terms_controller.terms)
 app.get('/backend/terms/:taxonomy/page/:page', auth, terms_controller.terms)
 app.post('/backend/terms/:taxonomy/create', auth, terms_controller.create)
 
-app.route('/backend/terms/:taxonomy/update/:_id')
-    .get(auth, terms_controller.update)
-    .post(auth, terms_controller.update)
-    
+app.get('/backend/terms/:taxonomy/update/:_id', auth, terms_controller.update)
+app.put('/backend/terms/:taxonomy/update', auth, terms_controller.update)
+
 app.delete('/backend/terms/:taxonomy/delete', auth, terms_controller.delete)
 // end terms
 // users

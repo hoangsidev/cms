@@ -10,6 +10,7 @@ var configs = require('../../configs/configs.js'),
     get_admin_url = configs.get_admin_url(),
     get_site_name = configs.get_site_name(),
     nodemailer = configs.nodemailer(),
+    get_admin_email = configs.get_admin_email(),
     mail_auth = nodemailer.createTransport({ service: 'gmail', auth: { user: 'authentication.smtp.mail@gmail.com', pass: 'u+J%E^9!hx?p' } });
 
 app.use(body_parser.json());
@@ -139,7 +140,7 @@ var users_controller = {
                         // verify email
                         var url_verify = get_site_url + '/verify/' + result.username + '/' + result.key,
                             mail_options = {
-                                from: 'it.hoangsi@gmail.com', to: email, subject: '[' + get_site_name + '] Please verify your email address.',
+                                from: get_admin_email, to: email, subject: '[' + get_site_name + '] Please verify your email address.',
                                 html: `Help us secure your account by verifying your email address (` + result.email + `). This lets you access all of our features.<br><br>
                                 <a href="` + url_verify + `">` + url_verify + `</a><br><br>
                                 You’re receiving this email because you recently created a new `+ get_site_name + ` account or added a new email address. If this wasn’t you, please ignore this email.`
@@ -247,7 +248,7 @@ var users_controller = {
                             m_users.findOneAndUpdate({ email: email }, { $set: { key: md5(Math.random().toString()) } }, { new: true }, (err, result) => {
                                 var url_password_reset = get_site_url + '/password_reset?key=' + result.key,
                                     mail_options = {
-                                        from: 'it.hoangsi@gmail.com', to: email, subject: '[' + get_site_name + '] Please reset your password',
+                                        from: get_admin_email, to: email, subject: '[' + get_site_name + '] Please reset your password',
                                         html: `We heard that you lost your password. Sorry about that! <br> But don’t worry! You can use the following link to reset your password:<br><br>
                                 <a href="` + url_password_reset + `">` + url_password_reset + `</a><br><br>Thanks!`
                                     };
@@ -384,7 +385,7 @@ var users_controller = {
                             // verify email
                             var url_verify = get_site_url + '/verify/' + result.username + '/' + result.key,
                                 mail_options = {
-                                    from: 'it.hoangsi@gmail.com', to: email, subject: '[' + get_site_name + '] Please verify your email address.',
+                                    from: get_admin_email, to: email, subject: '[' + get_site_name + '] Please verify your email address.',
                                     html: `Help us secure your account by verifying your email address (` + result.email + `). This lets you access all of our features.<br><br>
                                     <a href="` + url_verify + `">` + url_verify + `</a><br><br>
                                     You’re receiving this email because you recently created a new `+ get_site_name + ` account or added a new email address. If this wasn’t you, please ignore this email.`
@@ -488,7 +489,7 @@ var users_controller = {
                                 // verify email
                                 var url_verify = get_site_url + '/verify/' + result.username + '/' + result.key,
                                     mail_options = {
-                                        from: 'it.hoangsi@gmail.com', to: result.email, subject: '[' + get_site_name + '] Please verify your email address.',
+                                        from: get_admin_email, to: result.email, subject: '[' + get_site_name + '] Please verify your email address.',
                                         html: `Help us secure your account by verifying your email address (` + result.email + `). This lets you access all of our features.<br><br>
                                         <a href="` + url_verify + `">` + url_verify + `</a><br><br>
                                         You’re receiving this email because you recently created a new `+ get_site_name + ` account or added a new email address. If this wasn’t you, please ignore this email.`

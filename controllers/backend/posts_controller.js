@@ -62,11 +62,15 @@ const promise_user = (user_id) => {
     return new Promise((resolve, reject) => {
         if (user_id) {
             m_users.findOne({ _id: user_id }, (err, result_user) => {
-                var user = {};
-                user._id = result_user._id;
-                user.username = result_user.username;
-                user.display_name = result_user.display_name;
-                resolve(user);
+                if (result_user) {
+                    var user = {};
+                    user._id = result_user._id;
+                    user.username = result_user.username;
+                    user.display_name = result_user.display_name;
+                    resolve(user);
+                } else {
+                    resolve(null);
+                }
             });
         } else {
             resolve(null);
@@ -100,7 +104,7 @@ const progress_post = async (result) => {
         post = await promise_post(elem, post);
     post.categories = categories ? categories : [];
     post.tags = tags ? tags : [];
-    post.author = user;
+    post.author = user ? user : null;
     return Promise.resolve(post);
 }
 
@@ -116,7 +120,7 @@ const progress_posts = async (results) => {
             post = await promise_post(elem, post);
         post.categories = categories ? categories : [];
         post.tags = tags ? tags : [];
-        post.author = user;
+        post.author = user ? user : null;
         posts.push(post);
     }
     return Promise.resolve(posts);
@@ -210,7 +214,6 @@ var posts_controller = {
         } else if (req.method == 'POST') {
             var form = new formidable.IncomingForm(); form.maxFileSize = 20 * 1024 * 1024; // 20MB
             form.parse(req, (err, fields, files) => {
-
                 if (fields.title && fields.title != null && fields.title != '' && typeof fields.title !== 'undefined') { var title = fields.title };
                 if (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') { var post_type_id = fields.post_type_id };
                 if (title && post_type_id) {
@@ -230,7 +233,6 @@ var posts_controller = {
                         arr_data.thumbnail = null;
                     };
                     arr_data.comments = (fields.comments && fields.comments != null && fields.comments != '' && typeof fields.comments !== 'undefined') ? fields.comments : [];
-
                     if (fields.terms && fields.terms != null && fields.terms != '' && typeof fields.terms !== 'undefined') {
                         var arr_terms = (fields.terms).split(','), terms = [];
                         for (var i in arr_terms) {
@@ -242,10 +244,8 @@ var posts_controller = {
                     } else {
                         arr_data.terms = [];
                     }
-
                     arr_data.custom_fields = (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') ? fields.custom_fields : [];
                     arr_data.user_id = (res.locals.me._id).toString();
-
                     arr_data.post_type_id = (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') ? fields.post_type_id : '1';
                     arr_data.status = (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') ? fields.status : '0';
                     arr_data.post_type_id = fields.post_type_id;
@@ -302,6 +302,7 @@ var posts_controller = {
                 });
             }
         } else if (req.method == 'PUT') {
+
             var form = new formidable.IncomingForm(); form.maxFileSize = 20 * 1024 * 1024;
             form.parse(req, (err, fields, files) => {
                 if (fields._id && fields._id != null && fields._id != '' && typeof fields._id !== 'undefined') { var _id = fields._id };
@@ -321,16 +322,24 @@ var posts_controller = {
                         arr_data.thumbnail = name_file + '.' + type_file;
                     }
                     if (fields.comments && fields.comments != null && fields.comments != '' && typeof fields.comments !== 'undefined') { arr_data.comments = fields.comments };
-                    if (fields.terms && fields.terms != null && fields.terms != '' && typeof fields.terms !== 'undefined') { arr_data.terms = fields.terms };
+                    if (fields.terms && fields.terms != null && fields.terms != '' && typeof fields.terms !== 'undefined') {
+                        var arr_terms = (fields.terms).split(','), terms = [];
+                        for (var i in arr_terms) {
+                            var term = {};
+                            term._id = arr_terms[i];
+                            terms.push(term)
+                        }
+                        arr_data.terms = terms;
+                    }
                     if (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') { arr_data.custom_fields = fields.custom_fields };
-                    if (res.locals.me._id) { arr_data.author_id = res.locals.me._id };
+                    if (res.locals.me._id) { arr_data.user_id = res.locals.me._id };
                     if (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') { arr_data.post_type_id = fields.post_type_id } else { arr_data.post_type_id = '1' };
                     if (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') { arr_data.status = fields.status } else { arr_data.status = '0' };
                     arr_data.updated_at = new Date();
                     if (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') { arr_data.num_order = fields.num_order } else { arr_data.num_order = '0' };
                     m_posts.findOneAndUpdate({ _id: _id }, { $set: arr_data }, { new: true }, (err, result) => {
                         if (result) {
-                            return res.redirect(get_admin_url + '/posts/update/' + result._id);
+                            return res.redirect(get_admin_url + '/' + post_type_slug + '/update/' + result._id);
                         } else {
                             return res.redirect(get_admin_url + '/error');
                         }
