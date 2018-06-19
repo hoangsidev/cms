@@ -1,0 +1,22 @@
+<!-- alert -->
+<% if(typeof site_info.me.role !== 'undefined' && site_info.me.verify=='0') { %>
+    <div class="alert alert-warning alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Warning!</strong> Please verify your email address (<%= site_info.me.email %>) for your account.
+    </div>
+<% } %>
+<!-- end alert -->
+
+<!-- breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" id="wrap_breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">
+                    <i class="fa fa-home" aria-hidden="true"></i>
+                </a>
+            </li>
+            <li class="breadcrumb-item active"><% if(typeof site_info !== 'undefined') { %><% if(typeof site_info.page_title !== 'undefined') { %><%= site_info.page_title  %><% } %><% } %></li>
+        </ol>
+        <hr style="margin: 0px 0 15px 0">
+    </nav>
+<!-- end breadcrumb -->

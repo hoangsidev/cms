@@ -17,6 +17,7 @@ app.use(body_parser.json());
 app.use(body_parser.urlencoded({ extended: true }));
 
 
+
 function valid_username(username) {
     if (username) {
         var re = /^[a-zA-Z0-9]+$/;
@@ -153,7 +154,7 @@ var users_controller = {
                     }
                 });
             } else { // if nó phá bậy bạ
-                return res.redirect(get_site_url + '/error');
+                return res.redirect(get_site_url + '/errors');
             }
         }
     },
@@ -181,7 +182,7 @@ var users_controller = {
                 }
             })
         } else {
-            return res.redirect(get_admin_url + '/error');
+            return res.redirect(get_admin_url + '/errors');
         }
     },
     signout: (req, res, next) => { // done
@@ -189,7 +190,7 @@ var users_controller = {
         if (req.session == null) {
             return res.redirect(get_site_url + '/signin');
         } else {
-            return res.redirect(get_admin_url + '/error');
+            return res.redirect(get_admin_url + '/errors');
         }
     },
     password_reset: (req, res, next) => { // done
@@ -268,7 +269,7 @@ var users_controller = {
                     }
                 });
             } else { // if nó phá bậy bạ
-                return res.redirect(get_admin_url + '/error');
+                return res.redirect(get_admin_url + '/errors');
             }
         } else if (req.method == 'PUT') { // if PUT
             if (req.body.password && req.body.password != null && req.body.password != '' && typeof req.body.password !== 'undefined' && valid_password(req.body.password)) { var password = req.body.password };
@@ -289,7 +290,7 @@ var users_controller = {
                     }
                 });
             } else { // đây là trường hợp nó phá
-                return res.redirect(get_site_url + '/error');
+                return res.redirect(get_site_url + '/errors');
             }
         }
     },
@@ -398,7 +399,7 @@ var users_controller = {
                         }
                     });
                 } else {
-                    return res.redirect(get_admin_url + '/error');
+                    return res.redirect(get_admin_url + '/errors');
                 }
             });
         }
@@ -501,11 +502,11 @@ var users_controller = {
                             }
                             return res.redirect(get_admin_url + '/users/')
                         } else {
-                            return res.redirect(get_admin_url + '/error');
+                            return res.redirect(get_admin_url + '/errors');
                         }
                     });
                 } else {
-                    return res.redirect(get_admin_url + '/error');
+                    return res.redirect(get_admin_url + '/errors');
                 }
             });
         }
@@ -521,7 +522,7 @@ var users_controller = {
                 }
             });
         } else {
-            return res.redirect(get_admin_url + '/error');
+            return res.redirect(get_admin_url + '/errors');
         }
     }
     // End CURD

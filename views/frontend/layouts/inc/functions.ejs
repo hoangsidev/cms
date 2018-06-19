@@ -1,0 +1,45 @@
+<% 
+  get_admin_url = () => {
+    return 'http://127.0.0.1:3000/backend';
+  } 
+
+  get_site_url = () => {
+    return 'http://127.0.0.1:3000';
+  } 
+
+  get_site_name = () => {
+    return 'Hoang Si';
+  } 
+ 
+  get_description = (str, length) => {
+    var str_get_description = str.substring(0, length);
+    return str_get_description + '...';
+  }
+
+  get_time = (value_time) => {
+    var time = new Date(value_time);
+    var d = time.getDate(); if(d.toString().length == 1) { d =  '0' + d }
+    var m = (time.getMonth() + 1); if(m.toString().length == 1) { m =  '0' + m }
+    var y = time.getFullYear();
+    var g = time.getHours(); if(g.toString().length == 1) { g =  '0' + g }
+    var a = g >= 12 ? 'pm' : 'am';
+    var i = time.getMinutes(); if(i.toString().length == 1) { i =  '0' + i }
+    var the_time = d + '/' + m + '/' + y + ' at ' + g + ':' + i + ' ' + a
+    return the_time;
+  }
+
+  get_role = (value_role) => {
+    var result_role = '';
+    if(value_role=='0') { result_role = '<span class="label label-default">Author</span>'  }
+    if(value_role=='1') { result_role = '<span class="label label-primary">Editor</span>'  }
+    if(value_role=='2') { result_role = '<span class="label label-danger">Administrator</span>'  }
+    return result_role;
+  }
+
+  get_status = (value_status) => {
+    var result_status = '';
+    if(value_status=='0') { result_status = '<span class="label label-danger">Private</span>'  }
+    if(value_status=='1') { result_status = '<span class="label label-success">Publish</span>'  }
+    return result_status;
+  }
+%>

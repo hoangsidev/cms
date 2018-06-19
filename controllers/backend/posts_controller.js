@@ -14,8 +14,7 @@ var configs = require('../../configs/configs.js'),
     slugify = configs.slugify(),
     get_site_url = configs.get_site_url(),
     get_admin_url = configs.get_admin_url(),
-    get_site_name = configs.get_site_name(),
-    ObjectID = configs.ObjectID();
+    get_site_name = configs.get_site_name();
 
 app.use(body_parser.json());
 app.use(body_parser.urlencoded({ extended: true }));
@@ -140,7 +139,7 @@ var posts_controller = {
             page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
         if (!key_search) { // list all
             var regex;
-            if (res.locals.me && res.locals.me.role == 0) {
+            if (res.locals.me && res.locals.me.role == 0) { // chỉ cho xem bài viết của mình
                 regex = {
                     post_type_id: post_type_id,
                     user_id: res.locals.me
@@ -170,15 +169,34 @@ var posts_controller = {
                 });
             });
         } else { // if search
-            var regex = [
-                { title: new RegExp(key_search, "i") }, // thêm '^' +  : là search bắt đầu bằng từ khóa
-                { slug: new RegExp(key_search, "i") },
-                { content: new RegExp(key_search, "i") }
-            ];
-            m_posts.find({ $and: [{ post_type_id: post_type_id }, { $or: regex }] }).skip((per_page * page) - per_page).limit(per_page).exec((err, results) => {
+
+            var regex;
+            if (res.locals.me && res.locals.me.role == 0) { // chỉ cho phép tìm kiếm bài viết của mình
+                regex = {
+                    $and: [{ post_type_id: post_type_id, user_id: res.locals.me }, {
+                        $or: [
+                            { title: new RegExp(key_search, "i") }, // thêm '^' +  : là search bắt đầu bằng từ khóa
+                            { slug: new RegExp(key_search, "i") },
+                            { content: new RegExp(key_search, "i") }
+                        ]
+                    }]
+                };
+            } else {
+                regex = {
+                    $and: [{ post_type_id: post_type_id }, {
+                        $or: [
+                            { title: new RegExp(key_search, "i") },
+                            { slug: new RegExp(key_search, "i") },
+                            { content: new RegExp(key_search, "i") }
+                        ]
+                    }]
+                };
+            }
+
+            m_posts.find(regex).skip((per_page * page) - per_page).limit(per_page).exec((err, results) => {
                 results = JSON.parse(JSON.stringify(results));
                 progress_posts(results).then((posts) => {
-                    m_posts.find({ $and: [{ post_type_id: post_type_id }, { $or: regex }] }).count().exec((err, count) => {
+                    m_posts.find(regex).count().exec((err, count) => {
                         return res.render('backend/posts/posts', {
                             posts: posts ? posts : [],
                             current: page,
@@ -266,11 +284,11 @@ var posts_controller = {
                         if (result) {
                             return res.redirect(get_admin_url + '/' + post_type_slug + '/update/' + result._id);
                         } else {
-                            return res.redirect(get_admin_url + '/error');
+                            return res.redirect(get_admin_url + '/errors');
                         }
                     });
                 } else {
-                    return res.redirect(get_admin_url + '/error');
+                    return res.redirect(get_admin_url + '/errors');
                 }
             });
         }
@@ -350,11 +368,11 @@ var posts_controller = {
                         if (result) {
                             return res.redirect(get_admin_url + '/' + post_type_slug + '/update/' + result._id);
                         } else {
-                            return res.redirect(get_admin_url + '/error');
+                            return res.redirect(get_admin_url + '/errors');
                         }
                     });
                 } else {
-                    return res.redirect(get_admin_url + '/error');
+                    return res.redirect(get_admin_url + '/errors');
                 }
             });
         }
@@ -377,7 +395,7 @@ var posts_controller = {
                 }
             });
         } else {
-            return res.redirect(get_admin_url + '/error');
+            return res.redirect(get_admin_url + '/errors');
         }
     }
     // End CURD

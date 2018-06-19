@@ -122,11 +122,11 @@ var terms_controller = {
                         if (result) {
                             return res.redirect(get_admin_url + '/terms/' + taxonomy_slug);
                         } else {
-                            return res.redirect(get_admin_url + '/error');
+                            return res.redirect(get_admin_url + '/errors');
                         }
                     });
                 } else {
-                    return res.redirect(get_admin_url + '/error');
+                    return res.redirect(get_admin_url + '/errors');
                 }
             });
         }
@@ -183,11 +183,11 @@ var terms_controller = {
                         if (result) {
                             return res.redirect(get_admin_url + '/terms/'+ taxonomy_slug +'/update/' + result._id);
                         } else {
-                            return res.redirect(get_admin_url + '/error');
+                            return res.redirect(get_admin_url + '/errors');
                         }
                     });
                 } else {
-                    return res.redirect(get_admin_url + '/error');
+                    return res.redirect(get_admin_url + '/errors');
                 }
             });
         }
@@ -210,7 +210,7 @@ var terms_controller = {
                 }
             });
         } else {
-            return res.redirect(get_admin_url + '/error');
+            return res.redirect(get_admin_url + '/errors');
         }
     }
     // End CURD

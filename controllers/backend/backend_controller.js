@@ -9,11 +9,11 @@ var backend_controller = {
             }
         });
     },
-    error: (req, res, next) => {
-        return res.render('backend/error', {
+    errors: (req, res, next) => {
+        return res.render('backend/errors', {
             site_info: {
                 page_title: 'Error!',
-                page_slug: 'error',
+                page_slug: 'errors',
                 me: res.locals.me
             }
         });
@@ -23,6 +23,15 @@ var backend_controller = {
             site_info: {
                 page_title: 'Not found!',
                 page_slug: '404',
+                me: res.locals.me
+            }
+        });
+    },
+    access_denied: (req, res, next) => {
+        return res.render('backend/access_denied', {
+            site_info: {
+                page_title: 'Access denied',
+                page_slug: 'access_denied',
                 me: res.locals.me
             }
         });

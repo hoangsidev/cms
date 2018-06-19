@@ -50,27 +50,39 @@ auth = (req, res, next) => {
     }
 }
 
-only_editor = (req, res, next) => {
-    if (req.session.me.role == '1' || req.session.me.role == '2') {
-        return next();
-    } else {
-        return res.redirect(get_admin_url + '/404');
+block_author = (req, res, next) => {
+    if (res.locals.me.role == '0') {
+        return res.redirect(get_admin_url + '/access_denied');
     }
+    next()
 }
 
-only_administrator = (req, res, next) => {
-    if (req.session.me.role == '2') {
-        return res.redirect(get_admin_url + '/404');
-    } else {
-        return next();
+block_editor = (req, res, next) => {
+    if (res.locals.me.role == '1') {
+        return res.redirect(get_admin_url + '/access_denied');
     }
+    next()
 }
 
-app.get('/backend', (req, res, next) => {
-    return res.redirect(get_admin_url + '/dashboard');
-})
+
+// check role
+app.get('/backend/users', block_author)
+app.all('/backend/users/*', block_author)
+
+app.get('/backend/pages', block_author, block_editor)
+app.all('/backend/pages/*', block_author, block_editor)
+
+app.get('/backend/terms', block_author)
+app.all('/backend/terms/*', block_author)
+
+app.get('/backend/feedbacks', block_author)
+app.get('/backend/configs', block_author)
+// check role
+
+app.get('/backend', (req, res, next) => { return res.redirect(get_admin_url + '/dashboard'); })
 app.get('/backend/404', auth, backend_controller.not_found)
-app.get('/backend/error', auth, backend_controller.error)
+app.get('/backend/errors', auth, backend_controller.errors)
+app.get('/backend/access_denied', auth, backend_controller.access_denied)
 app.get('/backend/dashboard', auth, backend_controller.dashboard)
 
 // posts
@@ -81,8 +93,6 @@ app.get(('/backend/:post_type'), auth, (req, res, next) => {
         return posts_controller.posts(req, res, next); // articles and pages
     }
 })
-
-
 
 app.get('/backend/:post_type/page/:page', auth, (req, res, next) => {
     if (req.params.post_type && req.params.post_type == 'users') {
@@ -136,7 +146,7 @@ app.delete('/backend/:post_type/delete', auth, auth, (req, res, next) => {
 // end posts
 
 // terms
-app.get('/backend/terms/:taxonomy', auth, only_editor, only_administrator, terms_controller.terms)
+app.get('/backend/terms/:taxonomy', auth, terms_controller.terms)
 app.get('/backend/terms/:taxonomy/page/:page', auth, terms_controller.terms)
 app.post('/backend/terms/:taxonomy/create', auth, terms_controller.create)
 
@@ -167,9 +177,8 @@ app.route('/password_reset')
 // End BACKEND
 
 // FRONTEND
-app.route('/')
-    .get(frontend_controller.index)
-
+app.get('/', frontend_controller.index)
+app.get('/contact', frontend_controller.index)
 
 // End FRONTEND
 /* --------------------------------------------------------------------------------------- */
