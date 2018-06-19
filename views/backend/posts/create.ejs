@@ -115,12 +115,12 @@
 
 <script>
     $('#create').submit(function(e){
+        // e.preventDefault();
         var terms = [];
         $('.term').each(function() {
-            if(this.checked) { 
-                var term = {};
-                term._id = $(this).val();
-                terms.push(term); 
+            var term = {};
+            if(this.checked) {
+                terms.push($(this).val()); 
             }
         });
         $('#terms').val(terms);

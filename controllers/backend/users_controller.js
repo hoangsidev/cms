@@ -381,7 +381,6 @@ var users_controller = {
                     arr_data.updated_at = null;
                     m_users.create(arr_data, (err, result) => {
                         if (result) {
-                            req.session.me = result;
                             // verify email
                             var url_verify = get_site_url + '/verify/' + result.username + '/' + result.key,
                                 mail_options = {

@@ -11,27 +11,18 @@ var posts_schema = new mongoose.Schema({
             name: String,
             email: String,
             comment: String,
+            active: String,
             created_at: String,
             updated_at: String
         }
     ],
     terms: [
         {
-            _id: String,
-            title: String,
-            slug: String,
-            taxonomy_id: String
+            _id: String
         }
     ],
     custom_fields: [],
-    user: [
-        {
-            _id: String,
-            username: String,
-            email: String,
-            display_name: String
-        }
-    ],
+    user_id: String,
     post_type_id: String,
     status: String,
     created_at: String,

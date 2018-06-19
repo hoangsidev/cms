@@ -37,31 +37,41 @@ const exist_post_type = (slug) => {
 const promise_terms = (arr_terms, taxonomy_id) => {
     return new Promise((resolve, reject) => {
         var terms = [];
-        for (var i in arr_terms) {
-            m_terms.findOne({ _id: (arr_terms[i])._id, taxonomy_id: taxonomy_id }).sort({ title: 1 }).exec((err, result_term) => {
-                if (result_term != null) {
-                    var term = {};
-                    term._id = result_term._id;
-                    term.title = result_term.title;
-                    term.slug = result_term.slug;
-                    term.taxonomy_id = result_term.taxonomy_id;
-                    terms.push(term);
-                }
-                resolve(terms);
-            });
+        if (arr_terms.length > 0) {
+            for (var i in arr_terms) {
+                m_terms.findOne({ _id: (arr_terms[i])._id, taxonomy_id: taxonomy_id }).sort({ title: 1 }).exec((err, result_term) => {
+                    if (result_term != null) {
+                        var term = {};
+                        term._id = result_term._id;
+                        term.title = result_term.title;
+                        term.slug = result_term.slug;
+                        term.taxonomy_id = result_term.taxonomy_id;
+                        terms.push(term);
+                    }
+                    resolve(terms);
+                });
+            }
+        } else {
+            resolve(terms);
         }
+
     });
 }
 
-const promise_user = (author_id) => {
+const promise_user = (user_id) => {
     return new Promise((resolve, reject) => {
-        m_users.findOne({ _id: author_id }, (err, result_user) => {
-            var user = {};
-            user._id = result_user._id;
-            user.username = result_user.username;
-            user.display_name = result_user.display_name;
-            resolve(user);
-        });
+        if (user_id) {
+            m_users.findOne({ _id: user_id }, (err, result_user) => {
+                var user = {};
+                user._id = result_user._id;
+                user.username = result_user.username;
+                user.display_name = result_user.display_name;
+                resolve(user);
+            });
+        } else {
+            resolve(null);
+        }
+
     });
 }
 
@@ -86,10 +96,10 @@ const progress_post = async (result) => {
         post = {},
         categories = await promise_terms(elem.terms, '1'),
         tags = await promise_terms(elem.terms, '2'),
-        user = await promise_user(elem.author_id),
+        user = await promise_user(elem.user_id),
         post = await promise_post(elem, post);
-    post.categories = categories;
-    post.tags = tags;
+    post.categories = categories ? categories : [];
+    post.tags = tags ? tags : [];
     post.author = user;
     return Promise.resolve(post);
 }
@@ -104,8 +114,8 @@ const progress_posts = async (results) => {
             tags = await promise_terms(elem.terms, '2'),
             user = await promise_user(elem.author_id),
             post = await promise_post(elem, post);
-        post.categories = categories;
-        post.tags = tags;
+        post.categories = categories ? categories : [];
+        post.tags = tags ? tags : [];
         post.author = user;
         posts.push(post);
     }
@@ -124,7 +134,7 @@ var posts_controller = {
         }
         // end check exist post_type
         if (req.query.search && req.query.search != null && req.query.search != '' && typeof req.query.search !== 'undefined') { var key_search = req.query.search };
-        var per_page = 2, // num of post in one page
+        var per_page = 20, // num of post in one page
             page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
         if (!key_search) { // list all
             m_posts.find({ post_type_id: post_type_id }).skip((per_page * page) - per_page).limit(per_page).exec((err, results) => {
@@ -200,6 +210,7 @@ var posts_controller = {
         } else if (req.method == 'POST') {
             var form = new formidable.IncomingForm(); form.maxFileSize = 20 * 1024 * 1024; // 20MB
             form.parse(req, (err, fields, files) => {
+
                 if (fields.title && fields.title != null && fields.title != '' && typeof fields.title !== 'undefined') { var title = fields.title };
                 if (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') { var post_type_id = fields.post_type_id };
                 if (title && post_type_id) {
@@ -219,14 +230,21 @@ var posts_controller = {
                         arr_data.thumbnail = null;
                     };
                     arr_data.comments = (fields.comments && fields.comments != null && fields.comments != '' && typeof fields.comments !== 'undefined') ? fields.comments : [];
-                    arr_data.terms = (fields.terms && fields.terms != null && fields.terms != '' && typeof fields.terms !== 'undefined') ? JSON.parse(fields.terms) : [];
+
+                    if (fields.terms && fields.terms != null && fields.terms != '' && typeof fields.terms !== 'undefined') {
+                        var arr_terms = (fields.terms).split(','), terms = [];
+                        for (var i in arr_terms) {
+                            var term = {};
+                            term._id = arr_terms[i];
+                            terms.push(term)
+                        }
+                        arr_data.terms = terms;
+                    } else {
+                        arr_data.terms = [];
+                    }
+
                     arr_data.custom_fields = (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') ? fields.custom_fields : [];
-                    arr_data.user = {
-                        _id: (res.locals.me._id).toString(),
-                        username: res.locals.me.username,
-                        email: res.locals.me.email,
-                        display_name: res.locals.me.display_name ? res.locals.me.display_name : res.locals.me.username
-                    };
+                    arr_data.user_id = (res.locals.me._id).toString();
 
                     arr_data.post_type_id = (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') ? fields.post_type_id : '1';
                     arr_data.status = (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') ? fields.status : '0';
