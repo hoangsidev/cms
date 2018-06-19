@@ -1,29 +1,27 @@
 <%- include('./layouts/inc/functions.ejs'); -%>
-<!DOCTYPE html>
-<html lang="en">
+    <!DOCTYPE html>
+    <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="<%= get_site_url(); %>/css/bootstrap.min.css">
-    <link rel="stylesheet" href="<%= get_site_url(); %>/css/master.css">
-    <link rel="stylesheet" href="<%= get_site_url(); %>/css/font-awesome.min.css">
-    <link rel="shortcut icon" href="<%= get_site_url(); %>/images/favicon.ico" type="image/x-icon" />
-    <script src="<%= get_site_url(); %>/js/jquery.min.js"></script>
-    <script src="<%= get_site_url(); %>/js/bootstrap.min.js"></script>
-    <script src="<%= get_site_url(); %>/js/vue.min.js"></script>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <link rel="stylesheet" href="<%= get_site_url(); %>/css/bootstrap.min.css">
+        <link rel="stylesheet" href="<%= get_site_url(); %>/css/master.css">
+        <link rel="stylesheet" href="<%= get_site_url(); %>/css/font-awesome.min.css">
+        <link rel="shortcut icon" href="<%= get_site_url(); %>/images/favicon.ico" type="image/x-icon" />
+        <script src="<%= get_site_url(); %>/js/jquery.min.js"></script>
+        <script src="<%= get_site_url(); %>/js/bootstrap.min.js"></script>
+        <script src="<%= get_site_url(); %>/js/vue.min.js"></script>
+    </head>
 
-<body>
+    <body>
+        <% if(typeof site_info !=='undifened') { %>
+            <% if(site_info.navs) { %>
+                <%= site_info.navs  %>
+            <% } %>
+        <% } %>
+    </body>
 
-
-
-ád
-
-
-
-</body>
-
-</html>
+    </html>

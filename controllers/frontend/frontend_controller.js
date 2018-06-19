@@ -20,20 +20,41 @@ app.use(body_parser.json());
 app.use(body_parser.urlencoded({ extended: true }));
 
 
-app.use((req, res, next) => {
-    res.locals.navs = 'menu';
-    return next();
-});
+const promise_posts = () => {
+    return new Promise((resolve, reject) => {
+        m_posts.find({}).exec((err, posts) => {
+            resolve(posts);
+        });
+    });
+}
+
+const app_globals = async () => {
+    var app_globals = {},
+        posts = await promise_posts();
+    app_globals.posts = posts;
+    app_globals.navs = 'menu';
+    return Promise.resolve(app_globals);
+}
+
 
 var frontend_controller = {
     index: (req, res, next) => {
-        console.log(res.locals.navs);
-        res.render('frontend/index', {
-            site_info: {
-                page_title: 'Home',
-                page_slug: 'index'
-            }
+        app_globals().then((app_globals) => {
+            res.render('frontend/index', {
+                site_info: {
+                    page_title: 'Home',
+                    page_slug: 'index',
+                    navs: app_globals.navs
+                }
+            });
         });
+
+
+
+
+
+
+
     }
 }
 module.exports = frontend_controller;
