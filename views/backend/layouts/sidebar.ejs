@@ -1,3 +1,14 @@
+<% if(typeof site_info.me !== 'undefined') { %>
+     <% if(site_info.me.role == '1') { 
+        var editor = 1 
+    } else if(site_info.me.role == '2') { 
+        var administrator = 1 
+     } %>
+<% } %>
+
+
+
+
 <div id="wrap_sidebar">
     <div class="brand">
         <a href="<%= get_admin_url(); %>/dashboard" class="text-center">Administrator</a>
@@ -25,17 +36,21 @@
                 Add new
             </a>
         </li>
-        <li>
-            <a href="<%= get_admin_url(); %>/terms/categories" class="list-group-item  <% if(typeof site_info !== 'undefined' && (site_info.page_slug=='categories' || site_info.page_slug=='update_categories')) { %> active <% } %>">
-                Categories
-            </a>
-        </li>
-        <li>
-            <a href="<%= get_admin_url(); %>/terms/tags" class="list-group-item  <% if(typeof site_info !== 'undefined' && (site_info.page_slug=='tags' || site_info.page_slug=='update_tags')) { %> active <% } %>">
-                Tags
-            </a>
-        </li>
+        <% if(editor || administrator) { %>
+            <li>
+                    <a href="<%= get_admin_url(); %>/terms/categories" class="list-group-item  <% if(typeof site_info !== 'undefined' && (site_info.page_slug=='categories' || site_info.page_slug=='update_categories')) { %> active <% } %>">
+                        Categories
+                    </a>
+                </li>
+                <li>
+                    <a href="<%= get_admin_url(); %>/terms/tags" class="list-group-item  <% if(typeof site_info !== 'undefined' && (site_info.page_slug=='tags' || site_info.page_slug=='update_tags')) { %> active <% } %>">
+                        Tags
+                    </a>
+                </li>
+        <% } %>
+        
     </ul>
+    <% if(administrator) { %>
     <ul class="list-group">
         <li>
             <a href="<%= get_admin_url(); %>/pages" class="list-group-item main  <% if(typeof site_info !== 'undefined' && (site_info.page_slug=='pages' || site_info.page_slug=='update_pages')) { %> active <% } %>">
@@ -53,6 +68,8 @@
             </a>
         </li>
     </ul>
+    <% } %>
+    <% if(editor || administrator) { %>
     <ul class="list-group">
         <li>
             <a href="<%= get_admin_url(); %>/users" class="list-group-item main <% if(typeof site_info !== 'undefined'  && (site_info.page_slug=='users' || site_info.page_slug=='update_user')) { %> active <% } %>">
@@ -75,18 +92,23 @@
             </a>
         </li>
     </ul>
+    <% } %>
     <ul class="list-group">
+            <% if(administrator) { %>
+                <li>
+                        <a href="javascript:void(0)" class="list-group-item main">
+                            <i class="fa fa-heart" aria-hidden="true"></i>&nbsp; Feedbacks
+                            <span class="badge">79</span>
+                        </a>
+                    </li>
         <li>
             <a href="javascript:void(0)" class="list-group-item main">
                 <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp; Configs
             </a>
         </li>
-        <li>
-            <a href="javascript:void(0)" class="list-group-item main">
-                <i class="fa fa-heart" aria-hidden="true"></i>&nbsp; Feedbacks
-                <span class="badge">79</span>
-            </a>
-        </li>
+       
+        
+        <% } %>
         <li>
             <a href="javascript:void(0)" class="list-group-item main" onClick="return confirm('Are you sure?')">
                 <i class="fa fa-sign-out" aria-hidden="true"></i>&nbsp; Signout

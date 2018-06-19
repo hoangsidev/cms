@@ -75,7 +75,6 @@ const promise_user = (user_id) => {
         } else {
             resolve(null);
         }
-
     });
 }
 
@@ -104,10 +103,9 @@ const progress_post = async (result) => {
         post = await promise_post(elem, post);
     post.categories = categories ? categories : [];
     post.tags = tags ? tags : [];
-    post.author = user ? user : null;
+    post.user = user ? user : null;
     return Promise.resolve(post);
 }
-
 
 const progress_posts = async (results) => {
     var posts = [];
@@ -116,11 +114,11 @@ const progress_posts = async (results) => {
             post = {},
             categories = await promise_terms(elem.terms, '1'),
             tags = await promise_terms(elem.terms, '2'),
-            user = await promise_user(elem.author_id),
+            user = await promise_user(elem.user_id),
             post = await promise_post(elem, post);
         post.categories = categories ? categories : [];
         post.tags = tags ? tags : [];
-        post.author = user ? user : null;
+        post.user = user ? user : null;
         posts.push(post);
     }
     return Promise.resolve(posts);
@@ -141,10 +139,21 @@ var posts_controller = {
         var per_page = 20, // num of post in one page
             page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
         if (!key_search) { // list all
-            m_posts.find({ post_type_id: post_type_id }).skip((per_page * page) - per_page).limit(per_page).exec((err, results) => {
+            var regex;
+            if (res.locals.me && res.locals.me.role == 0) {
+                regex = {
+                    post_type_id: post_type_id,
+                    user_id: res.locals.me
+                };
+            } else {
+                regex = {
+                    post_type_id: post_type_id
+                };
+            }
+            m_posts.find(regex).skip((per_page * page) - per_page).limit(per_page).exec((err, results) => {
                 results = JSON.parse(JSON.stringify(results));
                 progress_posts(results).then((posts) => {
-                    m_posts.find({ post_type_id: post_type_id }).count().exec((err, count) => {
+                    m_posts.find(regex).count().exec((err, count) => {
                         return res.render('backend/posts/posts', {
                             posts: posts ? posts : [],
                             current: page,
@@ -332,7 +341,7 @@ var posts_controller = {
                         arr_data.terms = terms;
                     }
                     if (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') { arr_data.custom_fields = fields.custom_fields };
-                    if (res.locals.me._id) { arr_data.user_id = res.locals.me._id };
+                    // if (res.locals.me._id) { arr_data.user_id = res.locals.me._id };
                     if (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') { arr_data.post_type_id = fields.post_type_id } else { arr_data.post_type_id = '1' };
                     if (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') { arr_data.status = fields.status } else { arr_data.status = '0' };
                     arr_data.updated_at = new Date();

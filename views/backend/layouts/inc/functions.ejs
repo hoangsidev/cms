@@ -30,9 +30,9 @@
 
   get_role = (value_role) => {
     var result_role = '';
-    if(value_role=='0') { result_role = '<span class="label label-info">Guest</span>'  }
-    if(value_role=='1') { result_role = '<span class="label label-primary">Author</span>'  }
-    if(value_role=='2') { result_role = '<span class="label label-danger">Adnimistrator</span>'  }
+    if(value_role=='0') { result_role = '<span class="label label-default">Author</span>'  }
+    if(value_role=='1') { result_role = '<span class="label label-primary">Editor</span>'  }
+    if(value_role=='2') { result_role = '<span class="label label-danger">Administrator</span>'  }
     return result_role;
   }
 

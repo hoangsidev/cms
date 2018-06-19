@@ -11,6 +11,9 @@
                         <p><% if (typeof count_result !== 'undefined' && count_result > 0)  { %> Có <%= count_result %> <% } else { %> Không có <% } %> kết quả phù hợp với từ khóa : "<%= key_search %>"</p> 
                     <% } %>
                     <!-- end if search -->
+
+                    
+
                     
                     <% if(typeof data_users !== 'undefined') { var users = JSON.parse(data_users); %>
                         <% if(users.length > 0) { %>
@@ -33,12 +36,24 @@
                                                 <td style="text-align:center;"> <%= index + 1 %> </td>
                                                 <td style="width: 70px;" class="text-center">
                                                     <% if(item.thumbnail) { %>
-                                                        <a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>">
+
+                                                        <% if(typeof site_info.me !== 'undefined' && site_info.me._id == item._id) { %>
+                                                            <a href="<%= get_admin_url(); %>/users/profile">    
+                                                        <% } else { %>
+                                                            <a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>"></a>
+                                                            <% } %>
                                                             <img class="thumb" src="<%= get_admin_url(); %>/uploads/<%= item.thumbnail %>" alt="<% if(item.username) { %><%= item.username %><% } %>">
                                                         </a>
                                                     <% } %>
                                                 </td>
-                                                <td><a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>"><% if(item.username) { %><%= item.username %><% } %></a>
+                                                <td>
+                                                        <% if(typeof site_info.me !== 'undefined' && site_info.me._id == item._id) { %>
+                                                            <a href="<%= get_admin_url(); %>/users/profile">    
+                                                        <% } else { %>
+                                                    <a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>">
+                                                        <% } %>
+                                                    
+                                                    <% if(item.username) { %><%= item.username %><% } %></a>
                                                 </td>
                                                 <td><% if(item.display_name) { %><%= item.display_name %><% } %></td>
                                                 <td><% if(item.email) { %><%= item.email %><% } %></td>
@@ -47,7 +62,15 @@
                                                     <a href="javascript:void(0)" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="View">
                                                         <i class="fa fa-eye" aria-hidden="true"></i>
                                                     </a>
-                                                    <a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
+
+                                                    <% if(typeof site_info.me !== 'undefined' && site_info.me._id == item._id) { %>
+                                                        <a href="<%= get_admin_url(); %>/users/profile" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
+                                                    <% } else { %>
+                                                        <a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
+                                                    <% } %>
+
+
+                                                    
                                                         <i class="fa fa-pencil" aria-hidden="true"></i>
                                                     </a>
                                                     <form action="<%= get_admin_url(); %>/users/delete?_method=DELETE" method="POST" style="display:inline-block;">

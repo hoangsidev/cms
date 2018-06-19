@@ -34,8 +34,8 @@ app.use((req, res, next) => {
 /* --------------------------------------------------------------------------------------- */
 var backend_controller = require('./controllers/backend/backend_controller.js'),
     posts_controller = require('./controllers/backend/posts_controller.js'),
-    users_controller = require('./controllers/backend/users_controller.js');
-terms_controller = require('./controllers/backend/terms_controller.js');
+    users_controller = require('./controllers/backend/users_controller.js'),
+    terms_controller = require('./controllers/backend/terms_controller.js');
 /* ----- */
 var frontend_controller = require('./controllers/frontend/frontend_controller.js');
 /* --------------------------------------------------------------------------------------- */
@@ -44,11 +44,28 @@ var frontend_controller = require('./controllers/frontend/frontend_controller.js
 
 auth = (req, res, next) => {
     if (!req.session.me) {
-        res.redirect('/signin');
+        return res.redirect('/signin');
     } else {
-        next();
+        return next();
     }
 }
+
+only_editor = (req, res, next) => {
+    if (req.session.me.role == '1' || req.session.me.role == '2') {
+        return next();
+    } else {
+        return res.redirect(get_admin_url + '/404');
+    }
+}
+
+only_administrator = (req, res, next) => {
+    if (req.session.me.role == '2') {
+        return res.redirect(get_admin_url + '/404');
+    } else {
+        return next();
+    }
+}
+
 app.get('/backend', (req, res, next) => {
     return res.redirect(get_admin_url + '/dashboard');
 })
@@ -64,6 +81,8 @@ app.get(('/backend/:post_type'), auth, (req, res, next) => {
         return posts_controller.posts(req, res, next); // articles and pages
     }
 })
+
+
 
 app.get('/backend/:post_type/page/:page', auth, (req, res, next) => {
     if (req.params.post_type && req.params.post_type == 'users') {
@@ -117,7 +136,7 @@ app.delete('/backend/:post_type/delete', auth, auth, (req, res, next) => {
 // end posts
 
 // terms
-app.get('/backend/terms/:taxonomy', auth, terms_controller.terms)
+app.get('/backend/terms/:taxonomy', auth, only_editor, only_administrator, terms_controller.terms)
 app.get('/backend/terms/:taxonomy/page/:page', auth, terms_controller.terms)
 app.post('/backend/terms/:taxonomy/create', auth, terms_controller.create)
 
