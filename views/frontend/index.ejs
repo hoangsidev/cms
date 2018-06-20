@@ -6,7 +6,7 @@
                 <ul>
                     <% if(articles.length > 0) { %>
                         <% articles.forEach((item, index) => { %>
-                             <li><a href="<%= get_site_url(); %>/<% if(item.slug) { %><%= item.slug + '-' +item._id %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></li>
+                             <li><a href="<%= get_site_url(); %>/<% if(item.slug) { %><%= item.slug %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></li>
                         <% }) %>
                     <% } %>
                     </ul>

@@ -64,13 +64,9 @@ var frontend_controller = {
     },
 
     single: (req, res, next) => {
-        if (req.params.slug && req.params.slug != null && req.params.slug != '' && typeof req.params.slug !== 'undefined') {
-            var slug = req.params.slug,
-                arr_slug = slug.split('-'),
-                _id = arr_slug[arr_slug.length - 1];
-        }; // tách id từ slug
-        if (_id) {
-            m_posts.findOne({ _id: _id }, (err, result) => {
+        if (req.params.slug && req.params.slug != null && req.params.slug != '' && typeof req.params.slug !== 'undefined') { var slug = req.params.slug };
+        if (slug) {
+            m_posts.findOne({ slug: slug }, (err, result) => {
                 if (result) {
                     result = JSON.parse(JSON.stringify(result));
                     progress_post(result).then((post) => {
@@ -79,8 +75,8 @@ var frontend_controller = {
                                 app_globals: app_globals,
                                 post: post,
                                 site_info: {
-                                    page_title: result.title,
-                                    page_slug: result.slug,
+                                    page_title: post.title,
+                                    page_slug: post.slug,
                                     post_type: 'posts'
                                 }
                             });
@@ -94,32 +90,33 @@ var frontend_controller = {
     },
 
     get_articles_by_term: (req, res, next) => {
-        if (req.params.slug && req.params.slug != null && req.params.slug != '' && typeof req.params.slug !== 'undefined') {
-            var slug = req.params.slug,
-                arr_slug = slug.split('-'),
-                _id = arr_slug[arr_slug.length - 1];
-        }; // tách id từ slug
-        if (_id) {
-            m_posts.find({ 'terms._id': _id, post_type_id: '1' }, (err, results) => {
-                if (results) {
-                    results = JSON.parse(JSON.stringify(results));
-                    progress_posts(results).then((articles_by_term) => {
-                        app_globals().then((app_globals) => {
-                            return res.render('frontend/archive', {
-                                app_globals: app_globals,
-                                articles_by_term: articles_by_term,
-                                site_info: {
-                                    page_title: 'Archive',
-                                    page_slug: 'archive',
-                                    post_type: 'posts'
-                                }
+        if (req.params.slug && req.params.slug != null && req.params.slug != '' && typeof req.params.slug !== 'undefined') { var slug = req.params.slug };
+        if (slug) {
+            m_terms.findOne({ slug: slug }, (err, result) => {
+                if (result._id) {
+                    m_posts.find({ 'terms._id': result._id, post_type_id: '1' }, (err, results) => {
+                        if (results) {
+                            results = JSON.parse(JSON.stringify(results));
+                            progress_posts(results).then((articles_by_term) => {
+                                app_globals().then((app_globals) => {
+                                    return res.render('frontend/archive', {
+                                        app_globals: app_globals,
+                                        articles_by_term: articles_by_term,
+                                        site_info: {
+                                            page_title: 'Archive',
+                                            page_slug: 'archive',
+                                            post_type: 'posts'
+                                        }
+                                    });
+                                });
                             });
-                        });
+                        } else {
+                            return res.redirect(get_site_url + '/404');
+                        }
                     });
-                } else {
-                    return res.redirect(get_site_url + '/404');
                 }
-            });
+            })
+
         }
     },
 

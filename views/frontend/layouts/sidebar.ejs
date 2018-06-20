@@ -4,7 +4,7 @@
                 <ul>
                     <% if(categories.length > 0) { %>
                         <% categories.forEach((item, index) =>{ %>
-                             <li><a href="/category/<% if(item.slug) { %><%= item.slug + '-' +item._id %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></li>
+                             <li><a href="/category/<% if(item.slug) { %><%= item.slug %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></li>
                         <% }) %>
                     <% } %>
                     </ul>
@@ -16,13 +16,10 @@
                 <ul>
                     <% if(tags.length > 0) { %>
                         <% tags.forEach((item, index) => { %>
-                             <li><a href="/tag/<% if(item.slug) { %><%= item.slug + '-' +item._id %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></li>
+                             <li><a href="/tag/<% if(item.slug) { %><%= item.slug %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></li>
                         <% }) %>
                     <% } %>
                     </ul>
                 <% } %>
                 <hr>
-
-
-
-            </div>
+</div>

@@ -102,13 +102,13 @@ const promise_get_pages = () => {
     });
 }
 
-const promise_get_terms = () => {
-    return new Promise((resolve, reject) => {
-        m_posts.find({ post_type_id: '2' }).exec((err, pages) => {
-            resolve(pages);
-        });
-    });
-}
+// const promise_get_terms = () => {
+//     return new Promise((resolve, reject) => {
+//         m_posts.find({ post_type_id: '2' }).exec((err, pages) => {
+//             resolve(pages);
+//         });
+//     });
+// }
 
 
 const promise_terms = (taxonomy_id) => {
@@ -159,7 +159,7 @@ const progress_posts = async (results) => {
 const app_globals = async () => {
     var app_globals = {},
         articles = await promise_get_articles(),
-        pages = await promise_get_pages('2'),
+        pages = await promise_get_pages(),
         categories = await promise_terms('1'),
         tags = await promise_terms('2');
 

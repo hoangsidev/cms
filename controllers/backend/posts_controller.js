@@ -15,7 +15,7 @@ var configs = require('../../configs/configs.js'),
     slugify = configs.slugify(),
     get_site_url = configs.get_site_url(),
     get_admin_url = configs.get_admin_url(),
-    get_site_name = configs.get_site_name();
+    get_site_name = configs.get_site_name(),
     progress_post = promise.progress_post,
     progress_posts = promise.progress_posts;
 
@@ -33,6 +33,18 @@ const exist_post_type = (slug) => {
     } else {
         return false;
     }
+}
+
+const exist_slug = (slug) => {
+    return new Promise((resolve, reject) => {
+        m_posts.findOne({ slug: slug }, (err, exist) => {
+            if (exist != null) {
+                resolve(exist_slug(slug + '-2'));
+            } else if (exist == null) {
+                resolve(slug);
+            }
+        });
+    });
 }
 
 var posts_controller = {
@@ -155,48 +167,51 @@ var posts_controller = {
                 if (fields.title && fields.title != null && fields.title != '' && typeof fields.title !== 'undefined') { var title = fields.title };
                 if (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') { var post_type_id = fields.post_type_id };
                 if (title && post_type_id) {
-                    var arr_data = new Object();
-                    arr_data.title = fields.title;
-                    arr_data.slug = slugify(fields.title, { replacement: '-', remove: /[$*_+~.()'"!\-:@]/g, lower: true });
-                    arr_data.content = (fields.content && fields.content != null && fields.content != '' && typeof fields.content !== 'undefined') ? fields.content : null;
-                    arr_data.excerpt = (fields.excerpt && fields.excerpt != null && fields.excerpt != '' && typeof fields.excerpt !== 'undefined') ? fields.excerpt : null;
-                    if (files.thumbnail.name) {
-                        var name_file = md5(Math.random().toString()),
-                            oldpath = files.thumbnail.path,
-                            type_file = (files.thumbnail.name.split('.'))[1],
-                            newpath = path.resolve('assets/backend/uploads/' + name_file + '.' + type_file);
-                        fs.rename(oldpath, newpath, (err) => { });
-                        arr_data.thumbnail = name_file + '.' + type_file;
-                    } else {
-                        arr_data.thumbnail = null;
-                    };
-                    arr_data.comments = (fields.comments && fields.comments != null && fields.comments != '' && typeof fields.comments !== 'undefined') ? fields.comments : [];
-                    if (fields.terms && fields.terms != null && fields.terms != '' && typeof fields.terms !== 'undefined') {
-                        var arr_terms = (fields.terms).split(','), terms = [];
-                        for (var i in arr_terms) {
-                            var term = {};
-                            term._id = arr_terms[i];
-                            terms.push(term)
-                        }
-                        arr_data.terms = terms;
-                    } else {
-                        arr_data.terms = [];
-                    }
-                    arr_data.custom_fields = (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') ? fields.custom_fields : [];
-                    arr_data.user_id = (res.locals.me._id).toString();
-                    arr_data.post_type_id = (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') ? fields.post_type_id : '1';
-                    arr_data.status = (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') ? fields.status : '0';
-                    arr_data.post_type_id = fields.post_type_id;
-                    arr_data.created_at = new Date();
-                    arr_data.updated_at = null;
-                    arr_data.num_order = (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') ? fields.num_order : '0';
-                    m_posts.create(arr_data, (err, result) => {
-
-                        if (result) {
-                            return res.redirect(get_admin_url + '/' + post_type_slug + '/update/' + result._id);
+                    var arr_data = new Object(),
+                        slug = slugify(fields.title, { replacement: '-', remove: /[$*_+~.()'"!\-:@]/g, lower: true });
+                    exist_slug(slug).then((result_slug) => {
+                        arr_data.title = fields.title;
+                        arr_data.slug = result_slug ? result_slug : slug;
+                        arr_data.content = (fields.content && fields.content != null && fields.content != '' && typeof fields.content !== 'undefined') ? fields.content : null;
+                        arr_data.excerpt = (fields.excerpt && fields.excerpt != null && fields.excerpt != '' && typeof fields.excerpt !== 'undefined') ? fields.excerpt : null;
+                        if (files.thumbnail.name) {
+                            var name_file = md5(Math.random().toString()),
+                                oldpath = files.thumbnail.path,
+                                type_file = (files.thumbnail.name.split('.'))[1],
+                                newpath = path.resolve('assets/backend/uploads/' + name_file + '.' + type_file);
+                            fs.rename(oldpath, newpath, (err) => { });
+                            arr_data.thumbnail = name_file + '.' + type_file;
                         } else {
-                            return res.redirect(get_admin_url + '/errors');
+                            arr_data.thumbnail = null;
+                        };
+                        arr_data.comments = (fields.comments && fields.comments != null && fields.comments != '' && typeof fields.comments !== 'undefined') ? fields.comments : [];
+                        if (fields.terms && fields.terms != null && fields.terms != '' && typeof fields.terms !== 'undefined') {
+                            var arr_terms = (fields.terms).split(','), terms = [];
+                            for (var i in arr_terms) {
+                                var term = {};
+                                term._id = arr_terms[i];
+                                terms.push(term)
+                            }
+                            arr_data.terms = terms;
+                        } else {
+                            arr_data.terms = [];
                         }
+                        arr_data.custom_fields = (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') ? fields.custom_fields : [];
+                        arr_data.user_id = (res.locals.me._id).toString();
+                        arr_data.post_type_id = (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') ? fields.post_type_id : '1';
+                        arr_data.status = (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') ? fields.status : '0';
+                        arr_data.post_type_id = fields.post_type_id;
+                        arr_data.created_at = new Date();
+                        arr_data.updated_at = null;
+                        arr_data.num_order = (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') ? fields.num_order : '0';
+                        m_posts.create(arr_data, (err, result) => {
+
+                            if (result) {
+                                return res.redirect(get_admin_url + '/' + post_type_slug + '/update/' + result._id);
+                            } else {
+                                return res.redirect(get_admin_url + '/errors');
+                            }
+                        });
                     });
                 } else {
                     return res.redirect(get_admin_url + '/errors');
@@ -240,47 +255,49 @@ var posts_controller = {
                 });
             }
         } else if (req.method == 'PUT') {
-
             var form = new formidable.IncomingForm(); form.maxFileSize = 20 * 1024 * 1024;
             form.parse(req, (err, fields, files) => {
                 if (fields._id && fields._id != null && fields._id != '' && typeof fields._id !== 'undefined') { var _id = fields._id };
                 if (fields.title && fields.title != null && fields.title != '' && typeof fields.title !== 'undefined') { var title = fields.title };
                 if (_id && title) {
-                    var arr_data = new Object();
-                    arr_data.title = fields.title;
-                    arr_data.slug = slugify(fields.title, { replacement: '-', remove: /[$*_+~.()'"!\-:@]/g, lower: true });
-                    if (fields.content && fields.content != null && fields.content != '' && typeof fields.content !== 'undefined') { arr_data.content = fields.content };
-                    if (fields.excerpt && fields.excerpt != null && fields.excerpt != '' && typeof fields.excerpt !== 'undefined') { arr_data.excerpt = fields.excerpt };
-                    if (files.thumbnail.name) {
-                        var name_file = md5(Math.random().toString());
-                        var oldpath = files.thumbnail.path;
-                        var type_file = (files.thumbnail.name.split('.'))[1];
-                        var newpath = path.resolve('assets/backend/uploads/' + name_file + '.' + type_file);
-                        fs.rename(oldpath, newpath, (err) => { });
-                        arr_data.thumbnail = name_file + '.' + type_file;
-                    }
-                    if (fields.comments && fields.comments != null && fields.comments != '' && typeof fields.comments !== 'undefined') { arr_data.comments = fields.comments };
-                    if (fields.terms && fields.terms != null && fields.terms != '' && typeof fields.terms !== 'undefined') {
-                        var arr_terms = (fields.terms).split(','), terms = [];
-                        for (var i in arr_terms) {
-                            var term = {};
-                            term._id = arr_terms[i];
-                            terms.push(term)
+                    var arr_data = new Object(),
+                        slug = slugify(fields.title, { replacement: '-', remove: /[$*_+~.()'"!\-:@]/g, lower: true });
+                    exist_slug(slug).then((result_slug) => {
+                        arr_data.title = fields.title;
+                        arr_data.slug = result_slug ? result_slug : slug;
+                        if (fields.content && fields.content != null && fields.content != '' && typeof fields.content !== 'undefined') { arr_data.content = fields.content };
+                        if (fields.excerpt && fields.excerpt != null && fields.excerpt != '' && typeof fields.excerpt !== 'undefined') { arr_data.excerpt = fields.excerpt };
+                        if (files.thumbnail.name) {
+                            var name_file = md5(Math.random().toString());
+                            var oldpath = files.thumbnail.path;
+                            var type_file = (files.thumbnail.name.split('.'))[1];
+                            var newpath = path.resolve('assets/backend/uploads/' + name_file + '.' + type_file);
+                            fs.rename(oldpath, newpath, (err) => { });
+                            arr_data.thumbnail = name_file + '.' + type_file;
                         }
-                        arr_data.terms = terms;
-                    }
-                    if (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') { arr_data.custom_fields = fields.custom_fields };
-                    // if (res.locals.me._id) { arr_data.user_id = res.locals.me._id };
-                    if (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') { arr_data.post_type_id = fields.post_type_id } else { arr_data.post_type_id = '1' };
-                    if (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') { arr_data.status = fields.status } else { arr_data.status = '0' };
-                    arr_data.updated_at = new Date();
-                    if (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') { arr_data.num_order = fields.num_order } else { arr_data.num_order = '0' };
-                    m_posts.findOneAndUpdate({ _id: _id }, { $set: arr_data }, { new: true }, (err, result) => {
-                        if (result) {
-                            return res.redirect(get_admin_url + '/' + post_type_slug + '/update/' + result._id);
-                        } else {
-                            return res.redirect(get_admin_url + '/errors');
+                        if (fields.comments && fields.comments != null && fields.comments != '' && typeof fields.comments !== 'undefined') { arr_data.comments = fields.comments };
+                        if (fields.terms && fields.terms != null && fields.terms != '' && typeof fields.terms !== 'undefined') {
+                            var arr_terms = (fields.terms).split(','), terms = [];
+                            for (var i in arr_terms) {
+                                var term = {};
+                                term._id = arr_terms[i];
+                                terms.push(term)
+                            }
+                            arr_data.terms = terms;
                         }
+                        if (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') { arr_data.custom_fields = fields.custom_fields };
+                        // if (res.locals.me._id) { arr_data.user_id = res.locals.me._id };
+                        if (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') { arr_data.post_type_id = fields.post_type_id } else { arr_data.post_type_id = '1' };
+                        if (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') { arr_data.status = fields.status } else { arr_data.status = '0' };
+                        arr_data.updated_at = new Date();
+                        if (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') { arr_data.num_order = fields.num_order } else { arr_data.num_order = '0' };
+                        m_posts.findOneAndUpdate({ _id: _id }, { $set: arr_data }, { new: true }, (err, result) => {
+                            if (result) {
+                                return res.redirect(get_admin_url + '/' + post_type_slug + '/update/' + result._id);
+                            } else {
+                                return res.redirect(get_admin_url + '/errors');
+                            }
+                        });
                     });
                 } else {
                     return res.redirect(get_admin_url + '/errors');

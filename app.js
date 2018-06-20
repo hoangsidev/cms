@@ -183,8 +183,6 @@ app.get('/404', frontend_controller.not_found)
 app.get('/errors', frontend_controller.errors)
 
 app.get('/', frontend_controller.index)
-
-// app.get('/contact', frontend_controller.single)
 // end pages
 
 app.get('/:slug', frontend_controller.single)

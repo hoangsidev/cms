@@ -43,9 +43,6 @@ const exist_slug = (slug) => {
     });
 }
 
-
-
-
 var terms_controller = {
     // CURD
     terms: (req, res, next) => {  // done
@@ -207,9 +204,6 @@ var terms_controller = {
                             }
                         });
                     });
-
-
-
                 } else {
                     return res.redirect(get_admin_url + '/errors');
                 }
