@@ -1,0 +1,32 @@
+html, body, #wrap {
+    background: #222;
+    height: 100%;
+}
+
+#wrap_cont {
+    top: 30%;
+    position: relative;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+
+label {
+    font-weight: lighter;
+}
+
+.errors, .error {
+    color: #f00;
+}
+
+.errors p {
+    color: #333
+}
+
+.errors ul {
+    padding-left: 20px;
+}
+
+.errors ul li {
+    line-height: 100%;
+}

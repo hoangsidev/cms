@@ -1,27 +1,19 @@
 <%- include('./inc/functions.ejs'); -%>
-    <!-- https://hoangsi.com/ -->
     <!DOCTYPE html>
-    <html lang='en'>
+    <html lang="en">
 
     <head>
-        <meta charset='UTF-8'>
-        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-        <meta http-equiv='X-UA-Compatible' content='ie=edge'>
-        <link rel="stylesheet" href="<%= get_admin_url(); %>/css/bootstrap.min.css">
-        <link rel="stylesheet" href="<%= get_admin_url(); %>/css/master.css">
-        <link rel="stylesheet" href="<%= get_admin_url(); %>/css/font-awesome.min.css">
-        <link rel="shortcut icon" href="<%= get_admin_url(); %>/images/favicon.ico" type="image/x-icon" />
-        <script src="<%= get_admin_url(); %>/js/jquery.min.js"></script>
-        <script src="<%= get_admin_url(); %>/js/bootstrap.min.js"></script>
-        <script src="<%= get_admin_url(); %>/js/vue.min.js"></script>
-        <title>
-            <% if(typeof site_info !== 'undefined') { %>
-                <%= site_info.page_title  %>
-            <% } %>
-        </title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <link rel="stylesheet" href="<%= get_template_url(); %>/css/bootstrap.min.css">
+        <link rel="stylesheet" href="<%= get_template_url(); %>/css/master.css">
+        <link rel="stylesheet" href="<%= get_template_url(); %>/css/font-awesome.min.css">
+        <link rel="shortcut icon" href="<%= get_template_url(); %>/images/favicon.ico" type="image/x-icon" />
+        <script src="<%= get_template_url(); %>/js/jquery.min.js"></script>
+        <script src="<%= get_template_url(); %>/js/bootstrap.min.js"></script>
+        <script src="<%= get_template_url(); %>/js/vue.min.js"></script>
     </head>
 
     <body>
-        <div id="wrap">
-
-

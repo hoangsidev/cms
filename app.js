@@ -155,6 +155,7 @@ app.put('/backend/terms/:taxonomy/update', auth, terms_controller.update)
 
 app.delete('/backend/terms/:taxonomy/delete', auth, terms_controller.delete)
 // end terms
+
 // users
 app.route('/signin')
     .get(users_controller.signin)
@@ -177,8 +178,13 @@ app.route('/password_reset')
 // End BACKEND
 
 // FRONTEND
+// pages
 app.get('/', frontend_controller.index)
 app.get('/contact', frontend_controller.index)
+// end pages
+
+app.get('/:slug-:_id', frontend_controller.single)
+
 
 // End FRONTEND
 /* --------------------------------------------------------------------------------------- */
