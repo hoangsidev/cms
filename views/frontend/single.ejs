@@ -2,15 +2,24 @@
         <div class="container">
         <!-- content -->
             <div class="col-sm-8">
-                <% if(typeof app_globals !== 'undefined'  && typeof app_globals.articles !== 'undefined') { var articles = app_globals.articles; %>
-                <ul>
-                    <% if(articles.length > 0) { %>
-                        <% articles.forEach(function(item, index){ %>
-                             <li><a href="<% if(item.slug) { %><%= item.slug + '-' + item._id %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></li>
-                        <% }) %>
-                    <% } %>
-                    </ul>
-                <% } %>
+               
+
+<%  if(post && typeof post !== 'undefined') { %>
+
+    <% if(post.title) { %><h1><%= post.title %></h1><% } %>
+
+    <% if(post.content) { %>
+        <div class="content"><%= post.content %></div>
+    <% } %>
+
+
+
+
+
+
+<% } %>
+
+
             </div>
             <!-- end content -->
             <!-- sidebar -->

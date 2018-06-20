@@ -1,13 +1,13 @@
-<%- include('./layouts/header.ejs'); -%>
-    <!-- main -->
-    <div id="wrap_main">
-        <!-- sidebar -->
-        <%- include('./layouts/sidebar'); -%>
-            <!-- end sidebar -->
-            <%- include('./layouts/navbar'); -%>
-                <!-- content -->
-                <p>Error! An error occurred. Please try again later</p>
+
+    <%- include('./layouts/header.ejs'); -%>
+        <div class="container">
+         <!-- content -->
+           <div class="col-sm-8">
+                 <p>Error! An error occurred. Please try again later</p>
+                 </div>
                 <!-- end content -->
-    </div>
-    <!-- end main -->
-    <%- include('./layouts/footer'); -%>
+            <!-- sidebar -->
+            <%- include('./layouts/sidebar.ejs'); -%>
+            <!-- end sidebar -->
+        </div>
+<%- include('./layouts/footer.ejs'); -%>

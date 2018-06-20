@@ -179,11 +179,18 @@ app.route('/password_reset')
 
 // FRONTEND
 // pages
+app.get('/404', frontend_controller.not_found)
+app.get('/errors', frontend_controller.errors)
+
 app.get('/', frontend_controller.index)
 app.get('/contact', frontend_controller.index)
 // end pages
 
-app.get('/:slug-:_id', frontend_controller.single)
+app.get('/:slug', frontend_controller.single)
+
+app.get('/:term/:slug', frontend_controller.terms)
+app.get('/:term/:slug', frontend_controller.terms)
+
 
 
 // End FRONTEND
