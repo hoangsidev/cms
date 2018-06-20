@@ -183,13 +183,13 @@ app.get('/404', frontend_controller.not_found)
 app.get('/errors', frontend_controller.errors)
 
 app.get('/', frontend_controller.index)
-app.get('/contact', frontend_controller.index)
+
+// app.get('/contact', frontend_controller.single)
 // end pages
 
 app.get('/:slug', frontend_controller.single)
 
-app.get('/:term/:slug', frontend_controller.terms)
-app.get('/:term/:slug', frontend_controller.terms)
+app.get('/:taxonomy/:slug', frontend_controller.get_articles_by_term)
 
 
 

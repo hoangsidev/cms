@@ -18,7 +18,7 @@ var configs = require('../../configs/configs.js'),
 app.use(body_parser.json());
 app.use(body_parser.urlencoded({ extended: true }));
 
-function exist_taxonomy(slug) {
+exist_taxonomy = (slug) => {
     var taxonomy, taxonomy_id;
     if (slug && slug != null && slug != '' && typeof slug !== 'undefined' && (slug == 'categories' || slug == 'tags')) {
         if (slug == 'categories') { taxonomy_id = '1'; } else if (slug == 'tags') { taxonomy_id = '2'; }
@@ -30,6 +30,8 @@ function exist_taxonomy(slug) {
         return false;
     }
 }
+
+
 
 var terms_controller = {
     // CURD
@@ -55,7 +57,7 @@ var terms_controller = {
                         site_info: {
                             page_title: 'All term of ' + taxonomy_slug,
                             page_slug: taxonomy_slug,
-                            taxonomy : taxonomy,
+                            taxonomy: taxonomy,
                             me: res.locals.me
                         }
                     });
@@ -79,7 +81,7 @@ var terms_controller = {
                         site_info: {
                             page_title: 'Search results ' + taxonomy_slug,
                             page_slug: taxonomy_slug,
-                            taxonomy : taxonomy,
+                            taxonomy: taxonomy,
                             me: res.locals.me
                         }
                     });
@@ -133,8 +135,8 @@ var terms_controller = {
     },
 
     update: (req, res, next) => { // done
-         // check exist_taxonomy
-         if (exist_taxonomy(req.params.taxonomy)) {
+        // check exist_taxonomy
+        if (exist_taxonomy(req.params.taxonomy)) {
             var taxonomy = exist_taxonomy(req.params.taxonomy), taxonomy_slug = taxonomy.taxonomy_slug, taxonomy_id = taxonomy.taxonomy_id;
         } else {
             return res.redirect(get_admin_url + '/404');
@@ -150,7 +152,7 @@ var terms_controller = {
                             site_info: {
                                 page_title: 'Update ' + taxonomy_slug,
                                 page_slug: 'update_' + taxonomy_slug,
-                                taxonomy : taxonomy,
+                                taxonomy: taxonomy,
                                 me: res.locals.me
                             }
                         });
@@ -159,7 +161,7 @@ var terms_controller = {
                     }
                 });
             }
-        } else if (req.method == 'PUT') { 
+        } else if (req.method == 'PUT') {
             var form = new formidable.IncomingForm(); form.maxFileSize = 20 * 1024 * 1024;
             form.parse(req, (err, fields, files) => {
                 if (fields._id && fields._id != null && fields._id != '' && typeof fields._id !== 'undefined') { var _id = fields._id };
@@ -181,7 +183,7 @@ var terms_controller = {
                     if (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') { arr_data.num_order = fields.num_order } else { arr_data.num_order = '0' };
                     m_terms.findOneAndUpdate({ _id: _id }, { $set: arr_data }, { new: true }, (err, result) => {
                         if (result) {
-                            return res.redirect(get_admin_url + '/terms/'+ taxonomy_slug +'/update/' + result._id);
+                            return res.redirect(get_admin_url + '/terms/' + taxonomy_slug + '/update/' + result._id);
                         } else {
                             return res.redirect(get_admin_url + '/errors');
                         }

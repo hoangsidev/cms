@@ -93,16 +93,34 @@ var frontend_controller = {
         }
     },
 
-    terms: (req, res, next) => {
-        app_globals().then((app_globals) => {
-            res.render('frontend/index', {
-                app_globals: app_globals,
-                site_info: {
-                    page_title: 'Home',
-                    page_slug: 'index'
+    get_articles_by_term: (req, res, next) => {
+        if (req.params.slug && req.params.slug != null && req.params.slug != '' && typeof req.params.slug !== 'undefined') {
+            var slug = req.params.slug,
+                arr_slug = slug.split('-'),
+                _id = arr_slug[arr_slug.length - 1];
+        }; // tách id từ slug
+        if (_id) {
+            m_posts.find({ 'terms._id': _id, post_type_id: '1' }, (err, results) => {
+                if (results) {
+                    results = JSON.parse(JSON.stringify(results));
+                    progress_posts(results).then((articles_by_term) => {
+                        app_globals().then((app_globals) => {
+                            return res.render('frontend/archive', {
+                                app_globals: app_globals,
+                                articles_by_term: articles_by_term,
+                                site_info: {
+                                    page_title: 'Archive',
+                                    page_slug: 'archive',
+                                    post_type: 'posts'
+                                }
+                            });
+                        });
+                    });
+                } else {
+                    return res.redirect(get_site_url + '/404');
                 }
             });
-        });
+        }
     },
 
 }

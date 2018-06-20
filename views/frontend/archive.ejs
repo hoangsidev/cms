@@ -2,7 +2,7 @@
         <div class="container">
         <!-- content -->
             <div class="col-sm-8">
-                <% if(typeof app_globals !== 'undefined'  && typeof app_globals.articles !== 'undefined') { var articles = app_globals.articles; %>
+                <% if(typeof articles_by_term !== 'undefined') { var articles = articles_by_term; %>
                 <ul>
                     <% if(articles.length > 0) { %>
                         <% articles.forEach(function(item, index){ %>

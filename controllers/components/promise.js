@@ -42,7 +42,6 @@ const promise_terms_of_post = (arr_terms, taxonomy_id) => {
         } else {
             resolve(terms);
         }
-
     });
 }
 
@@ -66,9 +65,6 @@ const promise_user_of_post = (user_id) => {
     });
 }
 
-// end promise backend
-
-// promise frontend
 const promise_post = (elem, post) => {
     return new Promise((resolve, reject) => {
         post._id = elem._id;
@@ -85,6 +81,11 @@ const promise_post = (elem, post) => {
     });
 }
 
+// end promise backend
+
+// promise frontend
+
+
 const promise_get_articles = () => {
     return new Promise((resolve, reject) => {
         m_posts.find({ post_type_id: '1' }).exec((err, articles) => {
@@ -94,6 +95,14 @@ const promise_get_articles = () => {
 }
 
 const promise_get_pages = () => {
+    return new Promise((resolve, reject) => {
+        m_posts.find({ post_type_id: '2' }).exec((err, pages) => {
+            resolve(pages);
+        });
+    });
+}
+
+const promise_get_terms = () => {
     return new Promise((resolve, reject) => {
         m_posts.find({ post_type_id: '2' }).exec((err, pages) => {
             resolve(pages);

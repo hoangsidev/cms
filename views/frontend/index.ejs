@@ -5,7 +5,7 @@
                 <% if(typeof app_globals !== 'undefined'  && typeof app_globals.articles !== 'undefined') { var articles = app_globals.articles; %>
                 <ul>
                     <% if(articles.length > 0) { %>
-                        <% articles.forEach(function(item, index){ %>
+                        <% articles.forEach((item, index) => { %>
                              <li><a href="<%= get_site_url(); %>/<% if(item.slug) { %><%= item.slug + '-' +item._id %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></li>
                         <% }) %>
                     <% } %>
