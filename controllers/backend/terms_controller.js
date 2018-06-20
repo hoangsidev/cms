@@ -31,6 +31,19 @@ exist_taxonomy = (slug) => {
     }
 }
 
+const exist_slug = (slug) => {
+    return new Promise((resolve, reject) => {
+        m_terms.findOne({ slug: slug }, (err, exist) => {
+            if (exist != null) {
+                resolve(exist_slug(slug + '-2'));
+            } else if (exist == null) {
+                resolve(slug);
+            }
+        });
+    });
+}
+
+
 
 
 var terms_controller = {
@@ -104,28 +117,31 @@ var terms_controller = {
                 if (fields.title && fields.title != null && fields.title != '' && typeof fields.title !== 'undefined') { var title = fields.title };
                 if (fields.taxonomy_id && fields.taxonomy_id != null && fields.taxonomy_id != '' && typeof fields.taxonomy_id !== 'undefined') { var taxonomy_id = fields.taxonomy_id };
                 if (title && taxonomy_id) {
-                    var arr_data = new Object();
-                    arr_data.title = fields.title;
-                    arr_data.slug = slugify(fields.title, { replacement: '-', remove: /[$*_+~.()'"!\-:@]/g, lower: true });
-                    arr_data.description = (fields.description && fields.description != null && fields.description != '' && typeof fields.description !== 'undefined') ? fields.description : null;
-                    if (files.thumbnail.name) {
-                        var name_file = md5(Math.random().toString()),
-                            oldpath = files.thumbnail.path,
-                            type_file = (files.thumbnail.name.split('.'))[1],
-                            newpath = path.resolve('assets/backend/uploads/' + name_file + '.' + type_file);
-                        fs.rename(oldpath, newpath, (err) => { });
-                        arr_data.thumbnail = name_file + '.' + type_file;
-                    } else {
-                        arr_data.thumbnail = null;
-                    };
-                    arr_data.taxonomy_id = fields.taxonomy_id;
-                    arr_data.num_order = (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') ? fields.num_order : '0';
-                    m_terms.create(arr_data, (err, result) => {
-                        if (result) {
-                            return res.redirect(get_admin_url + '/terms/' + taxonomy_slug);
+                    var arr_data = new Object(),
+                        slug = slugify(fields.title, { replacement: '-', remove: /[$*_+~.()'"!\-:@]/g, lower: true });
+                    exist_slug(slug).then((result_slug) => {
+                        arr_data.title = fields.title;
+                        arr_data.slug = result_slug ? result_slug : slug;
+                        arr_data.description = (fields.description && fields.description != null && fields.description != '' && typeof fields.description !== 'undefined') ? fields.description : null;
+                        if (files.thumbnail.name) {
+                            var name_file = md5(Math.random().toString()),
+                                oldpath = files.thumbnail.path,
+                                type_file = (files.thumbnail.name.split('.'))[1],
+                                newpath = path.resolve('assets/backend/uploads/' + name_file + '.' + type_file);
+                            fs.rename(oldpath, newpath, (err) => { });
+                            arr_data.thumbnail = name_file + '.' + type_file;
                         } else {
-                            return res.redirect(get_admin_url + '/errors');
-                        }
+                            arr_data.thumbnail = null;
+                        };
+                        arr_data.taxonomy_id = fields.taxonomy_id;
+                        arr_data.num_order = (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') ? fields.num_order : '0';
+                        m_terms.create(arr_data, (err, result) => {
+                            if (result) {
+                                return res.redirect(get_admin_url + '/terms/' + taxonomy_slug);
+                            } else {
+                                return res.redirect(get_admin_url + '/errors');
+                            }
+                        });
                     });
                 } else {
                     return res.redirect(get_admin_url + '/errors');
@@ -168,26 +184,32 @@ var terms_controller = {
                 if (fields.title && fields.title != null && fields.title != '' && typeof fields.title !== 'undefined') { var title = fields.title };
                 if (fields.taxonomy_id && fields.taxonomy_id != null && fields.taxonomy_id != '' && typeof fields.taxonomy_id !== 'undefined') { var taxonomy_id = fields.taxonomy_id };
                 if (_id && title && taxonomy_id) {
-                    var arr_data = new Object();
-                    arr_data.title = fields.title;
-                    arr_data.slug = slugify(fields.title, { replacement: '-', remove: /[$*_+~.()'"!\-:@]/g, lower: true });
-                    if (fields.description && fields.description != null && fields.description != '' && typeof fields.description !== 'undefined') { arr_data.description = fields.description };
-                    if (files.thumbnail.name) {
-                        var name_file = md5(Math.random().toString());
-                        var oldpath = files.thumbnail.path;
-                        var type_file = (files.thumbnail.name.split('.'))[1];
-                        var newpath = path.resolve('assets/backend/uploads/' + name_file + '.' + type_file);
-                        fs.rename(oldpath, newpath, (err) => { });
-                        arr_data.thumbnail = name_file + '.' + type_file;
-                    }
-                    if (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') { arr_data.num_order = fields.num_order } else { arr_data.num_order = '0' };
-                    m_terms.findOneAndUpdate({ _id: _id }, { $set: arr_data }, { new: true }, (err, result) => {
-                        if (result) {
-                            return res.redirect(get_admin_url + '/terms/' + taxonomy_slug + '/update/' + result._id);
-                        } else {
-                            return res.redirect(get_admin_url + '/errors');
+                    var arr_data = new Object(),
+                        slug = slugify(fields.title, { replacement: '-', remove: /[$*_+~.()'"!\-:@]/g, lower: true });
+                    exist_slug(slug).then((result_slug) => {
+                        arr_data.title = fields.title;
+                        arr_data.slug = result_slug ? result_slug : slug;
+                        if (fields.description && fields.description != null && fields.description != '' && typeof fields.description !== 'undefined') { arr_data.description = fields.description };
+                        if (files.thumbnail.name) {
+                            var name_file = md5(Math.random().toString());
+                            var oldpath = files.thumbnail.path;
+                            var type_file = (files.thumbnail.name.split('.'))[1];
+                            var newpath = path.resolve('assets/backend/uploads/' + name_file + '.' + type_file);
+                            fs.rename(oldpath, newpath, (err) => { });
+                            arr_data.thumbnail = name_file + '.' + type_file;
                         }
+                        if (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') { arr_data.num_order = fields.num_order } else { arr_data.num_order = '0' };
+                        m_terms.findOneAndUpdate({ _id: _id }, { $set: arr_data }, { new: true }, (err, result) => {
+                            if (result) {
+                                return res.redirect(get_admin_url + '/terms/' + taxonomy_slug + '/update/' + result._id);
+                            } else {
+                                return res.redirect(get_admin_url + '/errors');
+                            }
+                        });
                     });
+
+
+
                 } else {
                     return res.redirect(get_admin_url + '/errors');
                 }
