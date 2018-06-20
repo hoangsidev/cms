@@ -8,6 +8,8 @@
                         <% articles.forEach(function(item, index){ %>
                              <li><a href="<%= get_site_url(); %>/<% if(item.slug) { %><%= item.slug + '-' +item._id %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></li>
                         <% }) %>
+                         <% } else { %>
+                        <p>Empty!</p>
                     <% } %>
                     </ul>
                 <% } %>
