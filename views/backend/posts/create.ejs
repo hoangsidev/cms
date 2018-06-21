@@ -35,7 +35,56 @@
                             <label>Excerpt</label>
                             <textarea name="excerpt" id="excerpt" rows="4" class="form-control"></textarea>
                         </div>
-                        
+
+                        <hr>
+
+                        <!-- custom field -->
+                        <label>Custom field</label>
+                        <div id="wrap_fields"></div>
+
+                        <div >
+                                <a href="javascript:void(0)" class="btn btn-default pull-right" id="add_field">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Add field</a>
+                        </div>
+                        <!-- end custom field -->
+
+
+
+<script>
+    $('#add_field').click(function () {
+        $('#wrap_fields').append(`
+        <div class="form-group field_item row">
+            <div class="col-xs-3">
+                <input type="text" class="form-control key_field" name="key_field" autocomplete="off">
+            </div>
+                <div class="col-xs-8"  style="padding-left: 0;">
+                <input type="text" class="form-control" name="value_field" autocomplete="off">
+            </div>
+            <div class="col-xs-1" style="padding-left: 0;">
+                <button class="btn btn-danger btn-block btn_del_field" type="button"  onclick="return confirm('Are you sure?')">
+                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        `);
+        $('.key_field').focus();
+
+        $('.btn_del_field').click(function(){
+            $(this).closest('.field_item').find('input[name="key_field"]').val('');
+            $(this).closest('.field_item').find('input[name="value_field"]').val('');
+            $(this).closest('.field_item').remove();
+        });
+    });
+
+    $('.btn_del_field').click(function(){
+        $(this).closest('.field_item').find('input[name="key_field"]').val('');
+        $(this).closest('.field_item').find('input[name="value_field"]').val('');
+        $(this).closest('.field_item').remove();
+    });
+</script>
+
+
                         <div class="wrap_publish">
                             <label>&nbsp;</label>
                             <div class="panel panel-default">

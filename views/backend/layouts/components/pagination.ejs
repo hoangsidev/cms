@@ -3,7 +3,7 @@
         var post_type_slug = site_info.post_type.post_type_slug; 
     } else { 
         if(typeof site_info.taxonomy !== 'undefined') { 
-            var post_type_slug = site_info.taxonomy.taxonomy_slug, terms = 'terms/'
+            var post_type_slug = site_info.taxonomy.taxonomy_slug, terms_post_type_slug = 'terms/'
         } 
     } 
     if(typeof key_search !== 'undefined' && key_search!='') { 
@@ -14,7 +14,7 @@
                 <% if (current == 1) { %>
                     <li class="disabled"><a>First</a></li>
                 <% } else { %>
-                    <li><a href="<%= get_admin_url() %>/<%= terms %><%= post_type_slug %><%= search %>">First</a></li>
+                    <li><a href="<%= get_admin_url() %>/<%= terms_post_type_slug %><%= post_type_slug %><%= search %>">First</a></li>
                 <% } %>
                 <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
                 <% if (i !== 1) { %>
@@ -26,7 +26,7 @@
                     <% if (i == current) { %>
                         <li class="active"><a><%= i %></a></li>
                     <% } else { %>
-                        <li><a href="<%= get_admin_url() %>/<%= terms %><%= post_type_slug %>/page/<%= i %><%= search %>"><%= i %></a></li>
+                        <li><a href="<%= get_admin_url() %>/<%= terms_post_type_slug %><%= post_type_slug %>/page/<%= i %><%= search %>"><%= i %></a></li>
                     <% } %>
                     <% if (i == Number(current) + 4 && i < pages) { %>
                         <li class="disabled"><a>...</a></li>
@@ -36,7 +36,7 @@
                 <% if (current == pages) { %>
                     <li class="disabled"><a>Last</a></li>
                 <% } else { %>
-                    <li><a href="<%= get_admin_url() %>/<%= terms %><%= post_type_slug %>/page/<%= pages %><%= search %>">Last</a></li>
+                    <li><a href="<%= get_admin_url() %>/<%= terms_post_type_slug %><%= post_type_slug %>/page/<%= pages %><%= search %>">Last</a></li>
                 <% } %>
             </ul>
         <% }
