@@ -298,7 +298,7 @@ var users_controller = {
     // CURD
     users: (req, res, next) => { // done
         if (req.query.search && req.query.search != null && req.query.search != '' && typeof req.query.search !== 'undefined') { var key_search = req.query.search };
-        var per_page = 2, // num of post in one page
+        var per_page = 20, // num of post in one page
             page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
         if (!key_search) {  // list all
             m_users.find({}).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
@@ -458,7 +458,18 @@ var users_controller = {
             form.parse(req, (err, fields, files) => {
                 if (fields._id && fields._id != null && fields._id != '' && typeof fields._id !== 'undefined') { var _id = fields._id };
                 if (fields.old_email && fields.old_email != null && fields.old_email != '' && typeof fields.old_email !== 'undefined' && valid_email(fields.old_email)) { var old_email = fields.old_email; };
-                if (_id && old_email) {
+
+                if (res.locals.me.role != 2) { // nếu không phải admin thì ko được sửa người khác
+                    if (res.locals.me._id == _id) {
+                        var exactly_user = 1;
+                    } else {
+                        var exactly_user = 0;
+                    }
+                } else {
+                    var exactly_user = 1;
+                }
+
+                if (_id && old_email && exactly_user == 1) {
                     var arr_data = new Object();
                     if (fields.email && fields.email != null && fields.email != '' && typeof fields.email !== 'undefined' && valid_email(fields.email)) {
                         if (fields.email != old_email) { // nếu mail đã bị thay đổi thì đổi thì  xử lý đổi trong dữ liệu, sau đó verify về 0 và gửi mail verify
@@ -479,7 +490,10 @@ var users_controller = {
                         fs.rename(oldpath, newpath, (err) => { });
                         arr_data.thumbnail = name_file + '.' + type_file;
                     };
-                    if (fields.role && fields.role != null && fields.role != '' && typeof fields.role !== 'undefined') { arr_data.role = fields.role };
+                    if (res.locals.me.role == 2) {
+                        if (fields.role && fields.role != null && fields.role != '' && typeof fields.role !== 'undefined') { arr_data.role = fields.role };
+                    }
+
                     arr_data.updated_at = new Date();
                     m_users.findOneAndUpdate({ _id: _id }, { $set: arr_data }, { new: true }, (err, result) => {
                         if (result) {
@@ -500,7 +514,12 @@ var users_controller = {
                                 });
                                 // end verify email
                             }
-                            return res.redirect(get_admin_url + '/users/')
+                            if (res.locals.me.role == 2) {
+                                return res.redirect(get_admin_url + '/users/')
+                            } else {
+                                return res.redirect(get_admin_url + '/users/profile')
+                            }
+
                         } else {
                             return res.redirect(get_admin_url + '/errors');
                         }

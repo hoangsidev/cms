@@ -43,6 +43,7 @@ const exist_slug = (slug) => {
     });
 }
 
+
 var terms_controller = {
     // CURD
     terms: (req, res, next) => {  // done
@@ -54,7 +55,7 @@ var terms_controller = {
         }
         // end check exist_taxonomy
         if (req.query.search && req.query.search != null && req.query.search != '' && typeof req.query.search !== 'undefined') { var key_search = req.query.search };
-        var per_page = 2, // num of term in one page
+        var per_page = 20, // num of term in one page
             page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
         if (!key_search) { // list all
             m_terms.find({ taxonomy_id: taxonomy_id }).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {

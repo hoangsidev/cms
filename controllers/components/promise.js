@@ -88,7 +88,7 @@ const promise_post = (elem, post) => {
 
 const promise_get_articles = () => {
     return new Promise((resolve, reject) => {
-        m_posts.find({ post_type_id: '1' }).exec((err, articles) => {
+        m_posts.find({ post_type_id: '1', status: '1' }).exec((err, articles) => {
             resolve(articles);
         });
     });
@@ -96,7 +96,7 @@ const promise_get_articles = () => {
 
 const promise_get_pages = () => {
     return new Promise((resolve, reject) => {
-        m_posts.find({ post_type_id: '2' }).exec((err, pages) => {
+        m_posts.find({ post_type_id: '2', status: '1' }).exec((err, pages) => {
             resolve(pages);
         });
     });

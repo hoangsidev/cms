@@ -69,7 +69,7 @@
         </li>
     </ul>
     <% } %>
-    <% if(editor || administrator) { %>
+    <% if(administrator) { %>
     <ul class="list-group">
         <li>
             <a href="<%= get_admin_url(); %>/users" class="list-group-item main <% if(typeof site_info !== 'undefined'  && (site_info.page_slug=='users' || site_info.page_slug=='update_user')) { %> active <% } %>">
@@ -88,10 +88,18 @@
         </li>
         <li>
             <a href="<%= get_admin_url(); %>/users/profile" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='profile') { %> active <% } %>">
-                Your Profile
+                Profile
             </a>
         </li>
     </ul>
+    <% } else { %>
+    <ul class="list-group">
+        <li>
+            <a href="<%= get_admin_url(); %>/users/profile" class="list-group-item main <% if(typeof site_info !== 'undefined' && site_info.page_slug=='profile') { %> active <% } %>">
+                Profile
+            </a>
+        </li>
+        </ul>
     <% } %>
     <ul class="list-group">
             <% if(administrator) { %>

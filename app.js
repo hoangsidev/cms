@@ -66,8 +66,11 @@ block_editor = (req, res, next) => {
 
 
 // check role
-app.get('/backend/users', block_author)
-app.all('/backend/users/*', block_author)
+app.get('/backend/users', block_author, block_editor)
+app.all('/backend/users/page/*', block_author, block_editor)
+app.all('/backend/users/?search=*', block_author, block_editor)
+app.all('/backend/users/create', block_author, block_editor)
+app.all('/backend/users/delete', block_author, block_editor)
 
 app.get('/backend/pages', block_author, block_editor)
 app.all('/backend/pages/*', block_author, block_editor)

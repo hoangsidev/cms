@@ -3,6 +3,12 @@
 <!-- end main -->
 <!-- footer -->
 <!-- end footer -->
+<% if(typeof site_info.page_slug !== 'undefined' && 
+(site_info.page_slug=='articles' || site_info.page_slug=='pages' || site_info.page_slug=='users' )) { %>
+<script> $('input[name="search"]').focus(); </script>
+<% } else { %>
+<script> $('input[name="title"]').focus(); </script>
+<% } %>
 
 <script src="<%= get_admin_url(); %>/js/socket.io.js"></script>
 <script> var socket = io(); </script>

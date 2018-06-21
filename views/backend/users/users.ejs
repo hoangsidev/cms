@@ -1,3 +1,10 @@
+<% if(typeof site_info.me !== 'undefined') { %>
+     <% if(site_info.me.role == '1') { 
+        var editor = 1 
+    } else if(site_info.me.role == '2') { 
+        var administrator = 1 
+     } %>
+<% } %>
 <%- include('../layouts/header.ejs'); -%>
     <!-- main -->
     <div id="wrap_main">
@@ -12,9 +19,6 @@
                     <% } %>
                     <!-- end if search -->
 
-                    
-
-                    
                     <% if(typeof data_users !== 'undefined') { var users = JSON.parse(data_users); %>
                         <% if(users.length > 0) { %>
                             <%- include('../layouts/components/pagination.ejs'); -%>

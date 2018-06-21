@@ -66,7 +66,7 @@ var frontend_controller = {
     single: (req, res, next) => {
         if (req.params.slug && req.params.slug != null && req.params.slug != '' && typeof req.params.slug !== 'undefined') { var slug = req.params.slug };
         if (slug) {
-            m_posts.findOne({ slug: slug }, (err, result) => {
+            m_posts.findOne({ slug: slug, status : '1' }, (err, result) => {
                 if (result) {
                     result = JSON.parse(JSON.stringify(result));
                     progress_post(result).then((post) => {

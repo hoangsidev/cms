@@ -58,7 +58,7 @@ var posts_controller = {
         }
         // end check exist post_type
         if (req.query.search && req.query.search != null && req.query.search != '' && typeof req.query.search !== 'undefined') { var key_search = req.query.search };
-        var per_page = 2, // num of post in one page
+        var per_page = 20, // num of post in one page
             page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
         if (!key_search) { // list all
             var regex;
@@ -199,7 +199,11 @@ var posts_controller = {
                         arr_data.custom_fields = (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') ? fields.custom_fields : [];
                         arr_data.user_id = (res.locals.me._id).toString();
                         arr_data.post_type_id = (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') ? fields.post_type_id : '1';
-                        arr_data.status = (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') ? fields.status : '0';
+                        if(res.locals.me.role == 0) {
+                            arr_data.status = '0';
+                        } else {
+                            arr_data.status = (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') ? fields.status : '0';
+                        }
                         arr_data.post_type_id = fields.post_type_id;
                         arr_data.created_at = new Date();
                         arr_data.updated_at = null;
@@ -288,7 +292,15 @@ var posts_controller = {
                         if (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') { arr_data.custom_fields = fields.custom_fields };
                         // if (res.locals.me._id) { arr_data.user_id = res.locals.me._id };
                         if (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') { arr_data.post_type_id = fields.post_type_id } else { arr_data.post_type_id = '1' };
-                        if (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') { arr_data.status = fields.status } else { arr_data.status = '0' };
+                        
+                        
+
+                        if(res.locals.me.role == 0) {
+                            arr_data.status = '0';
+                        } else {
+                            if (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') { arr_data.status = fields.status } else { arr_data.status = '0' };
+                        }
+
                         arr_data.updated_at = new Date();
                         if (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') { arr_data.num_order = fields.num_order } else { arr_data.num_order = '0' };
                         m_posts.findOneAndUpdate({ _id: _id }, { $set: arr_data }, { new: true }, (err, result) => {
