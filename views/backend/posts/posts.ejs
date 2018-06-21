@@ -69,7 +69,7 @@
                                                     </td>
                                                     <td><% if(item.status) { %><%- get_status(item.status) %><% } %></td>
                                                     <td style="text-align:center;">
-                                                        <a href="javascript:void(0)" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                        <a target="_blank" href="<%= get_site_url(); %>/<% if(item.slug) { %><%= item.slug %><% } %>" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="View"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                         <a href="<%= get_admin_url(); %>/<%= post_type_slug %>/update/<% if(item._id) { %><%= item._id %><% } %>" class="btn btn-warning btn-xs" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
                                                             <i class="fa fa-pencil" aria-hidden="true"></i>
                                                         </a>

@@ -1,8 +1,14 @@
-<% var post_type_slug  = ''; if(typeof site_info !== 'undefined' && typeof site_info.post_type !== 'undefined') {  
-    post_type_slug = site_info.post_type.post_type_slug  
+<%
+if(typeof site_info.post_type !== 'undefined') { 
+    var post_type_slug = site_info.post_type.post_type_slug; 
+} else { 
+    if(typeof site_info.taxonomy !== 'undefined') { 
+        var post_type_slug = site_info.taxonomy.taxonomy_slug, terms = 'terms/';
+    } 
 } %>
-<% if(post_type_slug=='articles' || post_type_slug=='pages' || post_type_slug=='users') { %>
-    <form action="<%= get_admin_url(); %>/<%= post_type_slug %>/" method="GET" class="wrap_search">
+
+<% if(post_type_slug=='articles' || post_type_slug=='pages' || post_type_slug=='users' || terms=='terms/') { %>
+    <form action="<%= get_admin_url(); %>/<%= terms %><%= post_type_slug %>/" method="GET" class="wrap_search">
         <input type="text" id="search" name="search" value="<% if(typeof key_search !== 'undefined' && key_search!='') { %><%= key_search %><% } %>"
             autocomplete="off" placeholder="Search for <%= post_type_slug %>...">
         <button type="submit" id="submit_s" class="hover_opacity">

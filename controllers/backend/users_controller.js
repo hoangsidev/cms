@@ -298,7 +298,7 @@ var users_controller = {
     // CURD
     users: (req, res, next) => { // done
         if (req.query.search && req.query.search != null && req.query.search != '' && typeof req.query.search !== 'undefined') { var key_search = req.query.search };
-        var per_page = 20, // num of post in one page
+        var per_page = 2, // num of post in one page
             page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
         if (!key_search) {  // list all
             m_users.find({}).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {

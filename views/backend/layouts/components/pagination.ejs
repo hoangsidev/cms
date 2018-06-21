@@ -1,65 +1,43 @@
-<% if(paginate) { %>
-<% if(typeof key_search !== 'undefined' && key_search!='') { %>
-    <% if (pages > 0) { %>
-        <ul class="pagination pagination-sm pull-right wrap_pagination">
-            <% if (current == 1) { %>
-                <li class="disabled"><a>First</a></li>
-            <% } else { %>
-                <li><a href="<%= get_admin_url() %>/<% if(typeof site_info.page_slug !== 'undefined') { %><%= site_info.page_slug %><% } %>/?search=<%= key_search %>">First</a></li>
-            <% } %>
-            <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
-            <% if (i !== 1) { %>
-                <li class="disabled"><a>...</a></li>
-            <% } %>
-
-            <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
-                
-                <% if (i == current) { %>
-                    <li class="active"><a><%= i %></a></li>
+<% if(paginate) { 
+    if(typeof site_info.post_type !== 'undefined') { 
+        var post_type_slug = site_info.post_type.post_type_slug; 
+    } else { 
+        if(typeof site_info.taxonomy !== 'undefined') { 
+            var post_type_slug = site_info.taxonomy.taxonomy_slug, terms = 'terms/'
+        } 
+    } 
+    if(typeof key_search !== 'undefined' && key_search!='') { 
+        var search = '/?search=' + key_search;
+    }
+    if (pages > 0) { %>
+            <ul class="pagination pagination-sm pull-right wrap_pagination">
+                <% if (current == 1) { %>
+                    <li class="disabled"><a>First</a></li>
                 <% } else { %>
-                    <li><a href="<%= get_admin_url() %>/<% if(typeof site_info.page_slug !== 'undefined') { %><%= site_info.page_slug %><% } %>/page/<%= i %>/?search=<%= key_search %>"><%= i %></a></li>
+                    <li><a href="<%= get_admin_url() %>/<%= terms %><%= post_type_slug %><%= search %>">First</a></li>
                 <% } %>
-                <% if (i == Number(current) + 4 && i < pages) { %>
+                <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
+                <% if (i !== 1) { %>
                     <li class="disabled"><a>...</a></li>
                 <% } %>
-            <% } %>
-            
-            <% if (current == pages) { %>
-                <li class="disabled"><a>Last</a></li>
-            <% } else { %>
-                <li><a href="<%= get_admin_url() %>/<% if(typeof site_info.page_slug !== 'undefined') { %><%= site_info.page_slug %><% } %>/page/<%= pages %>/?search=<%= key_search %>">Last</a></li>
-            <% } %>
-        </ul>
-    <% } %>
-<% } else { %>
-    <ul class="pagination pagination-sm pull-right wrap_pagination">
-            <% if (current == 1) { %>
-                <li class="disabled"><a>First</a></li>
-            <% } else { %>
-                <li><a href="<%= get_admin_url() %>/<% if(typeof site_info.page_slug !== 'undefined') { %><%= site_info.page_slug %><% } %>">First</a></li>
-            <% } %>
-            <% var i = (Number(current) > 5 ? Number(current) - 4 : 1) %>
-            <% if (i !== 1) { %>
-                <li class="disabled"><a>...</a></li>
-            <% } %>
 
-            <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+                <% for (; i <= (Number(current) + 4) && i <= pages; i++) { %>
+                    
+                    <% if (i == current) { %>
+                        <li class="active"><a><%= i %></a></li>
+                    <% } else { %>
+                        <li><a href="<%= get_admin_url() %>/<%= terms %><%= post_type_slug %>/page/<%= i %><%= search %>"><%= i %></a></li>
+                    <% } %>
+                    <% if (i == Number(current) + 4 && i < pages) { %>
+                        <li class="disabled"><a>...</a></li>
+                    <% } %>
+                <% } %>
                 
-                <% if (i == current) { %>
-                    <li class="active"><a><%= i %></a></li>
+                <% if (current == pages) { %>
+                    <li class="disabled"><a>Last</a></li>
                 <% } else { %>
-                    <li><a href="<%= get_admin_url() %>/<% if(typeof site_info.page_slug !== 'undefined') { %><%= site_info.page_slug %><% } %>/page/<%= i %>"><%= i %></a></li>
+                    <li><a href="<%= get_admin_url() %>/<%= terms %><%= post_type_slug %>/page/<%= pages %><%= search %>">Last</a></li>
                 <% } %>
-                <% if (i == Number(current) + 4 && i < pages) { %>
-                    <li class="disabled"><a>...</a></li>
-                <% } %>
-            <% } %>
-            
-            <% if (current == pages) { %>
-                <li class="disabled"><a>Last</a></li>
-            <% } else { %>
-                <li><a href="<%= get_admin_url() %>/<% if(typeof site_info.page_slug !== 'undefined') { %><%= site_info.page_slug %><% } %>/page/<%= pages %>">Last</a></li>
-            <% } %>
-        </ul>
-<% } %>
-<% } %>
+            </ul>
+        <% }
+} %>
