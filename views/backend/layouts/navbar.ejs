@@ -1,5 +1,12 @@
 <!-- header -->
 <header id="wrap_header">
+<ul class="nav navbar-nav">
+        <li class="active"><a style="background: #fff;" target="_blank" href="<%= get_site_url(); %>">
+        <i class="fa fa-home" aria-hidden="true"></i>
+        </a></li>
+</ul>
+
+
     <%- include('./components/search.ejs'); -%>
         <% if(typeof site_info !== 'undefined') { %>
                 <ul class="nav navbar-nav navbar-right wrap_me">

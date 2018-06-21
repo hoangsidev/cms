@@ -115,37 +115,40 @@
                                     <strong># Featured Image</strong>
                                 </div>
                                 <div class="panel-body">
+                                   
                                     <div class="form-group">
-                                        <div class="user_thumbnail">
-                                            <span id="del_thumbnail">
-                                                <i class="fa fa-times-circle" aria-hidden="true"></i>
-                                            </span>
-                                            <input class="input-file" accept="image/*" id="thumbnail" name="thumbnail" type="file" onChange="loadFile(event)">
-                                            <img id="output_avatar" class="img-thumbnail" alt="Add Featured Image">
-                                        </div>
-                                        <small style="font-style:italic;">Click the image to edit or update</small>
-                                        <br>
-                                        <script>
-                                            var loadFile = function (event) {
-                                                var output = document.getElementById('output_avatar'); output.src = URL.createObjectURL(event.target.files[0]);
-                                                var thumbnail = document.getElementById('thumbnail'); thumbnail.value = URL.createObjectURL(event.target.files[0]);
-                                            };
-                                            $('#del_thumbnail').click(function () {
-                                                $('#output_avatar').attr('src', '');
-                                                $('#thumbnail').val('');
-                                            });
-                                        </script>
-                                        <div class="clearfix"></div>
+                                    <div class="user_thumbnail">
+                                        <span id="del_thumbnail">
+                                            <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                        </span>
+                                        <input class="input-file" accept="image/*" id="thumbnail" name="thumbnail" type="file" onChange="loadFile(event)">
+                                    
+                                        <img id="output_avatar" class="img-thumbnail" alt="Add Featured Image" src="<%= get_site_url(); %>/backend/images/no-image.svg">
+                                    </div>
+                                    <small style="font-style:italic;">Click the image to edit or update</small>
+                                    <br>
+                                    <script>
+                                        var loadFile = function (event) {
+                                            var output = document.getElementById('output_avatar'); output.src = URL.createObjectURL(event.target.files[0]);
+                                            var thumbnail = document.getElementById('thumbnail'); thumbnail.value = URL.createObjectURL(event.target.files[0]);
+                                        };
+                                        $('#del_thumbnail').click(function () {
+                                            $('#output_avatar').attr('src', '<%= get_site_url(); %>/backend/images/no-image.svg');
+                                            $('#thumbnail').val('');
+                                        });
+                                    </script>
+                                    <div class="clearfix"></div>
                                     </div>
                                 </div>
                             </div>
                             <!-- end -->
+                            <% if(post_type_slug != 'pages') { %>
                             <div class="panel panel-default">
                                     <div class="panel-heading">
                                         <strong># Categories</strong>
                                     </div>
                                     <div class="panel-body">
-                                        <div id="wrap_tags">
+                                        <div id="wrap_categories">
                                                 <% if(typeof terms !== 'undefined') {  %>
                                                     <% if(terms.length > 0) { %>
                                                         <% terms.forEach(function(item_term, index){ %>
@@ -160,14 +163,68 @@
                                                 <input type="hidden" name="terms" id="terms">
                                         </div>
                                       
+                                      
                                          <div class="input-group">
-                                                <input type="text" class="form-control" >
+                                                <input type="text" class="form-control" id="name_term" taxonomy_id="1">
                                                 <span class="input-group-btn">
-                                                  <button class="btn btn-default" type="button">Add</button>
+                                                  <button class="btn btn-default" type="button" id="create_term">Add</button>
                                                 </span>
                                          </div>
+
+
+<script>
+// $('#create_term').click(function(){
+// 	var name_term = $('#name_term').val();
+// 	if(name_term=='') {
+// 		alert('Please input name of term !'); $('#name_term').focus();
+// 	} else {
+//         var taxonomy_id = $('#name_term').attr('taxonomy_id');
+// 		if(taxonomy_id==1) {
+//             var taxonomy_slug = 'categories'
+//         } else if(taxonomy_id==2) {
+//             var taxonomy_slug = 'tags'
+//         }
+// $('#form_create_term').append(`
+
+// <input type="hidden" name="title" value="`+ name_term +`">
+// <input type="hidden" name="taxonomy_id" value="`+ taxonomy_id +`">
+// `)
+
+
+//         $.ajax({
+// 			type:'POST',
+// 			url: '/backend/terms/' + taxonomy_slug + '/create',  
+// 			data: $("#form_create_term").serialize(),
+// 			success: function(result){
+// 				alert(result)
+// 			}
+// 		})
+
+
+		// 	$.post( '/backend/terms/' + taxonomy_slug + '/create', { title:name_term, taxonomy_id : taxonomy_id }, function( data ) {
+        //         alert(data)
+		// 		if(data!='') {
+		// 			$('#wrap_categories').prepend(`
+                   
+		// 			`);
+		// 			$('#name_term').val('');
+		// 		} else {
+		// 			alert('Error! An error occurred. Please try again later');
+		// 		}
+		// });
+			
+	
+		
+		
+		
+		
+	}
+});
+</script>
+
                                     </div>
                                 </div>
+                                <% } %>
                                 <!-- end -->
                         </div>
                     </div>
@@ -191,4 +248,10 @@
                 <!-- end content -->
     </div>
     <!-- end main -->
+
+
+<form  method="post" id="form_create_term" enctype="multipart/form-data">
+</fomr>
+
+
     <%- include('../layouts/footer'); -%>

@@ -18,9 +18,10 @@ var configs = require('../../configs/configs.js'),
     get_site_name = configs.get_site_name(),
     progress_post = promise.progress_post,
     progress_posts = promise.progress_posts;
-
 app.use(body_parser.json());
 app.use(body_parser.urlencoded({ extended: true }));
+
+var page_404 = get_admin_url + '/404', page_errors = get_admin_url + '/errors';
 
 const exist_post_type = (slug) => {
     var post_type, post_type_id;
@@ -30,9 +31,7 @@ const exist_post_type = (slug) => {
             post_type_slug: slug,
             post_type_id: post_type_id
         }
-    } else {
-        return false;
-    }
+    } else { return false; }
 }
 
 const exist_slug = (slug) => {
@@ -54,7 +53,7 @@ var posts_controller = {
         if (exist_post_type(req.params.post_type)) {
             var post_type = exist_post_type(req.params.post_type), post_type_slug = post_type.post_type_slug, post_type_id = post_type.post_type_id;
         } else {
-            return res.redirect(get_admin_url + '/404');
+            return res.redirect(page_404);
         }
         // end check exist post_type
         if (req.query.search && req.query.search != null && req.query.search != '' && typeof req.query.search !== 'undefined') { var key_search = req.query.search };
@@ -145,7 +144,7 @@ var posts_controller = {
         if (exist_post_type(req.params.post_type)) {
             var post_type = exist_post_type(req.params.post_type), post_type_slug = post_type.post_type_slug, post_type_id = post_type.post_type_id;
         } else {
-            return res.redirect(get_admin_url + '/404');
+            return res.redirect(page_404);
         }
         // end check exist post_type
         if (req.method == 'GET') {
@@ -199,7 +198,7 @@ var posts_controller = {
                         arr_data.custom_fields = (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') ? fields.custom_fields : [];
                         arr_data.user_id = (res.locals.me._id).toString();
                         arr_data.post_type_id = (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') ? fields.post_type_id : '1';
-                        if(res.locals.me.role == 0) {
+                        if (res.locals.me.role == 0) {
                             arr_data.status = '0';
                         } else {
                             arr_data.status = (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') ? fields.status : '0';
@@ -213,12 +212,12 @@ var posts_controller = {
                             if (result) {
                                 return res.redirect(get_admin_url + '/' + post_type_slug + '/update/' + result._id);
                             } else {
-                                return res.redirect(get_admin_url + '/errors');
+                                return res.redirect(page_errors);
                             }
                         });
                     });
                 } else {
-                    return res.redirect(get_admin_url + '/errors');
+                    return res.redirect(page_errors);
                 }
             });
         }
@@ -229,7 +228,7 @@ var posts_controller = {
         if (exist_post_type(req.params.post_type)) {
             var post_type = exist_post_type(req.params.post_type), post_type_slug = post_type.post_type_slug, post_type_id = post_type.post_type_id;
         } else {
-            return res.redirect(get_admin_url + '/404');
+            return res.redirect(page_404);
         }
         // end check exist post_type
         if (req.method == 'GET') {
@@ -254,7 +253,7 @@ var posts_controller = {
                             });
                         });
                     } else {
-                        return res.redirect(get_admin_url + '/404');
+                        return res.redirect(page_404);
                     }
                 });
             }
@@ -292,27 +291,23 @@ var posts_controller = {
                         if (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') { arr_data.custom_fields = fields.custom_fields };
                         // if (res.locals.me._id) { arr_data.user_id = res.locals.me._id };
                         if (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') { arr_data.post_type_id = fields.post_type_id } else { arr_data.post_type_id = '1' };
-                        
-                        
-
-                        if(res.locals.me.role == 0) {
+                        if (res.locals.me.role == 0) {
                             arr_data.status = '0';
                         } else {
                             if (fields.status && fields.status != null && fields.status != '' && typeof fields.status !== 'undefined') { arr_data.status = fields.status } else { arr_data.status = '0' };
                         }
-
                         arr_data.updated_at = new Date();
                         if (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') { arr_data.num_order = fields.num_order } else { arr_data.num_order = '0' };
                         m_posts.findOneAndUpdate({ _id: _id }, { $set: arr_data }, { new: true }, (err, result) => {
                             if (result) {
                                 return res.redirect(get_admin_url + '/' + post_type_slug + '/update/' + result._id);
                             } else {
-                                return res.redirect(get_admin_url + '/errors');
+                                return res.redirect(page_errors);
                             }
                         });
                     });
                 } else {
-                    return res.redirect(get_admin_url + '/errors');
+                    return res.redirect(page_errors);
                 }
             });
         }
@@ -322,7 +317,7 @@ var posts_controller = {
         if (exist_post_type(req.params.post_type)) {
             var post_type = exist_post_type(req.params.post_type), post_type_slug = post_type.post_type_slug, post_type_id = post_type.post_type_id;
         } else {
-            return res.redirect(get_admin_url + '/404');
+            return res.redirect(page_404);
         }
         // end check exist post_type
         if (req.body._id && req.body._id != null && req.body._id != '' && typeof req.body._id !== 'undefined') { var _id = req.body._id };
@@ -331,13 +326,12 @@ var posts_controller = {
                 if (result) {
                     return res.redirect(get_admin_url + '/' + post_type_slug);
                 } else {
-                    return res.redirect(get_admin_url + '/404');
+                    return res.redirect(page_404);
                 }
             });
         } else {
-            return res.redirect(get_admin_url + '/errors');
+            return res.redirect(page_errors);
         }
     }
-    // End CURD
 }
 module.exports = posts_controller;

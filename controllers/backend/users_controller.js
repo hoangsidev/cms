@@ -16,9 +16,9 @@ var configs = require('../../configs/configs.js'),
 app.use(body_parser.json());
 app.use(body_parser.urlencoded({ extended: true }));
 
+var page_404 = get_admin_url + '/404', page_errors = get_admin_url + '/errors';
 
-
-function valid_username(username) {
+const valid_username = (username) => {
     if (username) {
         var re = /^[a-zA-Z0-9]+$/;
         return re.test(username);
@@ -26,7 +26,7 @@ function valid_username(username) {
         return false;
     }
 }
-function valid_email(email) {
+const valid_email = (email) => {
     if (email) {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return re.test(email);
@@ -34,7 +34,7 @@ function valid_email(email) {
         return false;
     }
 }
-function valid_password(password) {
+const valid_password = (password) => {
     if (password) {
         var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
         return re.test(password);
@@ -43,7 +43,7 @@ function valid_password(password) {
     }
 }
 
-function check_exist_user() { // check exist username & email with socket.io
+const check_exist_user = () => { // check exist username & email with socket.io
     io.on('connection', (socket) => {
         socket.on('guest_username', (username) => {
             if (username && username != null && username != '' && typeof username !== 'undefined' && valid_username(username)) {
@@ -154,7 +154,7 @@ var users_controller = {
                     }
                 });
             } else { // if nó phá bậy bạ
-                return res.redirect(get_site_url + '/errors');
+                return res.redirect(page_errors);
             }
         }
     },
@@ -182,7 +182,7 @@ var users_controller = {
                 }
             })
         } else {
-            return res.redirect(get_admin_url + '/errors');
+            return res.redirect(page_errors);
         }
     },
     signout: (req, res, next) => { // done
@@ -190,7 +190,7 @@ var users_controller = {
         if (req.session == null) {
             return res.redirect(get_site_url + '/signin');
         } else {
-            return res.redirect(get_admin_url + '/errors');
+            return res.redirect(page_errors);
         }
     },
     password_reset: (req, res, next) => { // done
@@ -269,7 +269,7 @@ var users_controller = {
                     }
                 });
             } else { // if nó phá bậy bạ
-                return res.redirect(get_admin_url + '/errors');
+                return res.redirect(page_errors);
             }
         } else if (req.method == 'PUT') { // if PUT
             if (req.body.password && req.body.password != null && req.body.password != '' && typeof req.body.password !== 'undefined' && valid_password(req.body.password)) { var password = req.body.password };
@@ -290,7 +290,7 @@ var users_controller = {
                     }
                 });
             } else { // đây là trường hợp nó phá
-                return res.redirect(get_site_url + '/errors');
+                return res.redirect(page_errors);
             }
         }
     },
@@ -301,10 +301,11 @@ var users_controller = {
         var per_page = 20, // num of post in one page
             page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
         if (!key_search) {  // list all
-            m_users.find({}).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
+            m_users.find({}).skip((per_page * page) - per_page).limit(per_page).exec((err, results) => {
+                results = JSON.parse(JSON.stringify(results));
                 m_users.count().exec(function (err, count) {
                     return res.render('backend/users/users', {
-                        data_users: JSON.stringify(result) ? JSON.stringify(result) : JSON.stringify([]),
+                        users: results ? results : [],
                         current: page,
                         pages: Math.ceil(count / per_page),
                         paginate: (count > per_page) ? true : false,
@@ -323,10 +324,11 @@ var users_controller = {
                 { email: new RegExp(key_search, "i") },
                 { display_name: new RegExp(key_search, "i") }
             ];
-            m_users.find({ $or: regex }).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
+            m_users.find({ $or: regex }).skip((per_page * page) - per_page).limit(per_page).exec((err, results) => {
+                users = JSON.parse(JSON.stringify(results));
                 m_users.find({ $or: regex }).count().exec((err, count) => {
                     return res.render('backend/users/users', {
-                        data_users: JSON.stringify(result) ? JSON.stringify(result) : JSON.stringify([]),
+                        users: users ? users : [],
                         current: page,
                         pages: Math.ceil(count / per_page),
                         key_search: key_search,
@@ -395,11 +397,11 @@ var users_controller = {
                                 if (!err) { console.log('Sent verify!'); }
                             });
                             // end verify email
-                            return res.redirect(get_admin_url + '/users');
+                            return res.redirect(page_errors);
                         }
                     });
                 } else {
-                    return res.redirect(get_admin_url + '/errors');
+                    return res.redirect(page_errors);
                 }
             });
         }
@@ -412,8 +414,9 @@ var users_controller = {
             if (_id) {
                 m_users.findOne({ _id: _id }, (err, result) => {
                     if (result) {
+                        user = JSON.parse(JSON.stringify(result));
                         return res.render('backend/users/update', {
-                            data_user: JSON.stringify(result) ? JSON.stringify(result) : JSON.stringify({}),
+                            user: user,
                             site_info: {
                                 page_title: 'Profile',
                                 page_slug: 'profile',
@@ -422,7 +425,7 @@ var users_controller = {
                             }
                         });
                     } else {
-                        return res.redirect(get_admin_url + '/404');
+                        return res.redirect(page_404);
                     }
                 });
             }
@@ -436,8 +439,9 @@ var users_controller = {
             if (_id) {
                 m_users.findOne({ _id: _id }, (err, result) => {
                     if (result) {
+                        user = JSON.parse(JSON.stringify(result));
                         return res.render('backend/users/update', {
-                            data_user: JSON.stringify(result) ? JSON.stringify(result) : JSON.stringify({}),
+                            user: user,
                             site_info: {
                                 page_title: 'Update user',
                                 page_slug: 'update_user',
@@ -446,12 +450,12 @@ var users_controller = {
                             }
                         });
                     } else {
-                        return res.redirect(get_admin_url + '/404');
+                        return res.redirect(page_404);
                     }
 
                 });
             } else {
-                return res.redirect(get_admin_url + '/404');
+                return res.redirect(page_404);
             }
         } else if (req.method == 'PUT') {
             var form = new formidable.IncomingForm(); form.maxFileSize = 20 * 1024 * 1024;
@@ -521,11 +525,11 @@ var users_controller = {
                             }
 
                         } else {
-                            return res.redirect(get_admin_url + '/errors');
+                            return res.redirect(page_errors);
                         }
                     });
                 } else {
-                    return res.redirect(get_admin_url + '/errors');
+                    return res.redirect(page_errors);
                 }
             });
         }
@@ -537,11 +541,11 @@ var users_controller = {
                 if (result) {
                     return res.redirect(get_admin_url + '/users');
                 } else {
-                    return res.redirect(get_admin_url + '/404');
+                    return res.redirect(page_404);
                 }
             });
         } else {
-            return res.redirect(get_admin_url + '/errors');
+            return res.redirect(page_errors);
         }
     }
     // End CURD

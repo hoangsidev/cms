@@ -62,7 +62,7 @@
                         
                     </div>
                     <div class="col-md-7">
-                        <% if(typeof data_terms !== 'undefined') { var terms = JSON.parse(data_terms); %>
+                        <% if(typeof terms !== 'undefined') {  %>
                             <% if(terms.length > 0) { %>
                                 <%- include('../layouts/components/pagination.ejs'); -%>
                                     <table class="table table-bordered table-striped wrap_data">

@@ -20,7 +20,7 @@
 
         <% if(typeof site_info.page_slug !== 'undefined' && (site_info.page_slug=='update_user' || site_info.page_slug=='profile')) { %>
         <script src="<%= get_admin_url(); %>/js/users/edit.js"></script>
-        <% var user = JSON.parse(data_user); if(user) { %>
+        <%  if(user) { %>
             <% if(user.username) { %>
                 <script> edit_user.username = '<%= user.username %>'; </script>
             <% } %>
@@ -31,29 +31,6 @@
         <% } %>
        
     <% } %>
-
-
-
-
-  
-     <% if(typeof site_info.page_slug !== 'undefined' && (site_info.page_slug=='create' || site_info.page_slug=='edit')) { %>
-        <script src="https://cdn.ckeditor.com/ckeditor5/10.0.1/decoupled-document/ckeditor.js"></script>
-        <script>
-            DecoupledEditor
-                .create( document.querySelector( '#editor' ), {
-                    cloudServices: {
-                        // tokenUrl: 'https://example.com/cs-token-endpoint',
-                        uploadUrl: 'assets/backend/uploads/'
-                    }
-                } )
-                .then( editor => {
-                    const toolbarContainer = document.querySelector( '#toolbar-container' );
-                    toolbarContainer.appendChild( editor.ui.view.toolbar.element );
-                } );
-                
-        </script>
-    <% } %>
-   
 <% } %>
 
 </body>

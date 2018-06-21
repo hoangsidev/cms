@@ -10,7 +10,7 @@
                     taxonomy_slug = site_info.taxonomy.taxonomy_slug;
                     taxonomy_id = site_info.taxonomy.taxonomy_id;
                 } %>
-                <% var term = JSON.parse(data_term); if(term) { %>
+                <% if(typeof term !== 'undefined') { %>
                     <form action="<%= get_admin_url(); %>/terms/<%= taxonomy_slug %>/update?_method=PUT" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="_id" value="<% if(term._id) { %><%= term._id %><% } %>">
                         <input type="hidden" value="<%= taxonomy_id %>" name="taxonomy_id">

@@ -19,7 +19,7 @@
                     <% } %>
                     <!-- end if search -->
 
-                    <% if(typeof data_users !== 'undefined') { var users = JSON.parse(data_users); %>
+                    <% if(typeof users !== 'undefined') {  %>
                         <% if(users.length > 0) { %>
                             <%- include('../layouts/components/pagination.ejs'); -%>
                                 <table class="table table-bordered table-striped wrap_data">
@@ -44,7 +44,7 @@
                                                         <% if(typeof site_info.me !== 'undefined' && site_info.me._id == item._id) { %>
                                                             <a href="<%= get_admin_url(); %>/users/profile">    
                                                         <% } else { %>
-                                                            <a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>"></a>
+                                                            <a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>">
                                                             <% } %>
                                                             <img class="thumb" src="<%= get_admin_url(); %>/uploads/<%= item.thumbnail %>" alt="<% if(item.username) { %><%= item.username %><% } %>">
                                                         </a>

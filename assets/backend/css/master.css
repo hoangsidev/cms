@@ -207,7 +207,10 @@
 }
 
 .thumb {
+    height: 45px;
     max-width: 60px;
+    object-fit: cover;
+    width: 60px;
 }
 
 #output_avatar {

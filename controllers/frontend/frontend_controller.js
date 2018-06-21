@@ -117,6 +117,8 @@ var frontend_controller = {
                 }
             })
 
+        } else {
+            return res.redirect(get_site_url + '/404');
         }
     },
 

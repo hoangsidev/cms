@@ -13,7 +13,7 @@
             <!-- end sidebar -->
             <%- include('../layouts/navbar'); -%>
                 <!-- content -->
-                <% var user = JSON.parse(data_user); if(user) { %>
+                <%  if(typeof user !== 'undefined') { %>
                     <form action="<%= get_admin_url(); %>/users/update?_method=PUT" method="post" enctype="multipart/form-data" id="edit_user"
                         v-on:submit.prevent="update_user" ref="form">
                         <input type="hidden" name="_id" value="<% if(user._id) { %><%= user._id %><% } %>">

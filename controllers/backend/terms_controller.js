@@ -14,11 +14,12 @@ var configs = require('../../configs/configs.js'),
     get_site_url = configs.get_site_url(),
     get_admin_url = configs.get_admin_url(),
     get_site_name = configs.get_site_name();
-
 app.use(body_parser.json());
 app.use(body_parser.urlencoded({ extended: true }));
 
-exist_taxonomy = (slug) => {
+var page_404 = get_admin_url + '/404', page_errors = get_admin_url + '/errors';
+
+const exist_taxonomy = (slug) => {
     var taxonomy, taxonomy_id;
     if (slug && slug != null && slug != '' && typeof slug !== 'undefined' && (slug == 'categories' || slug == 'tags')) {
         if (slug == 'categories') { taxonomy_id = '1'; } else if (slug == 'tags') { taxonomy_id = '2'; }
@@ -26,9 +27,7 @@ exist_taxonomy = (slug) => {
             taxonomy_slug: slug,
             taxonomy_id: taxonomy_id
         }
-    } else {
-        return false;
-    }
+    } else { return false; }
 }
 
 const exist_slug = (slug) => {
@@ -43,7 +42,6 @@ const exist_slug = (slug) => {
     });
 }
 
-
 var terms_controller = {
     // CURD
     terms: (req, res, next) => {  // done
@@ -51,17 +49,18 @@ var terms_controller = {
         if (exist_taxonomy(req.params.taxonomy)) {
             var taxonomy = exist_taxonomy(req.params.taxonomy), taxonomy_slug = taxonomy.taxonomy_slug, taxonomy_id = taxonomy.taxonomy_id;
         } else {
-            return res.redirect(get_admin_url + '/404');
+            return res.redirect(page_404);
         }
         // end check exist_taxonomy
         if (req.query.search && req.query.search != null && req.query.search != '' && typeof req.query.search !== 'undefined') { var key_search = req.query.search };
         var per_page = 20, // num of term in one page
             page = (req.params.page && req.params.page != null && req.params.page != '' && typeof req.params.page !== 'undefined' && !isNaN(req.params.page)) ? req.params.page : 1;
         if (!key_search) { // list all
-            m_terms.find({ taxonomy_id: taxonomy_id }).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
+            m_terms.find({ taxonomy_id: taxonomy_id }).skip((per_page * page) - per_page).limit(per_page).exec((err, results) => {
+                terms = JSON.parse(JSON.stringify(results));
                 m_terms.find({ taxonomy_id: taxonomy_id }).count().exec((err, count) => {
                     return res.render('backend/terms/terms', {
-                        data_terms: JSON.stringify(result) ? JSON.stringify(result) : JSON.stringify([]),
+                        terms: terms ? terms : [],
                         current: page,
                         pages: Math.ceil(count / per_page),
                         paginate: (count > per_page) ? true : false,
@@ -80,10 +79,11 @@ var terms_controller = {
                 { slug: new RegExp(key_search, "i") },
                 { description: new RegExp(key_search, "i") }
             ];
-            m_terms.find({ $and: [{ taxonomy_id: taxonomy_id }, { $or: regex }] }).skip((per_page * page) - per_page).limit(per_page).exec((err, result) => {
+            m_terms.find({ $and: [{ taxonomy_id: taxonomy_id }, { $or: regex }] }).skip((per_page * page) - per_page).limit(per_page).exec((err, results) => {
+                terms = JSON.parse(JSON.stringify(results));
                 m_terms.find({ $and: [{ taxonomy_id: taxonomy_id }, { $or: regex }] }).count().exec((err, count) => {
                     return res.render('backend/terms/terms', {
-                        data_terms: JSON.stringify(result) ? JSON.stringify(result) : JSON.stringify([]),
+                        terms: terms ? terms : [],
                         current: page,
                         pages: Math.ceil(count / per_page),
                         key_search: key_search,
@@ -106,14 +106,17 @@ var terms_controller = {
         if (exist_taxonomy(req.params.taxonomy)) {
             var taxonomy = exist_taxonomy(req.params.taxonomy), taxonomy_slug = taxonomy.taxonomy_slug, taxonomy_id = taxonomy.taxonomy_id;
         } else {
-            return res.redirect(get_admin_url + '/404');
+            return res.redirect(page_404);
         }
         // end check exist_taxonomy
         if (req.method == 'POST') {
+           
+            
             var form = new formidable.IncomingForm(); form.maxFileSize = 20 * 1024 * 1024; // 20MB
             form.parse(req, (err, fields, files) => {
                 if (fields.title && fields.title != null && fields.title != '' && typeof fields.title !== 'undefined') { var title = fields.title };
                 if (fields.taxonomy_id && fields.taxonomy_id != null && fields.taxonomy_id != '' && typeof fields.taxonomy_id !== 'undefined') { var taxonomy_id = fields.taxonomy_id };
+                console.log(title);
                 if (title && taxonomy_id) {
                     var arr_data = new Object(),
                         slug = slugify(fields.title, { replacement: '-', remove: /[$*_+~.()'"!\-:@]/g, lower: true });
@@ -137,12 +140,12 @@ var terms_controller = {
                             if (result) {
                                 return res.redirect(get_admin_url + '/terms/' + taxonomy_slug);
                             } else {
-                                return res.redirect(get_admin_url + '/errors');
+                                return res.redirect(page_errors);
                             }
                         });
                     });
                 } else {
-                    return res.redirect(get_admin_url + '/errors');
+                    return res.redirect(page_errors);
                 }
             });
         }
@@ -153,7 +156,7 @@ var terms_controller = {
         if (exist_taxonomy(req.params.taxonomy)) {
             var taxonomy = exist_taxonomy(req.params.taxonomy), taxonomy_slug = taxonomy.taxonomy_slug, taxonomy_id = taxonomy.taxonomy_id;
         } else {
-            return res.redirect(get_admin_url + '/404');
+            return res.redirect(page_404);
         }
         // end check exist_taxonomy
         if (req.method == 'GET') {
@@ -161,8 +164,9 @@ var terms_controller = {
             if (_id) {
                 m_terms.findOne({ _id: _id }, (err, result) => {
                     if (result) {
+                        term = JSON.parse(JSON.stringify(result));
                         return res.render('backend/terms/update', {
-                            data_term: JSON.stringify(result),
+                            term: term,
                             site_info: {
                                 page_title: 'Update ' + taxonomy_slug,
                                 page_slug: 'update_' + taxonomy_slug,
@@ -171,7 +175,7 @@ var terms_controller = {
                             }
                         });
                     } else {
-                        return res.redirect(get_admin_url + '/404');
+                        return res.redirect(page_404);
                     }
                 });
             }
@@ -201,12 +205,12 @@ var terms_controller = {
                             if (result) {
                                 return res.redirect(get_admin_url + '/terms/' + taxonomy_slug + '/update/' + result._id);
                             } else {
-                                return res.redirect(get_admin_url + '/errors');
+                                return res.redirect(page_errors);
                             }
                         });
                     });
                 } else {
-                    return res.redirect(get_admin_url + '/errors');
+                    return res.redirect(page_errors);
                 }
             });
         }
@@ -216,7 +220,7 @@ var terms_controller = {
         if (exist_taxonomy(req.params.taxonomy)) {
             var taxonomy = exist_taxonomy(req.params.taxonomy), taxonomy_slug = taxonomy.taxonomy_slug, taxonomy_id = taxonomy.taxonomy_id;
         } else {
-            return res.redirect(get_admin_url + '/404');
+            return res.redirect(page_404);
         }
         // end check exist_taxonomy
         if (req.body._id && req.body._id != null && req.body._id != '' && typeof req.body._id !== 'undefined') { var _id = req.body._id };
@@ -225,11 +229,11 @@ var terms_controller = {
                 if (result) {
                     return res.redirect(get_admin_url + '/terms/' + taxonomy_slug);
                 } else {
-                    return res.redirect(get_admin_url + '/404');
+                    return res.redirect(page_404);
                 }
             });
         } else {
-            return res.redirect(get_admin_url + '/errors');
+            return res.redirect(page_errors);
         }
     }
     // End CURD

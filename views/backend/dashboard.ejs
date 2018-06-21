@@ -9,10 +9,9 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="panel panel-default">
-                            <div class="panel-heading">Hello <% if(typeof site_info.me !== 'undefined') { %><%= site_info.me.display_name  %><% } else { %><%= site_info.me.username  %><% } %>, Welcome to <strong>NodeCMS</strong>
+                            <div class="panel-heading">Hi <% if(typeof site_info.me !== 'undefined') { %><%= site_info.me.display_name  %><% } else { %><%= site_info.me.username  %><% } %>, Welcome to <strong>NodeCMS</strong>
                             </div>
                             <div class="panel-body">
-                                <label class="label label-primary">Sample</label>
                                 <ul style="padding-left: 20px;margin-top: 10px;">
                                     <li>
                                         <a href="<%= get_admin_url(); %>/articles/create">Write your first article</a>
