@@ -3,6 +3,18 @@
 <!-- end main -->
 <!-- footer -->
 <!-- end footer -->
+<script>
+    var loadFile = function (event) {
+    var output = document.getElementById('output_avatar'); output.src = URL.createObjectURL(event.target.files[0]);
+    var thumbnail = document.getElementById('thumbnail'); thumbnail.value = URL.createObjectURL(event.target.files[0]);
+    };
+    $('#del_thumbnail').click(function () {
+    $('#output_avatar').attr('src', '<%= get_site_url(); %>/backend/images/no-image.svg');
+    $('#thumbnail').val('');
+    });
+    </script>
+
+
 <% if(typeof site_info.page_slug !== 'undefined' && 
 (site_info.page_slug=='articles' || site_info.page_slug=='pages' || site_info.page_slug=='users' )) { %>
 <script> $('input[name="search"]').focus(); </script>

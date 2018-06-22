@@ -51,14 +51,14 @@ auth = (req, res, next) => {
 }
 
 block_author = (req, res, next) => {
-    if (res.locals.me.role == '0') {
+    if (res.locals.me && res.locals.me.role == '0') {
         return res.redirect(get_admin_url + '/access_denied');
     }
     next()
 }
 
 block_editor = (req, res, next) => {
-    if (res.locals.me.role == '1') {
+    if (res.locals.me && res.locals.me.role == '1') {
         return res.redirect(get_admin_url + '/access_denied');
     }
     next()

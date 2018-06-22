@@ -18,7 +18,7 @@
                     post_type_slug = site_info.post_type.post_type_slug;
                     post_type_id = site_info.post_type.post_type_id  
                 } %>
-                <%  if(post && typeof post !== 'undefined') { %>
+                <%  if(typeof post !== 'undefined' && post) { %>
                         <form action="<%= get_admin_url(); %>/<%= post_type_slug %>/update?_method=PUT" method="post" id="update" enctype="multipart/form-data">
                             <input type="hidden" name="_id" value="<% if(post._id) { %><%= post._id %><% } %>">
                             <div class="wrap_create">
@@ -70,20 +70,10 @@
                                                         <i class="fa fa-times-circle" aria-hidden="true"></i>
                                                     </span>
                                                     <input class="input-file" accept="image/*" id="thumbnail" name="thumbnail" type="file" onChange="loadFile(event)">
-                                                    <img id="output_avatar" class="img-thumbnail" alt="Add Featured Image" src="<%= get_admin_url(); %>/uploads/<% if(post.thumbnail) { %><%= post.thumbnail %><% } %>">
+                                                    <img id="output_avatar" class="img-thumbnail" alt="Add Featured Image" src="<% if(post.thumbnail) { %><%= get_admin_url(); %>/uploads/<%= post.thumbnail %><% } else { %><%= get_site_url(); %>/backend/images/no-image.svg<% } %>">
                                                 </div>
-                                                <small style="font-style:italic;">Click the image to edit or update</small>
-                                                <br>
-                                                <script>
-                                                    var loadFile = function (event) {
-                                                        var output = document.getElementById('output_avatar'); output.src = URL.createObjectURL(event.target.files[0]);
-                                                        var thumbnail = document.getElementById('thumbnail'); thumbnail.value = URL.createObjectURL(event.target.files[0]);
-                                                    };
-                                                    $('#del_thumbnail').click(function () {
-                                                        $('#output_avatar').attr('src', '');
-                                                        $('#thumbnail').val('');
-                                                    });
-                                                </script>
+                                                <small style="font-style:italic;">Click the image to update</small>
+                                                
                                                 <div class="clearfix"></div>
                                             </div>
                                         </div>

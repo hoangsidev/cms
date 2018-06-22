@@ -57,28 +57,19 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="thumbnail">Featured Image</label>
-                                <div class="user_thumbnail">
-                                    <span id="del_thumbnail">
-                                        <i class="fa fa-times-circle" aria-hidden="true"></i>
-                                    </span>
-                                    <input class="input-file" accept="image/*" id="thumbnail" name="thumbnail" type="file" onChange="loadFile(event)">
-                                    <img id="output_avatar" class="img-thumbnail" alt="Add Featured Image">
-                                </div>
-                                <small style="font-style:italic;">Click the image to edit or update</small>
-                                <br>
-                                <script>
-                                    var loadFile = function (event) {
-                                        var output = document.getElementById('output_avatar'); output.src = URL.createObjectURL(event.target.files[0]);
-                                        var thumbnail = document.getElementById('thumbnail'); thumbnail.value = URL.createObjectURL(event.target.files[0]);
-                                    };
-                                    $('#del_thumbnail').click(function () {
-                                        $('#output_avatar').attr('src', '');
-                                        $('#thumbnail').val('');
-                                    });
-                                </script>
-                                <div class="clearfix"></div>
-                            </div>
+                            <label for="thumbnail">Thumbnail</label>
+                                    <div class="user_thumbnail">
+                                        <span id="del_thumbnail">
+                                            <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                        </span>
+                                        <input class="input-file" accept="image/*" id="thumbnail" name="thumbnail" type="file" onChange="loadFile(event)">
+                                    
+                                        <img id="output_avatar" class="img-thumbnail" alt="Add Featured Image" src="<%= get_site_url(); %>/backend/images/no-image.svg">
+                                    </div>
+                                    <small style="font-style:italic;">Click the image to update</small>
+                                   
+                                    <div class="clearfix"></div>
+                                    </div>
                         </div>
                         <!-- end -->
                     </div>
