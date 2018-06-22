@@ -270,6 +270,7 @@ var posts_controller = {
                         arr_data.slug = result_slug ? result_slug : slug;
                         if (fields.content && fields.content != null && fields.content != '' && typeof fields.content !== 'undefined') { arr_data.content = fields.content };
                         if (fields.excerpt && fields.excerpt != null && fields.excerpt != '' && typeof fields.excerpt !== 'undefined') { arr_data.excerpt = fields.excerpt };
+
                         if (files.thumbnail.name) {
                             var name_file = md5(Math.random().toString());
                             var oldpath = files.thumbnail.path;
@@ -277,6 +278,10 @@ var posts_controller = {
                             var newpath = path.resolve('assets/backend/uploads/' + name_file + '.' + type_file);
                             fs.rename(oldpath, newpath, (err) => { });
                             arr_data.thumbnail = name_file + '.' + type_file;
+                        } else {
+                            if (fields.check_del_thumbnail && fields.check_del_thumbnail != null && fields.check_del_thumbnail != '' && typeof fields.check_del_thumbnail !== 'undefined') {
+                                arr_data.thumbnail = null;
+                            }
                         }
                         if (fields.comments && fields.comments != null && fields.comments != '' && typeof fields.comments !== 'undefined') { arr_data.comments = fields.comments };
                         if (fields.terms && fields.terms != null && fields.terms != '' && typeof fields.terms !== 'undefined') {
@@ -290,7 +295,7 @@ var posts_controller = {
                         }
                         if (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') { arr_data.custom_fields = fields.custom_fields };
                         // if (res.locals.me._id) { arr_data.user_id = res.locals.me._id };
-                        if (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') { arr_data.post_type_id = fields.post_type_id } else { arr_data.post_type_id = '1' };
+
                         if (res.locals.me.role == 0) {
                             arr_data.status = '0';
                         } else {

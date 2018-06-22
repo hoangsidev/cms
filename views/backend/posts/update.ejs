@@ -21,6 +21,7 @@
                 <%  if(typeof post !== 'undefined' && post) { %>
                         <form action="<%= get_admin_url(); %>/<%= post_type_slug %>/update?_method=PUT" method="post" id="update" enctype="multipart/form-data">
                             <input type="hidden" name="_id" value="<% if(post._id) { %><%= post._id %><% } %>">
+                           
                             <div class="wrap_create">
                                 <div class="form-group">
                                     <label>Title</label>
@@ -28,7 +29,6 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Content</label>
-                                    <div id="toolbar-container"></div>
                                     <textarea name="content" id="content" rows="10" class="form-control" ><% if(post.content) { %><%= post.content %><% } %></textarea>
                                 </div>
                                 <hr>
@@ -45,7 +45,7 @@
                                         </div>
                                         <div class="panel-body">
                                             <div class="form-group">
-                                                <i class="fa fa-calendar" aria-hidden="true"></i> 04/06/2018 at 15:07
+                                                <i class="fa fa-calendar" aria-hidden="true"></i> <%= get_time(new Date()) %>
                                             </div>
                                               <% if(editor || administrator) { %>
                                             <div class="form-group">
@@ -71,6 +71,7 @@
                                                     </span>
                                                     <input class="input-file" accept="image/*" id="thumbnail" name="thumbnail" type="file" onChange="loadFile(event)">
                                                     <img id="output_avatar" class="img-thumbnail" alt="Add Featured Image" src="<% if(post.thumbnail) { %><%= get_admin_url(); %>/uploads/<%= post.thumbnail %><% } else { %><%= get_site_url(); %>/backend/images/no-image.svg<% } %>">
+                                                    <input type="hidden" name="check_del_thumbnail" id="check_del_thumbnail">
                                                 </div>
                                                 <small style="font-style:italic;">Click the image to update</small>
                                                 
@@ -113,12 +114,14 @@
                                                         <input type="hidden" name="terms" id="terms">
                                                 </div>
                                               
-                                                 <div class="input-group">
-                                                        <input type="text" class="form-control" >
-                                                        <span class="input-group-btn">
-                                                          <button class="btn btn-default" type="button">Add</button>
-                                                        </span>
-                                                 </div>
+                                                 <% if(editor || administrator) { %>
+                                         <div class="input-group">
+                                                <input type="text" class="form-control" id="name_term" taxonomy_id="1">
+                                                <span class="input-group-btn">
+                                                  <button class="btn btn-default" type="button" id="create_term">Add</button>
+                                                </span>
+                                         </div>
+                                        <% } %>
                                             </div>
                                         </div>
                                         <% } %>

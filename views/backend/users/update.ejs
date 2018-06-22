@@ -75,13 +75,14 @@
                                 </div>
                                 <% } %>
                                 <div class="form-group">
-                                 <label for="thumbnail">Thumbnail</label>
+                                 <label>Thumbnail</label>
                                                 <div class="user_thumbnail">
-                                                    <span id="del_thumbnail">
-                                                        <i class="fa fa-times-circle" aria-hidden="true"></i>
-                                                    </span>
+                                                     <span id="del_thumbnail">
+                                            <i class="fa fa-times-circle" aria-hidden="true"></i>
+                                        </span>
                                                     <input class="input-file" accept="image/*" id="thumbnail" name="thumbnail" type="file" onChange="loadFile(event)">
                                                     <img id="output_avatar" class="img-thumbnail" alt="Add Featured Image" src="<% if(user.thumbnail) { %><%= get_admin_url(); %>/uploads/<%= user.thumbnail %><% } else { %><%= get_site_url(); %>/backend/images/no-image.svg<% } %>">
+                                                    <input type="hidden" name="check_del_thumbnail" id="check_del_thumbnail">
                                                 </div>
                                                 <small style="font-style:italic;">Click the image to update</small>
                                                 

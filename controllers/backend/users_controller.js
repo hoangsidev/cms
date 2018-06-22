@@ -376,8 +376,10 @@ var users_controller = {
                         fs.rename(oldpath, newpath, (err) => { });
                         arr_data.thumbnail = name_file + '.' + type_file;
                     } else {
-                        arr_data.thumbnail = null;
-                    };
+                        if (fields.check_del_thumbnail && fields.check_del_thumbnail != null && fields.check_del_thumbnail != '' && typeof fields.check_del_thumbnail !== 'undefined') {
+                            arr_data.thumbnail = null;
+                        }
+                    }
                     arr_data.key = md5(Math.random().toString());
                     arr_data.verify = '0';
                     arr_data.role = (fields.role && fields.role != null && fields.role != '' && typeof fields.role !== 'undefined') ? fields.role : null;
@@ -397,6 +399,8 @@ var users_controller = {
                                 if (!err) { console.log('Sent verify!'); }
                             });
                             // end verify email
+                            return res.redirect(get_admin_url + '/users')
+                        } else {
                             return res.redirect(page_errors);
                         }
                     });
@@ -493,6 +497,8 @@ var users_controller = {
                             newpath = path.resolve('assets/backend/uploads/' + name_file + '.' + type_file);
                         fs.rename(oldpath, newpath, (err) => { });
                         arr_data.thumbnail = name_file + '.' + type_file;
+                    } else {
+                        arr_data.thumbnail = null;
                     };
                     if (res.locals.me.role == 2) {
                         if (fields.role && fields.role != null && fields.role != '' && typeof fields.role !== 'undefined') { arr_data.role = fields.role };
@@ -504,7 +510,7 @@ var users_controller = {
                             if (_id == res.locals.me._id) { // nếu tài khoản bị sửa chính là tài khoản đang đăng nhập thì fải làm mới session
                                 req.session.me = result;
                             }
-                            if (result.verify == 0) { // nếu sau quá trình cập nhật, verify bị đổi về 0 thì gửi 1 mail verify
+                            if (result.verify == 0 && result.email != old_email) { // nếu sau quá trình cập nhật, verify bị đổi về 0 thì gửi 1 mail verify
                                 // verify email
                                 var url_verify = get_site_url + '/verify/' + result.username + '/' + result.key,
                                     mail_options = {
@@ -519,7 +525,7 @@ var users_controller = {
                                 // end verify email
                             }
                             if (res.locals.me.role == 2) {
-                                return res.redirect(get_admin_url + '/users/')
+                                return res.redirect(get_admin_url + '/users')
                             } else {
                                 return res.redirect(get_admin_url + '/users/profile')
                             }

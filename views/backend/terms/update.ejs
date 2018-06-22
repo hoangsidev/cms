@@ -32,6 +32,7 @@
                                                     </span>
                                                     <input class="input-file" accept="image/*" id="thumbnail" name="thumbnail" type="file" onChange="loadFile(event)">
                                                     <img id="output_avatar" class="img-thumbnail" alt="Add Featured Image" src="<% if(term.thumbnail) { %><%= get_admin_url(); %>/uploads/<%= term.thumbnail %><% } else { %><%= get_site_url(); %>/backend/images/no-image.svg<% } %>">
+                                                    <input type="hidden" name="check_del_thumbnail" id="check_del_thumbnail">
                                                 </div>
                                                 <small style="font-style:italic;">Click the image to edit or update</small>
                                                

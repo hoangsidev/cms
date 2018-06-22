@@ -68,8 +68,23 @@
             </a>
         </li>
     </ul>
-    <% } %>
-    <% if(administrator) { %>
+    <ul class="list-group">
+        <li>
+            <a href="<%= get_admin_url(); %>/navs" class="list-group-item main  <% if(typeof site_info !== 'undefined' && (site_info.page_slug=='navs' || site_info.page_slug=='update_navs')) { %> active <% } %>">
+                <i class="fa fa-bars" aria-hidden="true"></i>&nbsp; Navigations
+            </a>
+        </li>
+        <li>
+            <a href="<%= get_admin_url(); %>/navs" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='navs') { %> active <% } %>">
+                All navigations
+            </a>
+        </li>
+        <li>
+            <a href="<%= get_admin_url(); %>/navs/create" class="list-group-item <% if(typeof site_info !== 'undefined' && site_info.page_slug=='create_navs') { %> active <% } %>">
+                Add new
+            </a>
+        </li>
+    </ul>
     <ul class="list-group">
         <li>
             <a href="<%= get_admin_url(); %>/users" class="list-group-item main <% if(typeof site_info !== 'undefined'  && (site_info.page_slug=='users' || site_info.page_slug=='update_user')) { %> active <% } %>">

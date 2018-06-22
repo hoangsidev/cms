@@ -27,7 +27,6 @@
                         </div>
                         <div class="form-group">
                             <label>Content</label>
-                            <div id="toolbar-container"></div>
                             <textarea name="content" id="content" rows="10" class="form-control" ></textarea>
                         </div>
                         <hr>
@@ -93,7 +92,7 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="form-group">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i> 04/06/2018 at 15:07
+                                        <i class="fa fa-calendar" aria-hidden="true"></i> <%= get_time(new Date()) %>
                                     </div>
                                      <% if(editor || administrator) { %>
                                     <div class="form-group">
@@ -153,14 +152,14 @@
                                                 <input type="hidden" name="terms" id="terms">
                                         </div>
                                       
-                                      
+                                       <% if(editor || administrator) { %>
                                          <div class="input-group">
                                                 <input type="text" class="form-control" id="name_term" taxonomy_id="1">
                                                 <span class="input-group-btn">
                                                   <button class="btn btn-default" type="button" id="create_term">Add</button>
                                                 </span>
                                          </div>
-
+                                        <% } %>
 
 <script>
 // $('#create_term').click(function(){
@@ -208,8 +207,8 @@
 		
 		
 		
-	}
-});
+	// }
+//  });
 </script>
 
                                     </div>
@@ -240,8 +239,7 @@
     <!-- end main -->
 
 
-<form  method="post" id="form_create_term" enctype="multipart/form-data">
-</fomr>
+    <!-- <form  method="post" id="form_create_term" enctype="multipart/form-data"></fomr> -->
 
 
     <%- include('../layouts/footer'); -%>

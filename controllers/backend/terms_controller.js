@@ -110,8 +110,8 @@ var terms_controller = {
         }
         // end check exist_taxonomy
         if (req.method == 'POST') {
-           
-            
+
+
             var form = new formidable.IncomingForm(); form.maxFileSize = 20 * 1024 * 1024; // 20MB
             form.parse(req, (err, fields, files) => {
                 if (fields.title && fields.title != null && fields.title != '' && typeof fields.title !== 'undefined') { var title = fields.title };
@@ -199,6 +199,10 @@ var terms_controller = {
                             var newpath = path.resolve('assets/backend/uploads/' + name_file + '.' + type_file);
                             fs.rename(oldpath, newpath, (err) => { });
                             arr_data.thumbnail = name_file + '.' + type_file;
+                        } else {
+                            if (fields.check_del_thumbnail && fields.check_del_thumbnail != null && fields.check_del_thumbnail != '' && typeof fields.check_del_thumbnail !== 'undefined') {
+                                arr_data.thumbnail = null;
+                            }
                         }
                         if (fields.num_order && fields.num_order != null && fields.num_order != '' && typeof fields.num_order !== 'undefined') { arr_data.num_order = fields.num_order } else { arr_data.num_order = '0' };
                         m_terms.findOneAndUpdate({ _id: _id }, { $set: arr_data }, { new: true }, (err, result) => {
