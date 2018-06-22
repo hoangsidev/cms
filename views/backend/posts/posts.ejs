@@ -23,8 +23,10 @@
                                             <tr>
                                                 <th style="width:30px;">No.</th>
                                                 <th>Title</th>
-                                                <th>Categories</th>
+                                               
+                                               <% if(post_type_slug != 'pages') { %> <th>Categories</th>
                                                 <th>Tags</th>
+                                                <% } %>
                                                 <th>Date</th>
                                                 <th>Author</th>
                                                 <th>Status</th>
@@ -36,6 +38,7 @@
                                                 <tr id="<% if(item._id) { %><%= item._id %><% } %>">
                                                     <td style="text-align:center;"> <%= index + 1 %> </td>
                                                     <td><a href="<%= get_admin_url(); %>/<%= post_type_slug %>/update/<% if(item._id) { %><%= item._id %><% } %>"><% if(item.title) { %><%= item.title %><% } %></a></td>
+                                                    <% if(post_type_slug != 'pages') { %>
                                                     <td class="terms">
                                                         <% if(typeof item.categories !== 'undefined') { var  categories = item.categories %>
                                                             <% if(categories.length > 0) { %>
@@ -58,6 +61,7 @@
                                                             <% } %>
                                                         <% } %>
                                                     </td>
+                                                    <% } %>
                                                     <td><% if(item.created_at) { %><%= get_time(item.created_at) %><% } %></td>
                                                     <td><% if(item.user) { %>
                                                         <a href="<%= item.user._id %>">

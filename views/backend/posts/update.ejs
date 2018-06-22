@@ -42,7 +42,7 @@
 
                         <!-- custom field -->
                         <label>Custom field</label>
-                        <div id="wrap_fields"></div>
+                        <div id="wrap_fields">
 
                             <% if(typeof post.custom_fields !== 'undefined') { var  custom_fields = post.custom_fields %>
                                 <% if(custom_fields.length > 0) { %>
@@ -56,7 +56,7 @@
                                             <input type="text" class="form-control" name="value" value="<% if(field.value) { %><%= field.value %><% } %>" autocomplete="off">
                                         </div>
                                         <div class="col-xs-1" style="padding-left: 0;">
-                                            <button class="btn btn-danger btn-block btn_del_field" type="button"  onclick="return confirm('Are you sure?')">
+                                            <button class="btn btn-danger btn-block btn_del_field" type="button" >
                                                 <i class="fa fa-minus-circle" aria-hidden="true"></i>
                                             </button>
                                         </div>
@@ -67,7 +67,7 @@
                                 <% } %>
                             <% } %>
 
-                                
+                                </div>
 
 
                         <div>
@@ -83,39 +83,6 @@
 
 
 
-<script>
-    $('#add_field').click(function () {
-        $('#wrap_fields').append(`
-        <div class="form-group field row">
-            <div class="col-xs-3">
-                <input type="text" class="form-control key" name="key" autocomplete="off" required>
-            </div>
-                <div class="col-xs-8"  style="padding-left: 0;">
-                <input type="text" class="form-control" name="value" autocomplete="off">
-            </div>
-            <div class="col-xs-1" style="padding-left: 0;">
-                <button class="btn btn-danger btn-block btn_del_field" type="button"  onclick="return confirm('Are you sure?')">
-                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
-                </button>
-            </div>
-            <div class="clearfix"></div>
-        </div>
-        `);
-        $('.key').focus();
-
-        $('.btn_del_field').click(function(){
-            $(this).closest('.field').find('input[name="key"]').val('');
-            $(this).closest('.field').find('input[name="value"]').val('');
-            $(this).closest('.field').remove();
-        });
-    });
-
-    $('.btn_del_field').click(function(){
-        $(this).closest('.field').find('input[name="key"]').val('');
-        $(this).closest('.field').find('input[name="value"]').val('');
-        $(this).closest('.field').remove();
-    });
-</script>
 
 
 
@@ -139,11 +106,13 @@
                                                     </select>
                                                 </div>
                                                  <% } %>
-                                            <button type="submit" class="btn btn-default pull-right">Update</button>
+                                            <button type="submit" class="btn btn-default pull-right"><i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp; Update</button>
                                         </div>
                                     </div>
                                     <!-- end -->
-                                    <div class="panel panel-default">
+                                   
+                                    <% if(post_type_slug != 'pages') { %>
+                                     <div class="panel panel-default">
                                         <div class="panel-heading">
                                             <strong># Featured Image</strong>
                                         </div>
@@ -164,13 +133,12 @@
                                         </div>
                                     </div>
                                     <!-- end -->
-                                    <% if(post_type_slug != 'pages') { %>
                                     <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <strong># Categories</strong>
                                             </div>
                                             <div class="panel-body">
-                                                <div id="wrap_tags">
+                                                <div id="wrap_categories">
                                                         <% if(typeof terms !== 'undefined') {  %>
                                                             <% if(terms.length > 0) { %>
                                                                 <% terms.forEach(function(item_term, index){ %>
@@ -178,7 +146,6 @@
                                                                         <div class="checkbox">
                                                                             <label>
                                                                                 <input 
-                                                                                
                                                                                 <% if(typeof post.categories !== 'undefined') { var  categories = post.categories %>
                                                                                     <% if(categories.length > 0) { %>
                                                                                         <% categories.forEach(function(item_category, index){ %>

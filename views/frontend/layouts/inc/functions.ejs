@@ -46,4 +46,16 @@
     if(value_status=='1') { result_status = '<span class="label label-success">Publish</span>'  }
     return result_status;
   }
+
+  get_field = ( key) => {
+    var value = 'Field not exist!', custom_fields = post.custom_fields;
+    if(typeof custom_fields !== 'undifined' && custom_fields && typeof key !== 'undifined' && key) {
+      for(i in custom_fields) {
+        if(key == custom_fields[i].key) {
+          value = custom_fields[i].value
+        }
+      }
+    }
+    return value;
+  }
 %>

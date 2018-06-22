@@ -39,16 +39,28 @@
                                             <tr id="<% if(item._id) { %><%= item._id %><% } %>">
                                                 <td style="text-align:center;"> <%= index + 1 %> </td>
                                                 <td style="width: 70px;" class="text-center">
-                                                    <% if(item.thumbnail) { %>
+                                                    <% if(item.thumbnail) {  var url_thumbnail = get_admin_url()+'/uploads/' + item.thumbnail  %>
 
                                                         <% if(typeof site_info.me !== 'undefined' && site_info.me._id == item._id) { %>
                                                             <a href="<%= get_admin_url(); %>/users/profile">    
                                                         <% } else { %>
                                                             <a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>">
-                                                            <% } %>
-                                                            <img class="thumb" src="<%= get_admin_url(); %>/uploads/<%= item.thumbnail %>" alt="<% if(item.username) { %><%= item.username %><% } %>">
+                                                        <% } %>
+                                                            <img class="thumb" src="<%= url_thumbnail %>" alt="<% if(item.username) { %><%= item.username %><% } %>">
                                                         </a>
+                                                    <% } else { %>
+                                                            <% if(typeof site_info.me !== 'undefined' && site_info.me._id == item._id) { %> <a href="<%= get_admin_url(); %>/users/profile">    
+                                                        <% } else { %> <a href="<%= get_admin_url(); %>/users/update/<% if(item._id) { %><%= item._id %><% } %>"> <% } %>
+                                                                <img class="thumb" src="<%= get_site_url() %>/backend/images/no-image.svg" alt="<% if(item.username) { %><%= item.username %><% } %>">
+                                                        </a>
+
                                                     <% } %>
+                                                    
+                                                    
+                                                  
+
+
+
                                                 </td>
                                                 <td>
                                                         <% if(typeof site_info.me !== 'undefined' && site_info.me._id == item._id) { %>

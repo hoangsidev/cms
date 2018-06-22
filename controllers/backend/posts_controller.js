@@ -34,9 +34,16 @@ const exist_post_type = (slug) => {
     } else { return false; }
 }
 
-const exist_slug = (slug) => {
+const exist_slug = (slug, _id) => {
     return new Promise((resolve, reject) => {
-        m_posts.findOne({ slug: slug }, (err, exist) => {
+        // Nếu là update thì lúc tìm fải loại trừ slug của chính nó
+        var regex_slug;
+        if (_id) {
+            regex_slug = { slug: slug, _id: { $not: _id } }
+        } else {
+            regex_slug = { slug: slug }
+        }
+        m_posts.findOne(regex_slug, (err, exist) => {
             if (exist != null) {
                 resolve(exist_slug(slug + '-2'));
             } else if (exist == null) {
@@ -173,7 +180,7 @@ var posts_controller = {
                         arr_data.slug = result_slug ? result_slug : slug;
                         arr_data.content = (fields.content && fields.content != null && fields.content != '' && typeof fields.content !== 'undefined') ? fields.content : null;
                         arr_data.excerpt = (fields.excerpt && fields.excerpt != null && fields.excerpt != '' && typeof fields.excerpt !== 'undefined') ? fields.excerpt : null;
-                        if (files.thumbnail.name) {
+                        if (files.thumbnail && files.thumbnail.name) {
                             var name_file = md5(Math.random().toString()),
                                 oldpath = files.thumbnail.path,
                                 type_file = (files.thumbnail.name.split('.'))[1],
@@ -281,13 +288,13 @@ var posts_controller = {
                 if (_id && title) {
                     var arr_data = new Object(),
                         slug = slugify(fields.title, { replacement: '-', remove: /[$*_+~.()'"!\-:@]/g, lower: true });
-                    exist_slug(slug).then((result_slug) => {
+                    exist_slug(slug, _id).then((result_slug) => {
                         arr_data.title = fields.title;
                         arr_data.slug = result_slug ? result_slug : slug;
                         if (fields.content && fields.content != null && fields.content != '' && typeof fields.content !== 'undefined') { arr_data.content = fields.content };
                         if (fields.excerpt && fields.excerpt != null && fields.excerpt != '' && typeof fields.excerpt !== 'undefined') { arr_data.excerpt = fields.excerpt };
 
-                        if (files.thumbnail.name) {
+                        if (files.thumbnail && files.thumbnail.name) {
                             var name_file = md5(Math.random().toString());
                             var oldpath = files.thumbnail.path;
                             var type_file = (files.thumbnail.name.split('.'))[1];

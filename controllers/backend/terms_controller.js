@@ -30,9 +30,16 @@ const exist_taxonomy = (slug) => {
     } else { return false; }
 }
 
-const exist_slug = (slug) => {
+const exist_slug = (slug, _id) => {
     return new Promise((resolve, reject) => {
-        m_terms.findOne({ slug: slug }, (err, exist) => {
+        // Nếu là update thì lúc tìm fải loại trừ slug của chính nó
+        var regex_slug;
+        if (_id) {
+            regex_slug = { slug: slug, _id: { $not: _id } }
+        } else {
+            regex_slug = { slug: slug }
+        }
+        m_terms.findOne(regex_slug, (err, exist) => {
             if (exist != null) {
                 resolve(exist_slug(slug + '-2'));
             } else if (exist == null) {
@@ -116,7 +123,6 @@ var terms_controller = {
             form.parse(req, (err, fields, files) => {
                 if (fields.title && fields.title != null && fields.title != '' && typeof fields.title !== 'undefined') { var title = fields.title };
                 if (fields.taxonomy_id && fields.taxonomy_id != null && fields.taxonomy_id != '' && typeof fields.taxonomy_id !== 'undefined') { var taxonomy_id = fields.taxonomy_id };
-                console.log(title);
                 if (title && taxonomy_id) {
                     var arr_data = new Object(),
                         slug = slugify(fields.title, { replacement: '-', remove: /[$*_+~.()'"!\-:@]/g, lower: true });
@@ -188,7 +194,7 @@ var terms_controller = {
                 if (_id && title && taxonomy_id) {
                     var arr_data = new Object(),
                         slug = slugify(fields.title, { replacement: '-', remove: /[$*_+~.()'"!\-:@]/g, lower: true });
-                    exist_slug(slug).then((result_slug) => {
+                    exist_slug(slug, _id).then((result_slug) => {
                         arr_data.title = fields.title;
                         arr_data.slug = result_slug ? result_slug : slug;
                         if (fields.description && fields.description != null && fields.description != '' && typeof fields.description !== 'undefined') { arr_data.description = fields.description };

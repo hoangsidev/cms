@@ -40,7 +40,7 @@ var backend_controller = require('./controllers/backend/backend_controller.js'),
 var frontend_controller = require('./controllers/frontend/frontend_controller.js');
 /* --------------------------------------------------------------------------------------- */
 
-// BACKEND
+/* BACKEND --------------------------------------------------------------------------------------- */
 
 auth = (req, res, next) => {
     if (!req.session.me) {
@@ -179,9 +179,9 @@ app.route('/password_reset')
     .put(users_controller.password_reset)
 // end user
 
-// End BACKEND
+/* END BACKEND --------------------------------------------------------------------------------------- */
 
-// FRONTEND
+/* FRONTEND --------------------------------------------------------------------------------------- */
 
 app.get('/404', frontend_controller.not_found)
 app.get('/errors', frontend_controller.errors)
@@ -193,5 +193,4 @@ app.get('/:taxonomy/:slug', frontend_controller.get_articles_by_term)
 
 
 
-// End FRONTEND
-/* --------------------------------------------------------------------------------------- */
+/* END FRONTEND --------------------------------------------------------------------------------------- */

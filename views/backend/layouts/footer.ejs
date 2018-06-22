@@ -49,5 +49,42 @@
     });
 </script>
 
+
+<script>
+    $('#add_field').click(function () {
+        $('#wrap_fields').append(`
+        <div class="form-group field row">
+            <div class="col-xs-3">
+                <input type="text" class="form-control key" name="key" autocomplete="off" required>
+            </div>
+                <div class="col-xs-8"  style="padding-left: 0;">
+                <input type="text" class="form-control" name="value" autocomplete="off">
+            </div>
+            <div class="col-xs-1" style="padding-left: 0;">
+                <button class="btn btn-danger btn-block btn_del_field" type="button">
+                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        `);
+        $('.key').focus();
+
+        $('.btn_del_field').click(function(){
+                $(this).closest('.field').find('input[name="key"]').val('');
+                $(this).closest('.field').find('input[name="value"]').val('');
+                $(this).closest('.field').remove();
+        });
+    });
+
+    $('.btn_del_field').click(function(){
+            $(this).closest('.field').find('input[name="key"]').val('');
+            $(this).closest('.field').find('input[name="value"]').val('');
+            $(this).closest('.field').remove();
+    });
+
+
+</script>
+
 </body>
 </html>

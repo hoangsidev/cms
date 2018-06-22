@@ -56,17 +56,19 @@ textarea {
     overflow-y: auto;
 }
 
-#wrap_sidebar::-webkit-scrollbar {
+#wrap_categories { max-height: 150px;  overflow-y: auto; margin-bottom: 20px;}
+
+#wrap_sidebar::-webkit-scrollbar, #wrap_categories::-webkit-scrollbar {
     width: 8px;
     border-radius: 4px;
 }
 
-#wrap_sidebar::-webkit-scrollbar-track {
+#wrap_sidebar::-webkit-scrollbar-track, #wrap_categories::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     border-radius: 4px;
 }
 
-#wrap_sidebar::-webkit-scrollbar-thumb {
+#wrap_sidebar::-webkit-scrollbar-thumb, #wrap_categories::-webkit-scrollbar-thumb {
     background-color: #ccc;
     border-radius: 4px;
 }
