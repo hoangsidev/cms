@@ -39,7 +39,7 @@ const exist_slug = (slug, _id) => {
         // Nếu là update thì lúc tìm fải loại trừ slug của chính nó
         var regex_slug;
         if (_id) {
-            regex_slug = { slug: slug, _id: { $not: _id } }
+            regex_slug = { slug: slug, _id: { $ne: _id } }
         } else {
             regex_slug = { slug: slug }
         }
