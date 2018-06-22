@@ -9,6 +9,15 @@ var backend_controller = {
             }
         });
     },
+    configs: (req, res, next) => {
+        return res.render('backend/configs', {
+            site_info: {
+                page_title: 'Configs',
+                page_slug: 'configs',
+                me: res.locals.me
+            }
+        });
+    },
     errors: (req, res, next) => {
         return res.render('backend/errors', {
             site_info: {

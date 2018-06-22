@@ -1,0 +1,66 @@
+<%- include('./layouts/header.ejs'); -%>
+    <!-- main -->
+    <div id="wrap_main">
+        <!-- sidebar -->
+        <%- include('./layouts/sidebar'); -%>
+            <!-- end sidebar -->
+            <%- include('./layouts/navbar'); -%>
+                <!-- content -->
+                <div class="row">
+                <div class="col-md-5">
+ <!-- form configs -->
+                        <form action="#" method="post" enctype="multipart/form-data">
+                           
+                                <div class="form-group">
+                                    <label>Site name</label>
+                                    <input type="text" name="title" class="form-control" v-focus required >
+                                </div>
+                                <div class="form-group">
+                                    <label>Site Description</label>
+                                    <div id="toolbar-container"></div>
+                                    <textarea name="description" id="content" rows="4" class="form-control" ></textarea>
+                                </div>
+                                    <div class="form-group">
+                                    <label>Site URL</label>
+                                    <input type="text" name="site" class="form-control" v-focus required >
+                                </div>
+                                 <div class="form-group">
+                                    <label>Site Admin URL</label>
+                                    <input type="text" name="admin" class="form-control" v-focus required >
+                                </div>
+                                <div class="form-group">
+                                    <label>Email receive feedbacks</label>
+                                    <input type="text" name="email" class="form-control" required value="it.hoangsi@gmail.com">
+                                </div>
+                                <hr>
+                            <div class="form-group">
+                                    <label>SMTP Email</label>
+                                    <input type="text" name="email" class="form-control" required value="it.hoangsi@gmail.com">
+                                    <input type="password" name="password" style="margin-top: 15px;" class="form-control" required value="123458">
+                                </div>
+
+<hr>
+                                <div class="form-group">
+                                <button type="submit" class="btn btn-default"><i class="fa fa-floppy-o" aria-hidden="true"></i>&nbsp; Save</button>
+                            </div>
+                        </form>
+                        <!-- end form configs -->
+ </div>
+
+                    <div class="col-md-7">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><strong># Site Info</strong></div>
+                            <div class="panel-body">
+                                <ul style="padding-left: 20px;margin-top: 10px;">
+                                    <li>Developer : Hoang Si</li>
+                                    <li>Contact : it.hoangsi@gmail.com</li>
+                                </ul>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end content -->
+    </div>
+    <!-- end main -->
+    <%- include('./layouts/footer'); -%>

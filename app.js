@@ -87,6 +87,7 @@ app.get('/backend/404', auth, backend_controller.not_found)
 app.get('/backend/errors', auth, backend_controller.errors)
 app.get('/backend/access_denied', auth, backend_controller.access_denied)
 app.get('/backend/dashboard', auth, backend_controller.dashboard)
+app.get('/backend/configs', auth, backend_controller.configs)
 
 // posts
 app.get(('/backend/:post_type'), auth, (req, res, next) => {

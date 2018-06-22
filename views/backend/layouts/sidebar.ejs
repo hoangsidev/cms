@@ -125,7 +125,7 @@
                         </a>
                     </li>
         <li>
-            <a href="javascript:void(0)" class="list-group-item main">
+            <a href="<%= get_admin_url(); %>/configs" class="list-group-item main <% if(typeof site_info !== 'undefined' && site_info.page_slug=='configs') { %> active <% } %>">
                 <i class="fa fa-cogs" aria-hidden="true"></i>&nbsp; Configs
             </a>
         </li>
