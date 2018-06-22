@@ -1,8 +1,5 @@
 { 
-    "_id" : ObjectId("5b29ac0d89cd4a3284a9d61e"), 
-    "custom_fields" : [
-
-    ], 
+    "_id" : ObjectId("5b2c89717c2e90416c743064"), 
     "title" : "Home", 
     "slug" : "home", 
     "content" : null, 
@@ -17,16 +14,16 @@
     "user_id" : "5b1a3d625e130c66ae3a7e98", 
     "post_type_id" : "2", 
     "status" : "1", 
-    "created_at" : "Wed Jun 20 2018 08:21:17 GMT+0700 (SE Asia Standard Time)", 
+    "created_at" : "Fri Jun 22 2018 12:30:25 GMT+0700 (SE Asia Standard Time)", 
     "updated_at" : null, 
     "num_order" : "0", 
-    "__v" : NumberInt(0)
-}
-{ 
-    "_id" : ObjectId("5b29ac2189cd4a3284a9d620"), 
     "custom_fields" : [
 
     ], 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5b2c89767c2e90416c743065"), 
     "title" : "About", 
     "slug" : "about", 
     "content" : null, 
@@ -41,16 +38,16 @@
     "user_id" : "5b1a3d625e130c66ae3a7e98", 
     "post_type_id" : "2", 
     "status" : "1", 
-    "created_at" : "Wed Jun 20 2018 08:21:37 GMT+0700 (SE Asia Standard Time)", 
+    "created_at" : "Fri Jun 22 2018 12:30:30 GMT+0700 (SE Asia Standard Time)", 
     "updated_at" : null, 
     "num_order" : "0", 
-    "__v" : NumberInt(0)
-}
-{ 
-    "_id" : ObjectId("5b29ac2689cd4a3284a9d621"), 
     "custom_fields" : [
 
     ], 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5b2c897a7c2e90416c743066"), 
     "title" : "Contact", 
     "slug" : "contact", 
     "content" : null, 
@@ -65,18 +62,18 @@
     "user_id" : "5b1a3d625e130c66ae3a7e98", 
     "post_type_id" : "2", 
     "status" : "1", 
-    "created_at" : "Wed Jun 20 2018 08:21:42 GMT+0700 (SE Asia Standard Time)", 
+    "created_at" : "Fri Jun 22 2018 12:30:34 GMT+0700 (SE Asia Standard Time)", 
     "updated_at" : null, 
     "num_order" : "0", 
-    "__v" : NumberInt(0)
-}
-{ 
-    "_id" : ObjectId("5b29ae97547f073cb8fecc40"), 
     "custom_fields" : [
 
     ], 
-    "title" : "Article 1", 
-    "slug" : "article-1", 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5b2c89867c2e90416c743067"), 
+    "title" : "Services", 
+    "slug" : "services", 
     "content" : null, 
     "excerpt" : null, 
     "thumbnail" : null, 
@@ -84,102 +81,78 @@
 
     ], 
     "terms" : [
+
+    ], 
+    "user_id" : "5b1a3d625e130c66ae3a7e98", 
+    "post_type_id" : "2", 
+    "status" : "1", 
+    "created_at" : "Fri Jun 22 2018 12:30:46 GMT+0700 (SE Asia Standard Time)", 
+    "updated_at" : null, 
+    "num_order" : "0", 
+    "custom_fields" : [
+
+    ], 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5b2c89897c2e90416c743068"), 
+    "title" : "Blog", 
+    "slug" : "blog", 
+    "content" : null, 
+    "excerpt" : null, 
+    "thumbnail" : null, 
+    "comments" : [
+
+    ], 
+    "terms" : [
+
+    ], 
+    "user_id" : "5b1a3d625e130c66ae3a7e98", 
+    "post_type_id" : "2", 
+    "status" : "1", 
+    "created_at" : "Fri Jun 22 2018 12:30:49 GMT+0700 (SE Asia Standard Time)", 
+    "updated_at" : "Fri Jun 22 2018 12:31:20 GMT+0700 (SE Asia Standard Time)", 
+    "num_order" : "0", 
+    "custom_fields" : [
+
+    ], 
+    "__v" : NumberInt(0)
+}
+{ 
+    "_id" : ObjectId("5b2caf328f08b6375c4be54b"), 
+    "title" : "Lorem ipsum dolor sit amet consectetur", 
+    "slug" : "lorem-ipsum-dolor-sit-amet-consectetur", 
+    "content" : "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam dolores, recusandae impedit incidunt assumenda rem vero ullam quisquam accusamus aspernatur laboriosam temporibus consequuntur nesciunt eveniet facere architecto labore ducimus iste.\r\nLorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam dolores, recusandae impedit incidunt assumenda rem vero ullam quisquam accusamus aspernatur laboriosam temporibus consequuntur nesciunt eveniet facere architecto labore ducimus iste.", 
+    "excerpt" : "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Aliquam dolores, recusandae impedit incidunt assumenda rem vero ullam quisquam accusamus aspernatur laboriosam temporibus consequuntur nesciunt eveniet facere architecto labore ducimus iste.", 
+    "thumbnail" : "5c4765cad86e0909486628f7d87e6bfe.png", 
+    "comments" : [
+
+    ], 
+    "terms" : [
         {
-            "_id" : "5b29ae69547f073cb8fecc3a"
+            "_id" : "5b2caf038f08b6375c4be547"
         }, 
         {
-            "_id" : "5b29ae6c547f073cb8fecc3b"
+            "_id" : "5b2caf068f08b6375c4be548"
         }
     ], 
-    "user_id" : "5b1a3d625e130c66ae3a7e98", 
-    "post_type_id" : "1", 
-    "status" : "1", 
-    "created_at" : "Wed Jun 20 2018 08:32:07 GMT+0700 (SE Asia Standard Time)", 
-    "updated_at" : null, 
-    "num_order" : "0", 
-    "__v" : NumberInt(0)
-}
-{ 
-    "_id" : ObjectId("5b29ae9d547f073cb8fecc41"), 
     "custom_fields" : [
-
-    ], 
-    "title" : "Article 2", 
-    "slug" : "article-2", 
-    "content" : null, 
-    "excerpt" : null, 
-    "thumbnail" : null, 
-    "comments" : [
-
-    ], 
-    "terms" : [
         {
-            "_id" : "5b29ae6f547f073cb8fecc3c"
-        }
-    ], 
-    "user_id" : "5b1a3d625e130c66ae3a7e98", 
-    "post_type_id" : "1", 
-    "status" : "1", 
-    "created_at" : "Wed Jun 20 2018 08:32:13 GMT+0700 (SE Asia Standard Time)", 
-    "updated_at" : null, 
-    "num_order" : "0", 
-    "__v" : NumberInt(0)
-}
-{ 
-    "_id" : ObjectId("5b29aea3547f073cb8fecc42"), 
-    "custom_fields" : [
-
-    ], 
-    "title" : "Article 3", 
-    "slug" : "article-3", 
-    "content" : null, 
-    "excerpt" : null, 
-    "thumbnail" : null, 
-    "comments" : [
-
-    ], 
-    "terms" : [
-        {
-            "_id" : "5b29ae69547f073cb8fecc3a"
+            "_id" : ObjectId("5b2caf418f08b6375c4be54f"), 
+            "key" : "fax", 
+            "value" : "0123456789"
         }, 
         {
-            "_id" : "5b29ae6c547f073cb8fecc3b"
-        }, 
-        {
-            "_id" : "5b29ae6f547f073cb8fecc3c"
+            "_id" : ObjectId("5b2caf418f08b6375c4be54e"), 
+            "key" : "telephone", 
+            "value" : "0123456789"
         }
     ], 
     "user_id" : "5b1a3d625e130c66ae3a7e98", 
     "post_type_id" : "1", 
     "status" : "1", 
-    "created_at" : "Wed Jun 20 2018 08:32:19 GMT+0700 (SE Asia Standard Time)", 
-    "updated_at" : null, 
-    "num_order" : "0", 
-    "__v" : NumberInt(0)
-}
-{ 
-    "_id" : ObjectId("5b29dfcc9b4c301cd000d3ce"), 
-    "custom_fields" : [
-
-    ], 
-    "title" : "BlockChain và Sharing Economy", 
-    "slug" : "blockchain-va-sharing-economy", 
-    "content" : null, 
-    "excerpt" : null, 
-    "thumbnail" : null, 
-    "comments" : [
-
-    ], 
-    "terms" : [
-        {
-            "_id" : "5b29ae69547f073cb8fecc3a"
-        }
-    ], 
-    "user_id" : "5b1a3d625e130c66ae3a7e98", 
-    "post_type_id" : "1", 
-    "status" : "1", 
-    "created_at" : "Wed Jun 20 2018 12:02:04 GMT+0700 (SE Asia Standard Time)", 
-    "updated_at" : null, 
+    "created_at" : "Fri Jun 22 2018 15:11:30 GMT+0700 (SE Asia Standard Time)", 
+    "updated_at" : "Fri Jun 22 2018 15:11:45 GMT+0700 (SE Asia Standard Time)", 
     "num_order" : "0", 
     "__v" : NumberInt(0)
 }

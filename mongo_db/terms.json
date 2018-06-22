@@ -1,7 +1,7 @@
 { 
-    "_id" : ObjectId("5b29ae69547f073cb8fecc3a"), 
-    "title" : "Cat 1", 
-    "slug" : "cat-1", 
+    "_id" : ObjectId("5b2caf038f08b6375c4be547"), 
+    "title" : "Category 1", 
+    "slug" : "category-1", 
     "description" : null, 
     "thumbnail" : null, 
     "taxonomy_id" : "1", 
@@ -9,9 +9,9 @@
     "__v" : NumberInt(0)
 }
 { 
-    "_id" : ObjectId("5b29ae6c547f073cb8fecc3b"), 
-    "title" : "Cat 2", 
-    "slug" : "cat-2", 
+    "_id" : ObjectId("5b2caf068f08b6375c4be548"), 
+    "title" : "Category 2", 
+    "slug" : "category-2", 
     "description" : null, 
     "thumbnail" : null, 
     "taxonomy_id" : "1", 
@@ -19,17 +19,7 @@
     "__v" : NumberInt(0)
 }
 { 
-    "_id" : ObjectId("5b29ae6f547f073cb8fecc3c"), 
-    "title" : "Cat 3", 
-    "slug" : "cat-3", 
-    "description" : null, 
-    "thumbnail" : null, 
-    "taxonomy_id" : "1", 
-    "num_order" : "0", 
-    "__v" : NumberInt(0)
-}
-{ 
-    "_id" : ObjectId("5b29ae81547f073cb8fecc3d"), 
+    "_id" : ObjectId("5b2caf0f8f08b6375c4be549"), 
     "title" : "Tag 1", 
     "slug" : "tag-1", 
     "description" : null, 
@@ -39,19 +29,9 @@
     "__v" : NumberInt(0)
 }
 { 
-    "_id" : ObjectId("5b29ae85547f073cb8fecc3e"), 
+    "_id" : ObjectId("5b2caf118f08b6375c4be54a"), 
     "title" : "Tag 2", 
     "slug" : "tag-2", 
-    "description" : null, 
-    "thumbnail" : null, 
-    "taxonomy_id" : "2", 
-    "num_order" : "0", 
-    "__v" : NumberInt(0)
-}
-{ 
-    "_id" : ObjectId("5b29ae88547f073cb8fecc3f"), 
-    "title" : "Tag 3", 
-    "slug" : "tag-3", 
     "description" : null, 
     "thumbnail" : null, 
     "taxonomy_id" : "2", 
