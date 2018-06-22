@@ -82,7 +82,7 @@
                                                         </a>
                                                         <form action="<%= get_admin_url(); %>/terms/<%= taxonomy_slug %>/delete?_method=DELETE" method="post" style="display:inline-block;">
                                                             <input type="hidden" name="_id" value="<% if(item._id) { %><%= item._id %><% } %>">
-                                                            <button type="submit" onclick="return confirm ('Are you sure ?')" class="btn btn-danger btn-xs"> <i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                                            <button type="submit" onclick="return confirm ('Are you sure delete this term and relationship in article ?')" class="btn btn-danger btn-xs"> <i class="fa fa-trash-o" aria-hidden="true"></i></button>
                                                         </form>
                                                     </td>
                                                 </tr>

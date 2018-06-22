@@ -48,7 +48,7 @@
   }
 
   get_field = ( key) => {
-    var value = 'Field not exist!', custom_fields = post.custom_fields;
+    var value = '', custom_fields = post.custom_fields;
     if(typeof custom_fields !== 'undifined' && custom_fields && typeof key !== 'undifined' && key) {
       for(i in custom_fields) {
         if(key == custom_fields[i].key) {

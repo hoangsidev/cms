@@ -1,5 +1,6 @@
 var configs = require('../../configs/configs.js'),
     m_terms = require('../../models/terms_model.js'),
+    m_posts = require('../../models/posts_model.js'),
     app = configs.app(),
     express = configs.express(),
     session = configs.session(),
@@ -237,6 +238,27 @@ var terms_controller = {
         if (_id) {
             m_terms.deleteOne({ _id: _id }, (err, result) => {
                 if (result) {
+                    m_posts.find({ 'terms._id': _id }, (err, results) => { // tìm tất cả bài post có term_id đó
+                        results = JSON.parse(JSON.stringify(results));
+                        var arr_terms_new = [];
+                        for (i in results) {
+                            post_id = results[i]._id;
+                            terms = results[i].terms; // lấy tất cả term_id của bài post đó, for ra, push zô lại nhưng loại trừ term_id xóa
+
+                            for (j in terms) {
+                                if (terms[j]._id !== _id) {
+                                    var obj_term = {};
+                                    obj_term._id = terms[j]._id;
+                                    arr_terms_new.push(obj_term)
+                                }
+                            }
+
+                            m_posts.findOneAndUpdate({ _id: post_id }, { $set: { terms: arr_terms_new } }, { new: true }, (err, result) => {
+                               console.log('Deleted relationship term in post!');
+                            });
+
+                        }
+                    });
                     return res.redirect(get_admin_url + '/terms/' + taxonomy_slug);
                 } else {
                     return res.redirect(page_404);
