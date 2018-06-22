@@ -73,6 +73,7 @@ const promise_post = (elem, post) => {
         post.content = elem.content;
         post.excerpt = elem.excerpt;
         post.thumbnail = elem.thumbnail;
+        post.custom_fields = elem.custom_fields;
         post.status = elem.status;
         post.created_at = elem.created_at;
         post.updated_at = elem.updated_at;

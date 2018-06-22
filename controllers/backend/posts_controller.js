@@ -197,25 +197,19 @@ var posts_controller = {
                         }
 
 
-                        arr_key_fields = (fields.key_fields && fields.key_fields != null && fields.key_fields != '' && typeof fields.key_fields !== 'undefined') ? fields.key_fields : [];
-                        arr_value_fields = (fields.value_fields && fields.value_fields != null && fields.value_fields != '' && typeof fields.value_fields !== 'undefined') ? fields.value_fields : [];
-                      
-                        if (arr_key_fields) {
-                            var custom_fields = [], key_fields = arr_key_fields.split(','), value_fields = arr_value_fields.split(',');
-                            for (var j in key_fields) {
+                        if (fields.keys && fields.keys != null && fields.keys != '' && typeof fields.keys !== 'undefined') { var arr_keys = fields.keys };
+                        if (fields.values && fields.values != null && fields.values != '' && typeof fields.values !== 'undefined') { var arr_values = fields.values };
+                        if (arr_keys) {
+                            var custom_fields = [], keys = arr_keys.split(','), values = arr_values.split(',');
+                            for (var j in keys) {
                                 var field_item = {
-                                    'key': key_fields[j],
-                                    'value': value_fields[j]
+                                    'key': keys[j],
+                                    'value': values[j]
                                 };
                                 custom_fields.push(field_item);
                             }
                             arr_data.custom_fields = custom_fields;
                         }
-
-
-
-
-
 
 
                         arr_data.user_id = (res.locals.me._id).toString();
@@ -315,8 +309,19 @@ var posts_controller = {
                             }
                             arr_data.terms = terms;
                         }
-                        if (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') { arr_data.custom_fields = fields.custom_fields };
-                        // if (res.locals.me._id) { arr_data.user_id = res.locals.me._id };
+                        if (fields.keys && fields.keys != null && fields.keys != '' && typeof fields.keys !== 'undefined') { var arr_keys = fields.keys };
+                        if (fields.values && fields.values != null && fields.values != '' && typeof fields.values !== 'undefined') { var arr_values = fields.values };
+                        if (arr_keys) {
+                            var custom_fields = [], keys = arr_keys.split(','), values = arr_values.split(',');
+                            for (var j in keys) {
+                                var field_item = {
+                                    'key': keys[j],
+                                    'value': values[j]
+                                };
+                                custom_fields.push(field_item);
+                            }
+                            arr_data.custom_fields = custom_fields;
+                        }
 
                         if (res.locals.me.role == 0) {
                             arr_data.status = '0';

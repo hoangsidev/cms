@@ -45,8 +45,8 @@
                                 <a href="javascript:void(0)" class="btn btn-default pull-right" id="add_field">
                                     <i class="fa fa-plus-circle" aria-hidden="true"></i> Add field</a>
 
-                                    <input type="hidden" name="key_fields" id="key_fields">
-                                    <input type="hidden" name="value_fields" id="value_fields">
+                                    <input type="hidden" name="keys" id="keys">
+                                    <input type="hidden" name="values" id="values">
                         </div>
                         <!-- end custom field -->
 
@@ -234,14 +234,14 @@
         $('#terms').val(terms);
 
 
-        var key_fields = [], value_fields = [];
+        var keys = [], values = [];
         $('.field').each(function() {
             var key = $(this).find('input[name="key"]').val(), value = $(this).find('input[name="value"]').val()
-                key_fields.push(key); 
-                value_fields.push(value); 
+                keys.push(key); 
+                values.push(value); 
         });
-        $('#key_fields').val(key_fields);
-         $('#value_fields').val(value_fields);
+        $('#keys').val(keys);
+         $('#values').val(values);
         e.submit();                               
     })
 </script>

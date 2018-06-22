@@ -36,6 +36,90 @@
                                     <label>Excerpt</label>
                                     <textarea name="excerpt" id="excerpt" rows="4" class="form-control"><% if(post.excerpt) { %><%= post.excerpt %><% } %></textarea>
                                 </div>
+
+
+                            <hr>
+
+                        <!-- custom field -->
+                        <label>Custom field</label>
+                        <div id="wrap_fields"></div>
+
+                            <% if(typeof post.custom_fields !== 'undefined') { var  custom_fields = post.custom_fields %>
+                                <% if(custom_fields.length > 0) { %>
+                                    <% custom_fields.forEach(function(field, index){ %>
+                                       
+                            <div class="form-group field row">
+                                        <div class="col-xs-3">
+                                            <input type="text" class="form-control key" name="key" autocomplete="off" value="<% if(field.key) { %><%= field.key %><% } %>" required>
+                                        </div>
+                                            <div class="col-xs-8"  style="padding-left: 0;">
+                                            <input type="text" class="form-control" name="value" value="<% if(field.value) { %><%= field.value %><% } %>" autocomplete="off">
+                                        </div>
+                                        <div class="col-xs-1" style="padding-left: 0;">
+                                            <button class="btn btn-danger btn-block btn_del_field" type="button"  onclick="return confirm('Are you sure?')">
+                                                <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <% }); %>
+                                <% } %>
+                            <% } %>
+
+                                
+
+
+                        <div>
+                                <a href="javascript:void(0)" class="btn btn-default pull-right" id="add_field">
+                                    <i class="fa fa-plus-circle" aria-hidden="true"></i> Add field</a>
+
+                                    <input type="hidden" name="keys" id="keys">
+                                    <input type="hidden" name="values" id="values">
+                        </div>
+                        <!-- end custom field -->
+
+
+
+
+
+<script>
+    $('#add_field').click(function () {
+        $('#wrap_fields').append(`
+        <div class="form-group field row">
+            <div class="col-xs-3">
+                <input type="text" class="form-control key" name="key" autocomplete="off" required>
+            </div>
+                <div class="col-xs-8"  style="padding-left: 0;">
+                <input type="text" class="form-control" name="value" autocomplete="off">
+            </div>
+            <div class="col-xs-1" style="padding-left: 0;">
+                <button class="btn btn-danger btn-block btn_del_field" type="button"  onclick="return confirm('Are you sure?')">
+                    <i class="fa fa-minus-circle" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        `);
+        $('.key').focus();
+
+        $('.btn_del_field').click(function(){
+            $(this).closest('.field').find('input[name="key"]').val('');
+            $(this).closest('.field').find('input[name="value"]').val('');
+            $(this).closest('.field').remove();
+        });
+    });
+
+    $('.btn_del_field').click(function(){
+        $(this).closest('.field').find('input[name="key"]').val('');
+        $(this).closest('.field').find('input[name="value"]').val('');
+        $(this).closest('.field').remove();
+    });
+</script>
+
+
+
+
                                 
                                 <div class="wrap_publish">
                                     <label>&nbsp;</label>
@@ -131,20 +215,29 @@
                         </form>
                        
                             <% } %>
-                            <script>
-                                $('#update').submit(function(e){
-                                    // e.preventDefault();
-                                    var terms = [];
-                                    $('.term').each(function() {
-                                        var term = {};
-                                        if(this.checked) {
-                                            terms.push($(this).val()); 
-                                        }
-                                    });
-                                    $('#terms').val(terms);
-                                    e.submit();                               
-                                })
-                            </script>
+                           <script>
+    $('#update').submit(function(e){
+        // e.preventDefault();
+        var terms = [];
+        $('.term').each(function() {
+            if(this.checked) {
+                terms.push($(this).val()); 
+            }
+        });
+        $('#terms').val(terms);
+
+
+        var keys = [], values = [];
+        $('.field').each(function() {
+            var key = $(this).find('input[name="key"]').val(), value = $(this).find('input[name="value"]').val()
+                keys.push(key); 
+                values.push(value); 
+        });
+        $('#keys').val(keys);
+         $('#values').val(values);
+        e.submit();                               
+    })
+</script>
                                 <!-- end content -->
     </div>
     <!-- end main -->
