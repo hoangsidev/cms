@@ -195,7 +195,29 @@ var posts_controller = {
                         } else {
                             arr_data.terms = [];
                         }
-                        arr_data.custom_fields = (fields.custom_fields && fields.custom_fields != null && fields.custom_fields != '' && typeof fields.custom_fields !== 'undefined') ? fields.custom_fields : [];
+
+
+                        arr_key_fields = (fields.key_fields && fields.key_fields != null && fields.key_fields != '' && typeof fields.key_fields !== 'undefined') ? fields.key_fields : [];
+                        arr_value_fields = (fields.value_fields && fields.value_fields != null && fields.value_fields != '' && typeof fields.value_fields !== 'undefined') ? fields.value_fields : [];
+                      
+                        if (arr_key_fields) {
+                            var custom_fields = [], key_fields = arr_key_fields.split(','), value_fields = arr_value_fields.split(',');
+                            for (var j in key_fields) {
+                                var field_item = {
+                                    'key': key_fields[j],
+                                    'value': value_fields[j]
+                                };
+                                custom_fields.push(field_item);
+                            }
+                            arr_data.custom_fields = custom_fields;
+                        }
+
+
+
+
+
+
+
                         arr_data.user_id = (res.locals.me._id).toString();
                         arr_data.post_type_id = (fields.post_type_id && fields.post_type_id != null && fields.post_type_id != '' && typeof fields.post_type_id !== 'undefined') ? fields.post_type_id : '1';
                         if (res.locals.me.role == 0) {

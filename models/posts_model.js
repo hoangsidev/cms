@@ -21,7 +21,12 @@ var posts_schema = new mongoose.Schema({
             _id: String
         }
     ],
-    custom_fields: [],
+    custom_fields: [
+        {
+            key: String,
+            value: String
+        }
+    ],
     user_id: String,
     post_type_id: String,
     status: String,
